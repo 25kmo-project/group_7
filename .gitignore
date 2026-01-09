@@ -1,5 +1,5 @@
 backend/node_modules/
-bank-automat/build/
-bank-automat/*.user
+bank_automat/build/
+bank_automat/*.user
 .qtcreator/
 backend/.env
