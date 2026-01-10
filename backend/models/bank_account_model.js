@@ -13,6 +13,7 @@ const account = {
         return db.query('INSERT INTO account (account_type, account_number, balance, credit_limit, user_id) VALUES (?, ?, ?, ?, ?)',
             [account.account_type, account.account_number, account.balance, account.credit_limit, account.user_id], callback);
     },
+    // pitäiskö account_number:in muuttaminen estää??
     update:function(account_id, account, callback) {   
         return db.query('UPDATE account SET account_type = ?, account_number = ?, balance = ?, credit_limit = ? WHERE account_id = ?',
             [account.account_type, account.account_number, account.balance, account.credit_limit, account_id], callback);
