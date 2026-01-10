@@ -6,6 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var bank_user_Router= require('./routes/bank_user');
 var account_Router= require('./routes/bank_account');
+var bank_log_Router = require('./routes/bank_log');
 
 var app = express();
 
@@ -18,8 +19,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 console.log("bank_user_Router =", bank_user_Router);
 console.log("account_Router =", account_Router);
+console.log("bank_log_Router =", bank_log_Router);
 
 app.use('/bank_user', bank_user_Router);
 app.use('/bank_account', account_Router);
+app.use('/bank_log',bank_log_Router);
 
 module.exports = app;

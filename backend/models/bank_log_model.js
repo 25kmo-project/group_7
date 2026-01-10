@@ -1,8 +1,7 @@
 const db = require('../database');
 const bcrypt = require('bcryptjs');
-const { getAll, update } = require('./bank_user_model');
 
-const log = {
+const bank_log = {
     getAll: function (callback) {
         return db.query("SELECT * FROM log", callback);
     },
@@ -21,11 +20,7 @@ const log = {
     delete: function (log_id, callback) {
         return db.query("DELETE * FROM log WHERE log_id = ?",
             [log_id], callback);
-    }
-
-
-
-
+    },
 }
 
-module.exports = log;
+module.exports = bank_log;
