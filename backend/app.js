@@ -9,6 +9,8 @@ var account_Router= require('./routes/bank_account');
 var bank_log_Router = require('./routes/bank_log');
 var card_Router= require('./routes/bank_card');
 var kirjautuminen_router= require('./routes/bank_kirjautuminen');
+var card_account_Router= require('./routes/bank_card_account');
+
 
 var app = express();
 
@@ -24,6 +26,7 @@ console.log("bank_user_Router =", bank_user_Router);
 console.log("account_Router =", account_Router);
 console.log("card_Router =", card_Router);
 console.log("bank_log_Router =", bank_log_Router);
+console.log("kirjautuminen_router =", kirjautuminen_router);
 
 
 app.use('/bank_user', bank_user_Router);
@@ -31,5 +34,6 @@ app.use('/bank_account', account_Router);
 app.use('/bank_card', card_Router);
 app.use('/bank_log', bank_log_Router);
 app.use('/bank_kirjautuminen', kirjautuminen_router);   
+app.use('/bank_card_account', card_account_Router);
 
 module.exports = app;
