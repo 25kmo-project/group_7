@@ -15,7 +15,7 @@ router.get('/', function (request, response) {
 
 // Get one log entry
 router.get('/:id', function (request, response) {
-    bankLogModel.getOne(request.params.log, function (err, result) {
+    bankLogModel.getOne(request.params.id, function (err, result) {
         if (err) {
             response.json(err);
         } else {
@@ -37,7 +37,7 @@ router.post('/', function (request, response) {
 
 // Update log entry
 router.put('/:id', function (request, response) {
-    bankLogModel.put(request.params.id, function (err, result) {
+    bankLogModel.update(request.body, request.params.id, function (err, result) {
         if (err) {
             response.json(err);
         } else {
