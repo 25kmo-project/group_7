@@ -54,7 +54,7 @@ router.post('/', function(request, response) {
     }
 });
 
-// JWT-tokenin generointi
+
 function generateAccessToken(user_id) {
     return jwt.sign({ user_id }, process.env.MY_TOKEN, { expiresIn: '1800s' });
 }
