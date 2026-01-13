@@ -13,6 +13,8 @@ qt_add_executable(bank_automat
     mainwindow.ui
     environment.h environment.cpp
     accountinfo.h accountinfo.cpp accountinfo.ui
+
+    data.h data.cpp data.ui
 )
 
 target_link_libraries(bank_automat

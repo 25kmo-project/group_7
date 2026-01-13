@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "environment.h"
+#include "data.h"
 
 namespace Ui {
 class Accountinfo;

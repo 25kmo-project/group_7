@@ -44,6 +44,11 @@ void Accountinfo::btnMyDataClicked()
 void Accountinfo::MyDataSlot()
 {
     QByteArray response=reply->readAll();
-    qDebug()<<response;
+    //qDebug()<<response;
+    Data *objData=new Data(this);
+    objData->setTestData(response);
+    objData->show();
+
+    reply->deleteLater();
 
 }

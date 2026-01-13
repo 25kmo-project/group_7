@@ -54,6 +54,10 @@ void MainWindow::loginAction()
         }
         else {
             ui->labelInfo->setText("Tunnus ja salasana eivät täsmää");
+            ui->textUsername->clear();
+            ui->textPassword->clear();
+            ui->textUsername->setFocus();
+
         }
     }
     // qDebug()<<responseData;
