@@ -33,5 +33,6 @@ private:
 private slots:
     void btnLoginSlot();
     void loginAction();
+    void onCardSelected(QString type);
 };
 #endif // MAINWINDOW_H

@@ -1,3 +1,4 @@
+#include "choosecard.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -40,6 +41,9 @@ void MainWindow::loginAction()
         QJsonDocument jsonDoc=QJsonDocument::fromJson(responseData);
         QJsonObject jsonObject=jsonDoc.object();
         if(jsonObject.contains("token")){
+
+            ChooseCard *objchoose = new ChooseCard(this);
+            objchoose->exec();
             //QString token=jsonObject["token"].toString();
             QString token=jsonObject["token"].toString();
             QByteArray tokenBytes = token.toUtf8();
@@ -62,4 +66,10 @@ void MainWindow::loginAction()
     }
     // qDebug()<<responseData;
     reply->deleteLater();
+}
+
+void MainWindow::onCardSelected(QString type)
+{
+    qDebug() << "Kortti valittu:" << type;
+
 }
