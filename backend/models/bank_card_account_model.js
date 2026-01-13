@@ -12,6 +12,9 @@ const bankCardAccount = {
         return db.query('INSERT INTO card_account (card_id, account_id) VALUES (?, ?)',
             [card_account.card_id, card_account.account_id], callback);
     },
+    delete:function(card_id, callback) {
+        return db.query('DELETE FROM card_account WHERE card_id = ?', [card_id], callback);
+    },
     
 }
 

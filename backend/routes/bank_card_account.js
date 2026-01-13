@@ -31,7 +31,17 @@ router.get('/:id', function(req, res) {
         } else {
             res.json(result);
         }
-    }
-    );
+    })
+});
+
+// Delete a bank card account
+router.delete('/:id', function(req, res) {
+    bankAccountModel.delete(req.params.id, function(err, result) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(result);
+        }
+    });
 });
 module.exports = router;
