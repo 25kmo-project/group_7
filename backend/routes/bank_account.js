@@ -32,7 +32,7 @@ router.post('/', function(req, res) {
         if (err) {
             res.send(err);
         } else {
-            res.json(result);
+            res.json({ message: 'Account added successfully', userId: result.insertId });
         }
     });
 });
@@ -44,7 +44,7 @@ router.put('/:id', function(req, res) {
         if (err) {
             res.send(err);
         } else {
-            res.json(result);
+            res.json({ message: 'User updated successfully', userId: result.insertId });
         }
     });
 });
@@ -54,7 +54,7 @@ router.delete('/:id', function(req, res) {
         if (err) {
             res.send(err);
         } else {
-            res.json(result);
+            res.json({ message: 'Account deleted successfully' });
         }
     });
 });
