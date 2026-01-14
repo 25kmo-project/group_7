@@ -52,6 +52,32 @@
     <string>Valitse kortti</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="btnDEBIT">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>280</y>
+     <width>181</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>DEBIT NAPPI</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCREDIT">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>280</y>
+     <width>181</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>CREDIT NAPPI</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
