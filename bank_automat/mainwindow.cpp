@@ -53,8 +53,8 @@ void MainWindow::loginAction()
             Accountinfo *objAccountinfo=new Accountinfo(this);
             /*objAccountinfo->setToken(tokenBytes);
             objAccountinfo->setUsername(ui->textUsername->text());
-            objAccountinfo->show();*/
-
+            objAccountinfo->show();
+*/
         }
         else {
             ui->labelInfo->setText("Tunnus ja salasana eivät täsmää");

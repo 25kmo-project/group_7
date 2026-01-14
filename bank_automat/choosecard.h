@@ -16,6 +16,8 @@ class ChooseCard : public QDialog
 public:
     explicit ChooseCard(QWidget *parent = nullptr);
     ~ChooseCard();
+    void setUsername(const QString &newUsername);
+
 
 
     void setChooseCard(const QByteArray &newChooseCard);
@@ -33,6 +35,8 @@ private slots:
     void btnDEBITClicked();
     void ChooseCardSlot();
     void btnCREDITClicked();
+    void handleDebit();
+    void handleCredit();
 
 
 
@@ -44,6 +48,8 @@ private:
     QByteArray token;
     QNetworkReply *reply;
     QByteArray chooseCard;
+    void openAccount(const QJsonObject &obj);
+    QString username;
 
 };
 

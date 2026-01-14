@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>Päävalikko</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnMyData">
