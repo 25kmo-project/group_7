@@ -23,7 +23,7 @@ router.post('/', function(req, res) {
         }
     });
 });
-// Get a single bank card account by card ID
+// Get a single bank card accounts by card ID
 router.get('/:id', function(req, res) {
     bankAccountModel.getOne(req.params.id, function(err, result) {
         if (err) { 
