@@ -18,6 +18,8 @@ public:
     ~ChooseCard();
 
 
+    void setChooseCard(const QByteArray &newChooseCard);
+
 signals:
     //void cardSelected(QString type); //Välittää tiedon onko credit vai debit
 
@@ -41,6 +43,7 @@ private:
     QNetworkAccessManager *manager;
     QByteArray token;
     QNetworkReply *reply;
+    QByteArray chooseCard;
 
 };
 

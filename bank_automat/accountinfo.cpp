@@ -27,6 +27,16 @@ void Accountinfo::setToken(const QByteArray &newToken)
     qDebug()<<token;
 }
 
+void Accountinfo::setAccountData(const QJsonObject &obj)
+{
+    ui->labelID->setText(QString::number(obj["account_id"].toInt()));
+    ui->labelType->setText(obj["account_type"].toString());
+    ui->labelNumber->setText(obj["account_number"].toString());
+    ui->labelBalance->setText(obj["balance"].toString());
+    ui->labelCreditLimit->setText(obj["credit_limit"].toString());
+    ui->labelUserID->setText(QString::number(obj["user_id"].toInt()));
+}
+
 void Accountinfo::btnMyDataClicked()
 {
     QString url=Environment::base_url()+"bank_user/"+username;

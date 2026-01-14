@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+#include "accountinfo.h"
 
 ChooseCard::ChooseCard(QWidget *parent)
     : QDialog(parent)
@@ -27,7 +28,7 @@ ChooseCard::~ChooseCard()
 void ChooseCard::btnDEBITClicked()
 {
 
-    QString url=Environment::base_url()+"bank_account/+2";
+    QString url=Environment::base_url()+"bank_account/2";
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     QByteArray myToken="Bearer "+token;
@@ -45,20 +46,35 @@ void ChooseCard::ChooseCardSlot()
 {
     QByteArray response = reply->readAll();
     qDebug()<<response;
+
     reply->deleteLater();
+
+    QJsonDocument doc = QJsonDocument::fromJson(response);
+    QJsonObject obj = doc.object();
+    qDebug() << "Account JSON:" << obj;
+    Accountinfo *objacc = new Accountinfo(this);
+    objacc->setAccountData(obj);
+    objacc->show();
+    this->close();
 
 
 }
 
 void ChooseCard::btnCREDITClicked()
 {
-    QString url=Environment::base_url()+"bank_account/+3";
+    QString url=Environment::base_url()+"bank_account/3";
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     QByteArray myToken="Bearer "+token;
     request.setRawHeader(QByteArray("Authorization"),(myToken));
     reply = manager->get(request);
     connect(reply, &QNetworkReply::finished,this,&ChooseCard::ChooseCardSlot);
+}
+
+void ChooseCard::setChooseCard(const QByteArray &newChooseCard)
+{
+    chooseCard = newChooseCard;
+    qDebug()<< chooseCard;
 }
 
 /*void ChooseCard::on_btn_Credit_clicked()

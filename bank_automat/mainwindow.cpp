@@ -51,9 +51,9 @@ void MainWindow::loginAction()
             // qDebug()<<"Login ok";
             qDebug()<<token;
             Accountinfo *objAccountinfo=new Accountinfo(this);
-            objAccountinfo->setToken(tokenBytes);
+            /*objAccountinfo->setToken(tokenBytes);
             objAccountinfo->setUsername(ui->textUsername->text());
-            objAccountinfo->show();
+            objAccountinfo->show();*/
 
         }
         else {
