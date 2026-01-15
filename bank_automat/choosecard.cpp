@@ -1,8 +1,6 @@
 #include "choosecard.h"
 #include "environment.h"
 #include "ui_choosecard.h"
-
-
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -15,9 +13,8 @@ ChooseCard::ChooseCard(QWidget *parent)
 {
     manager = new QNetworkAccessManager(this);
     ui->setupUi(this);
-    connect(ui->btnDEBIT,&QPushButton::clicked,(this),&ChooseCard::btnDEBITClicked);
-    connect(ui->btnCREDIT,&QPushButton::clicked,(this),&ChooseCard::btnCREDITClicked);
-
+    connect(ui->btnDEBIT, &QPushButton::clicked, this, &ChooseCard::btnDEBITClicked);
+    connect(ui->btnCREDIT, &QPushButton::clicked, this, &ChooseCard::btnCREDITClicked);
 }
 
 ChooseCard::~ChooseCard()
@@ -27,95 +24,115 @@ ChooseCard::~ChooseCard()
 
 void ChooseCard::btnDEBITClicked()
 {
+    if (username.isEmpty() || token.isEmpty()) {
+        qDebug() << "ChooseCard: Username or token is empty! Cannot fetch accounts.";
+        return;
+    }
 
-    QString url=Environment::base_url()+"bank_account";
+    QString url = Environment::base_url() + "bank_account/" + username;
+    qDebug() << "ChooseCard: Fetching debit accounts from URL:" << url;
+
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-
-    QByteArray myToken="Bearer "+token;
-    request.setRawHeader(QByteArray("Authorization"),(myToken));
-
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QByteArray myToken = "Bearer " + token;
+    request.setRawHeader(QByteArray("Authorization"), myToken);
     reply = manager->get(request);
-
-
-
-    connect(reply, &QNetworkReply::finished,this,&ChooseCard::handleDebit);
-
-
-}
-
-void ChooseCard::ChooseCardSlot()
-{
-    QByteArray response = reply->readAll();
-    qDebug()<<response;
-
-    reply->deleteLater();
-
-    QJsonDocument doc = QJsonDocument::fromJson(response);
-    QJsonObject obj = doc.object();
-    qDebug() << "Account JSON:" << obj;
-    Accountinfo *objacc = new Accountinfo(this);
-    objacc->setAccountData(obj);
-    objacc->show();
-    this->close();
-
-
+    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleDebit);
+    connect(reply, &QNetworkReply::errorOccurred, this, &ChooseCard::handleNetworkError);
 }
 
 void ChooseCard::btnCREDITClicked()
 {
-    QString url=Environment::base_url()+"bank_account";
+    if (username.isEmpty() || token.isEmpty()) {
+        qDebug() << "ChooseCard: Username or token is empty! Cannot fetch accounts.";
+        return;
+    }
+
+    QString url = Environment::base_url() + "bank_account/" + username;
+    qDebug() << "ChooseCard: Fetching credit accounts from URL:" << url;
+
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-
-    QByteArray myToken="Bearer "+token;
-    request.setRawHeader(QByteArray("Authorization"),(myToken));
-
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QByteArray myToken = "Bearer " + token;
+    request.setRawHeader(QByteArray("Authorization"), myToken);
     reply = manager->get(request);
-
-    connect(reply, &QNetworkReply::finished,this,&ChooseCard::handleCredit);
+    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleCredit);
+    connect(reply, &QNetworkReply::errorOccurred, this, &ChooseCard::handleNetworkError);
 }
 
 void ChooseCard::handleDebit()
 {
-    qDebug()<<"handleDebit() called";
+    qDebug() << "handleDebit() called";
     QByteArray response = reply->readAll();
-    qDebug()<<"Raw response:" << response;
-
-
-    //QByteArray response = reply->readAll();
+    qDebug() << "Raw response:" << response;
     reply->deleteLater();
 
     QJsonDocument doc = QJsonDocument::fromJson(response);
-    QJsonArray arr = doc.array();
+    if (doc.isNull()) {
+        qDebug() << "ChooseCard: Invalid JSON in debit response";
+        return;
+    }
 
-    for (auto item:arr){
-        QJsonObject obj = item.toObject();
-        if (obj["account_type"].toString() == "debit") {
-            qDebug() << "Checking account:" << obj;
-            qDebug() << "DEBIT selected:" << obj;
-
-
+    if (doc.isObject()) {
+        QJsonObject obj = doc.object();
+        qDebug() << "Single account object found:" << obj;
+        if (obj["account_type"].toString() == "debit" && obj["user_id"].toInt() == username.toInt()) {
+            qDebug() << "DEBIT selected (single object):" << obj;
             openAccount(obj);
             return;
         }
+    } else if (doc.isArray()) {
+        QJsonArray arr = doc.array();
+        for (auto it = arr.constBegin(); it != arr.constEnd(); ++it) {
+            QJsonObject obj = it->toObject();
+            qDebug() << "Checking account in array:" << obj;
+            if (obj["account_type"].toString() == "debit" && obj["user_id"].toInt() == username.toInt()) {
+                qDebug() << "DEBIT selected (from array):" << obj;
+                openAccount(obj);
+                return;
+            }
+        }
     }
+
     qDebug() << "Debit-tiliä ei löytynyt!";
 }
 
 void ChooseCard::handleCredit()
 {
+    qDebug() << "handleCredit() called";
     QByteArray response = reply->readAll();
+    qDebug() << "Raw response:" << response;
     reply->deleteLater();
+
     QJsonDocument doc = QJsonDocument::fromJson(response);
-    QJsonArray arr = doc.array();
-    for (auto item : arr) {
-        QJsonObject obj = item.toObject();
-        if (obj["account_type"].toString() == "credit") {
+    if (doc.isNull()) {
+        qDebug() << "ChooseCard: Invalid JSON in credit response";
+        return;
+    }
+
+
+    if (doc.isObject()) {
+        QJsonObject obj = doc.object();
+        qDebug() << "Single account object found:" << obj;
+        if (obj["account_type"].toString() == "credit" && obj["user_id"].toInt() == username.toInt()) {
+            qDebug() << "CREDIT selected (single object):" << obj;
             openAccount(obj);
             return;
         }
+    } else if (doc.isArray()) {
+        QJsonArray arr = doc.array();
+
+        for (auto it = arr.constBegin(); it != arr.constEnd(); ++it) {
+            QJsonObject obj = it->toObject();
+            qDebug() << "Checking account in array:" << obj;
+            if (obj["account_type"].toString() == "credit" && obj["user_id"].toInt() == username.toInt()) {
+                qDebug() << "CREDIT selected (from array):" << obj;
+                openAccount(obj);
+                return;
+            }
+        }
     }
+
     qDebug() << "Credit-tiliä ei löytynyt!";
 }
 
@@ -126,21 +143,26 @@ void ChooseCard::openAccount(const QJsonObject &obj)
     acc->setToken(token);
     acc->setUsername(username);
     acc->show();
-
     this->close();
 }
 
-
 void ChooseCard::setChooseCard(const QByteArray &newChooseCard)
 {
-    chooseCard = newChooseCard;
-    qDebug()<< chooseCard;
+    token = newChooseCard;
+    qDebug() << "ChooseCard: Token set to" << token;
 }
 
 void ChooseCard::setUsername(const QString &newUsername)
 {
     username = newUsername;
+    qDebug() << "ChooseCard: Username set to" << username;
 }
+
+void ChooseCard::handleNetworkError(QNetworkReply::NetworkError error)
+{
+    qDebug() << "ChooseCard: Network error:" << error << "-" << reply->errorString();
+}
+
 
 
 /*void ChooseCard::on_btn_Credit_clicked()

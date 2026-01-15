@@ -39,6 +39,7 @@ private:
 private slots:
     void btnMyDataClicked();
     void MyDataSlot();
+    void handleNetworkError(QNetworkReply::NetworkError error);
 
 
 };
