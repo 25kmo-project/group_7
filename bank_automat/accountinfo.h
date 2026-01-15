@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include "environment.h"
 #include "data.h"
+#include "choosecard.h"
 
 namespace Ui {
 class Accountinfo;
@@ -26,6 +27,7 @@ public:
     void setUsername(const QString &newUsername);
 
     void setToken(const QByteArray &newToken);
+    void setAccountData(const QJsonObject &obj);
 
 private:
     Ui::Accountinfo *ui;
@@ -37,6 +39,7 @@ private:
 private slots:
     void btnMyDataClicked();
     void MyDataSlot();
+    void handleNetworkError(QNetworkReply::NetworkError error);
 
 
 };
