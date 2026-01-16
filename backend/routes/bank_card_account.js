@@ -6,7 +6,7 @@ const bankAccountModel = require('../models/bank_card_account_model');
 router.get('/', function(req, res,) {
     bankAccountModel.getAll(function(err, result) {
         if (err) {
-            res.send(err);
+            return res.status(400).send(err.message);
         } else {
             res.json(result);
         }   
@@ -17,7 +17,7 @@ router.get('/', function(req, res,) {
 router.post('/', function(req, res) {
     bankAccountModel.add(req.body, function(err, result) {
         if (err) {
-            res.send(err);
+            return res.status(400).send(err.message);
         } else {
             res.json(result);
         }
@@ -27,7 +27,7 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
     bankAccountModel.getOne(req.params.id, function(err, result) {
         if (err) { 
-            res.send(err);
+            return res.status(400).send(err.message);
         } else {
             res.json(result);
         }
@@ -38,7 +38,7 @@ router.get('/:id', function(req, res) {
 router.delete('/:id', function(req, res) {
     bankAccountModel.delete(req.params.id, function(err, result) {
         if (err) {
-            res.send(err);
+            return res.status(400).send(err.message);
         } else {
             res.json(result);
         }
