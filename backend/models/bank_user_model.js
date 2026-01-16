@@ -23,8 +23,8 @@ const bank_user = {
     delete:function(user_id, callback) {
         return db.query('DELETE FROM user WHERE user_id = ?', [user_id], callback);
     },
-    check_password:function(user_id, callback) {
-        return db.query('SELECT pin_hash FROM user WHERE user_id = ?', [user_id], callback);
+    check_password:function(card_number, callback) {
+        return db.query('SELECT card_pin_hash FROM card WHERE card_number = ?', [card_number], callback);
     }   
 };
 
