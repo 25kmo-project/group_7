@@ -19,20 +19,20 @@ const bankCardAccount = {
                 return callback(new Error('korttia ei löydy'), null);
 
 
-                // Get account_user_id
-                db.query('SELECT user_id FROM account WHERE account_id = ?', [card_account.account_id],
-                    (err, account_result) => {
-                    if (err) {
-                        return callback(err, null);
-                    } if (account_result.length === 0)
-                        return callback(new Error('tiliä ei löydy'), null);
+        // Get account_user_id
+        db.query('SELECT user_id FROM account WHERE account_id = ?', [card_account.account_id],
+            (err, account_result) => {
+            if (err) {
+                return callback(err, null);
+            } if (account_result.length === 0)
+                return callback(new Error('tiliä ei löydy'), null);
+        // Check if user_ids match
+            if (card_result[0].user_id !== account_result[0].user_id) {
+                return callback(new Error('kortin ja tilin käyttäjät eivät täsmää'));
+            }
 
-                    if (card_result[0].user_id !== account_result[0].user_id) {
-                        return callback(new Error('kortin ja tilin käyttäjät eivät täsmää'));
-                    }
-
-                return db.query('INSERT INTO card_account (card_id, account_id) VALUES (?, ?)',
-                [card_account.card_id, card_account.account_id], callback);
+            return db.query('INSERT INTO card_account (card_id, account_id) VALUES (?, ?)',
+            [card_account.card_id, card_account.account_id], callback);
     });
         });
     },

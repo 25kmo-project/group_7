@@ -44,13 +44,13 @@ router.post('/', function(request, response) {
 
             } else {
                 console.log("Käyttäjää ei ole");
-                response.json({ "message": "tunnus ja salasana eivät täsmää" });
+                response.json({ "message": "Tunnus ja salasana eivät täsmää" });
             }
         });
 
     } else {
         console.log("user_id tai pin puuttuu");
-        response.json({ "message": "tunnus ja salasana eivät täsmää" });
+        response.json({ "message": "Tunnus ja salasana eivät täsmää" });
     }
 });
 
