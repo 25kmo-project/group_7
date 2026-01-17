@@ -62,6 +62,20 @@ void MainWindow::loginAction()
                 //this->close();
                 reply->deleteLater();
                 return;
+            }
+
+            if (cardType == "debit") {
+                qDebug() << "Kirjaudutaan suoraan DEBIT-tiliin";
+                Accountinfo *objacc = new Accountinfo(this);
+                objacc->setToken(tokenBytes);
+                objacc->setUsername(QString::number(userId));
+                objacc->setAccountType("debit");
+                objacc->show();
+                //this->close();
+                reply->deleteLater();
+                return;
+
+
 
 
             }
