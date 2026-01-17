@@ -22,7 +22,7 @@ void MainWindow::btnLoginSlot()
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject jObject;
-    jObject.insert("user_id", ui->textUsername->text());
+    jObject.insert("card_number", ui->textUsername->text());
     jObject.insert("pin", ui->textPassword->text());
     QJsonDocument jsonDoc(jObject);
     reply = manager->post(request, jsonDoc.toJson());
