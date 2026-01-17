@@ -33,6 +33,7 @@ router.post('/', function(request, response) {
                             success: true,
                             message: "Login OK",
                             user_id: result[0].user_id, // Palautetaan user_id
+                            card_type: result[0].card_type, // Palautetaan card_type
                             token: token
                         });
                     } else {

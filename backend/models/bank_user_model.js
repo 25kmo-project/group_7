@@ -24,8 +24,24 @@ const bank_user = {
         return db.query('DELETE FROM user WHERE user_id = ?', [user_id], callback);
     },
     check_password:function(card_number, callback) {
-        return db.query('SELECT card_pin_hash FROM card WHERE card_number = ?', [card_number], callback);
-    }   
+    console.log("check_password() kutsuttu, card_number =", card_number);
+
+    return db.query(
+        'SELECT card_pin_hash, user_id, card_type FROM card WHERE card_number = ?',
+        [card_number],
+        function(err, result) {
+            if (err) {
+                console.log("SQL ERROR:", err);
+                return callback(err);
+            }
+
+            console.log("SQL tulos:", result);
+            return callback(null, result);
+        }
+    );
+    }
+
 };
+
 
 module.exports = bank_user;
