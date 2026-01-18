@@ -23,7 +23,7 @@ void Accountinfo::setAccountType(const QString &type)
     qDebug() << "Accountinfo: account type set to" << accountType;
 }
 
-void Accountinfo::showEvent(QShowEvent *event)
+/*void Accountinfo::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
     if (username.isEmpty() || token.isEmpty() || accountType.isEmpty()) {
@@ -37,9 +37,8 @@ void Accountinfo::showEvent(QShowEvent *event)
     QByteArray myToken = "Bearer " + token;
     request.setRawHeader("Authorization", myToken);
     reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [this]() { MyDataSlot(false); });  // Lambda: Välitä false
-    connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
-}
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);
+}*/
 
 void Accountinfo::setUsername(const QString &newUsername)
 {

@@ -31,7 +31,7 @@ public:
     void setAccountType(const QString &type);
     //void setAccountType(const QString &type);
 protected:
-    void showEvent(QShowEvent *event) override;
+    //void showEvent(QShowEvent *event) override;
 
 
 

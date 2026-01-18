@@ -11,10 +11,11 @@ ChooseCard::ChooseCard(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ChooseCard)
 {
-    manager = new QNetworkAccessManager(this);
+    manager = new QNetworkAccessManager(this); //HTTP_pyyntö varte
     ui->setupUi(this);
     connect(ui->btnDEBIT, &QPushButton::clicked, this, &ChooseCard::btnDEBITClicked);
     connect(ui->btnCREDIT, &QPushButton::clicked, this, &ChooseCard::btnCREDITClicked);
+    connect(ui->btnBack, &QPushButton::clicked, this, &ChooseCard::btnBackClicked);
 }
 
 ChooseCard::~ChooseCard()
@@ -24,31 +25,31 @@ ChooseCard::~ChooseCard()
 
 void ChooseCard::btnDEBITClicked()
 {
-    if (username.isEmpty() || token.isEmpty()) {
+    if (username.isEmpty() || token.isEmpty()) { //Varmistetaan että käyttäjän id ja token asetettu
         qDebug() << "ChooseCard: Username or token is empty! Cannot fetch accounts.";
         return;
     }
 
-    QString url = Environment::base_url() + "bank_account/" + username;
+    QString url = Environment::base_url() + "bank_account/" + username + "/debit"; //backend url credille
     qDebug() << "ChooseCard: Fetching debit accounts from URL:" << url;
 
-    QNetworkRequest request(url);
+    QNetworkRequest request(url); //GET pyyntöjä
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QByteArray myToken = "Bearer " + token;
     request.setRawHeader(QByteArray("Authorization"), myToken);
-    reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleDebit);
+    reply = manager->get(request); //Lähetetään pyyntö
+    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleDebit); //Kun vastaus tulee nii handlecredit
     connect(reply, &QNetworkReply::errorOccurred, this, &ChooseCard::handleNetworkError);
 }
 
 void ChooseCard::btnCREDITClicked()
 {
-    if (username.isEmpty() || token.isEmpty()) {
+    if (username.isEmpty() || token.isEmpty()) { //Varmistetaan että käyttäjän id ja token asetettu
         qDebug() << "ChooseCard: Username or token is empty! Cannot fetch accounts.";
         return;
     }
 
-    QString url = Environment::base_url() + "bank_account/" + username;
+    QString url = Environment::base_url() + "bank_account/" + username + "/credit"; //backend url debitille
     qDebug() << "ChooseCard: Fetching credit accounts from URL:" << url;
 
     QNetworkRequest request(url);
@@ -56,13 +57,19 @@ void ChooseCard::btnCREDITClicked()
     QByteArray myToken = "Bearer " + token;
     request.setRawHeader(QByteArray("Authorization"), myToken);
     reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleCredit);
+    connect(reply, &QNetworkReply::finished, this, &ChooseCard::handleCredit); //Kun vastaus tulee nii handlecredit
     connect(reply, &QNetworkReply::errorOccurred, this, &ChooseCard::handleNetworkError);
 }
 
 void ChooseCard::handleDebit()
 {
-    qDebug() << "handleDebit() called";
+
+    QByteArray response = reply->readAll(); //luetaan backendin json
+    QJsonDocument doc = QJsonDocument::fromJson(response);
+    QJsonObject obj = doc.object();
+    openAccount(obj); //Avataan data annetulla json datalla
+}
+    /*qDebug() << "handleDebit() called";
     QByteArray response = reply->readAll();
     qDebug() << "Raw response:" << response;
     reply->deleteLater();
@@ -95,11 +102,17 @@ void ChooseCard::handleDebit()
     }
 
     qDebug() << "Debit-tiliä ei löytynyt!";
-}
+}*/
 
 void ChooseCard::handleCredit()
 {
-    qDebug() << "handleCredit() called";
+
+    QByteArray response = reply->readAll(); //luetaan backendin json
+    QJsonDocument doc = QJsonDocument::fromJson(response);
+    QJsonObject obj = doc.object();
+    openAccount(obj); //Avataan data annetulla json datalla
+}
+    /*qDebug() << "handleCredit() called";
     QByteArray response = reply->readAll();
     qDebug() << "Raw response:" << response;
     reply->deleteLater();
@@ -134,33 +147,42 @@ void ChooseCard::handleCredit()
     }
 
     qDebug() << "Credit-tiliä ei löytynyt!";
-}
+}*/
 
 void ChooseCard::openAccount(const QJsonObject &obj)
 {
+    //emit cardSelected(obj["account_type"].toString());
+
+    // Luodaan Accountinfo-ikkuna ja annetaan sille kaikki tarvittava data
     Accountinfo *acc = new Accountinfo(this);
-    acc->setAccountData(obj);
-    acc->setToken(token);
-    acc->setUsername(username);
+    acc->setAccountData(obj); // JSON-tilidata
+    acc->setToken(token); // Token API-kutsuja varten
+    acc->setUsername(username); // Käyttäjän ID
     acc->show();
-    this->close();
+    this->close(); // Suljetaan ChooseCard → siirrytään Accountinfoon
 }
 
 void ChooseCard::setChooseCard(const QByteArray &newChooseCard)
 {
-    token = newChooseCard;
+    token = newChooseCard;   // Tallennetaan token myöhempiä API-kutsuja varten
     qDebug() << "ChooseCard: Token set to" << token;
 }
 
 void ChooseCard::setUsername(const QString &newUsername)
 {
-    username = newUsername;
+    username = newUsername; // Tallennetaan käyttäjän ID
     qDebug() << "ChooseCard: Username set to" << username;
 }
 
 void ChooseCard::handleNetworkError(QNetworkReply::NetworkError error)
 {
     qDebug() << "ChooseCard: Network error:" << error << "-" << reply->errorString();
+}
+
+void ChooseCard::btnBackClicked()
+{
+    qDebug() << "ChooseCard: Takaisin painettu → suljetaan dialogi";
+    this->close();
 }
 
 
