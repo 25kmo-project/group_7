@@ -23,11 +23,11 @@ const bank_user = {
     delete:function(user_id, callback) {
         return db.query('DELETE FROM user WHERE user_id = ?', [user_id], callback);
     },
-    check_password:function(card_number, callback) {
+    check_password_and_logins:function(card_number, callback) {
     console.log("check_password() kutsuttu, card_number =", card_number);
 
     return db.query(
-        'SELECT card_pin_hash, user_id, card_type FROM card WHERE card_number = ?',
+        'SELECT card_pin_hash, user_id, card_type, log_in_attempts FROM card WHERE card_number = ?',
         [card_number],
         function(err, result) {
             if (err) {
@@ -39,8 +39,27 @@ const bank_user = {
             return callback(null, result);
         }
     );
+    },
+    lock_card:function(card_number, callback) {
+        let sql = `UPDATE card SET log_in_attempts = 0 WHERE card_number = ?`;
+        db.query(sql, [card_number], function(err, result) {
+            callback(err, result);
+    });
+    },
+    update_logins:function(card_number, attempts, callback) {
+        let sql = `UPDATE card SET log_in_attempts = ? WHERE card_number = ?`;
+        db.query(sql, [attempts, card_number], function(err, result) {
+            callback(err, result);
+    });
+    },
+    reset_login_attempts:function(card_number, callback) {
+    let sql = `UPDATE card 
+               SET log_in_attempts = 3 
+               WHERE card_number = ?`;
+    db.query(sql, [card_number], function(err, result) {
+            callback(null, result);
+        });
     }
-
 };
 
 
