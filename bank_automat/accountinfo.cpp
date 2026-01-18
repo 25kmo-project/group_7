@@ -28,7 +28,7 @@ void Accountinfo::setAccountType(const QString &type)
 
 }
 
-void Accountinfo::showEvent(QShowEvent *event)
+/*void Accountinfo::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
 
@@ -42,7 +42,7 @@ void Accountinfo::showEvent(QShowEvent *event)
 
     reply = manager->get(request);
     connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);
-}
+}*/
 
 
 void Accountinfo::setUsername(const QString &newUsername)

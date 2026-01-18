@@ -33,6 +33,7 @@ private slots:
     void handleDebit();
     void handleCredit();
     void handleNetworkError(QNetworkReply::NetworkError error);
+    void btnBackClicked();
 
 private:
     Ui::ChooseCard *ui;
