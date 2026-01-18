@@ -1,5 +1,7 @@
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
+#include <QShowEvent>
+
 
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
@@ -14,6 +16,34 @@ Accountinfo::~Accountinfo()
 {
     delete ui;
 }
+
+
+void Accountinfo::setAccountType(const QString &type)
+{
+
+
+    accountType = type;
+    qDebug() << "Accountinfo: account type set to" << accountType;
+
+
+}
+
+void Accountinfo::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+
+    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
+
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QByteArray myToken = "Bearer " + token;
+    request.setRawHeader("Authorization", myToken);
+
+    reply = manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);
+}
+
 
 void Accountinfo::setUsername(const QString &newUsername)
 {

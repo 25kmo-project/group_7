@@ -176,7 +176,7 @@ void ChooseCard::handleNetworkError(QNetworkReply::NetworkError error)
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished,
             this, &ChooseCard::debitTiedot);
-    manager->get(request);
+    //manager->get(request);
 
 }
 

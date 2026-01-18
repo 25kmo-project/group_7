@@ -28,6 +28,13 @@ public:
 
     void setToken(const QByteArray &newToken);
     void setAccountData(const QJsonObject &obj);
+    void setAccountType(const QString &type);
+    //void setAccountType(const QString &type);
+protected:
+    void showEvent(QShowEvent *event) override;
+
+
+
 
 private:
     Ui::Accountinfo *ui;
@@ -35,6 +42,7 @@ private:
     QByteArray token;
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
+    QString accountType;
 
 private slots:
     void btnMyDataClicked();

@@ -14,6 +14,24 @@ router.get('/', function(req, res,) {
     }
     );
 });
+// Get account by user_id AND account_type (credit/debit)
+router.get('/:user_id/:account_type', function(req, res) {
+    const user_id = req.params.user_id;
+    const account_type = req.params.account_type;
+
+    bankAccountModel.getByUserAndType(user_id, account_type, function(err, result) {
+        if (err) {
+            console.log("SQL ERROR:", err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Account not found' });
+        }
+
+        return res.json(result[0]);
+    });
+});
 // Get a single bank account by ID
 router.get('/:id', function(req, res) {
     bankAccountModel.getOne(req.params.id, function(err, result) {

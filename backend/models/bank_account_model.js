@@ -24,6 +24,14 @@ const account = {
         return db.query('UPDATE account SET account_type = ?, account_number = ?, balance = ?, credit_limit = ? WHERE account_id = ?',
             [account.account_type, account.account_number, account.balance, account.credit_limit, account_id], callback);
     },
+    getByUserAndType: function(user_id, account_type, callback) {
+    return db.query(
+        'SELECT * FROM account WHERE user_id = ? AND account_type = ?',
+        [user_id, account_type],
+        callback
+    );
+},
+
     delete:function(account_id, callback) {
         return db.query('DELETE FROM account WHERE account_id = ?', [account_id], callback);
     },  

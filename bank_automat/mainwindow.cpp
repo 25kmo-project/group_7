@@ -45,11 +45,29 @@ void MainWindow::loginAction()
             // Siirrä token-määrittely tänne ylös, ennen ChooseCard:ia
             QString token = jsonObject["token"].toString();
             QByteArray tokenBytes = token.toUtf8();
+            int userId = jsonObject["user_id"].toInt();
+            QString cardType = jsonObject["card_type"].toString();
+
+            qDebug() << "Login OK. User ID:" << userId << "Card type:" << cardType;
             qDebug() << "Login ok";
             qDebug() << "Token:" << token;
 
+            if (cardType == "credit") {
+                qDebug() << "Kirjaudutaan suoraan CREDIT-tiliin";
+                Accountinfo *objacc = new Accountinfo(this);
+                objacc->setToken(tokenBytes);
+                objacc->setUsername(QString::number(userId));
+                objacc->setAccountType("credit");
+                objacc->show();
+                //this->close();
+                reply->deleteLater();
+                return;
+
+
+            }
+
             ChooseCard *objchoose = new ChooseCard(this);
-            objchoose->setUsername(ui->textUsername->text());
+            objchoose->setUsername(QString::number(userId));
             objchoose->setChooseCard(tokenBytes);  // Nyt tokenBytes on määritelty!
             connect(objchoose, &ChooseCard::cardSelected, this, &MainWindow::onCardSelected);
             objchoose->exec();
