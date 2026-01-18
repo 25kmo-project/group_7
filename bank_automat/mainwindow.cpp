@@ -87,7 +87,7 @@ void MainWindow::loginAction()
             objchoose->exec();
 
             //Accountinfo *objAccountinfo = new Accountinfo(this);
-            //objAccountinfo->setToken(tokenBytes);
+            ///objAccountinfo->setToken(tokenBytes);
             //objAccountinfo->setUsername(ui->textUsername->text());
            // objAccountinfo->show();
         } else {
