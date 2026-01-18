@@ -13,10 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="labelFirstName">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>120</x>
      <y>30</y>
      <width>131</width>
      <height>41</height>
@@ -26,24 +26,11 @@
     <string>Etunimi:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="labelfname">
+  <widget class="QLabel" name="labelLastName">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>30</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Etunimi</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelLastName_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>100</y>
+     <x>120</x>
+     <y>80</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -52,39 +39,52 @@
     <string>Sukunimi:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="labelLastName">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>100</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Sukunimi</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelAddress1">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>170</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Osoite</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelAddress">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>170</y>
+     <x>130</x>
+     <y>130</y>
      <width>131</width>
      <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Osoite:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>63</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Etunimi:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>90</y>
+     <width>63</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sukunimi:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>140</y>
+     <width>63</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
