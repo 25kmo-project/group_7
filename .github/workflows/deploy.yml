@@ -98,6 +98,16 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: "docker-compose.yml"
           target: "/opt/bank-app/"
+         
+      - name: Copy Nginx Config
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "nginx/nginx.conf"
+          target: "/opt/bank-app/nginx/"
+          strip_components: 1
 
   deploy:
     runs-on: ubuntu-latest
