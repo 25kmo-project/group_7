@@ -29,7 +29,7 @@
   <widget class="QPushButton" name="btnMyData">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>150</x>
      <y>10</y>
      <width>101</width>
      <height>41</height>
@@ -52,7 +52,7 @@
     <string>Talletus</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnMyData_3">
+  <widget class="QPushButton" name="btnWithdraw">
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -68,7 +68,7 @@
   <widget class="QPushButton" name="btnMyData_4">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>400</x>
      <y>110</y>
      <width>101</width>
      <height>41</height>
@@ -232,6 +232,45 @@
    </property>
    <property name="text">
     <string>Tilinumero:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMyData_5">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>110</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Siirrä</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMyData_3">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>10</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Paluu</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMyData_6">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>10</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kirjaudu ulos</string>
    </property>
   </widget>
  </widget>

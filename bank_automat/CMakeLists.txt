@@ -16,6 +16,7 @@ qt_add_executable(bank_automat
 
     data.h data.cpp data.ui
     choosecard.h choosecard.cpp choosecard.ui
+    withdraw.h withdraw.cpp withdraw.ui
 
 )
 
