@@ -2,7 +2,7 @@ name: CI/CD for Bank ATM
 
 on:
   push:
-    branches: [ actions ] 
+    branches: [ main ] 
 
 jobs:
   build-and-push:
