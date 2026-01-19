@@ -13,7 +13,6 @@ services:
       - db_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/1_init.sql:ro
       - ./db/schema/er_bankdb.sql:/docker-entrypoint-initdb.d/2_er_bankdb.sql:ro
-    # Pidä MySQL vain verkon sisällä (EI porttiohjausta ellei pakko)
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
