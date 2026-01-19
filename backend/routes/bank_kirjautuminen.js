@@ -56,11 +56,12 @@ router.post('/', function(request, response) {
                             if (err) {
                                 return response.json({ "message": "tunnus ja salasana eivät täsmää" });
                             }
-                            if (attempts <= 0) {bank_user.lock_card(card_number, function(err, lockResult) {
-                                if (err) {
+                            if (attempts <= 0) {
                                     return response.json({ "message": "Tili estetty" });
                                 }
-                                return response.json({ "message": "Tili estetty" });
+                            if (attempts === 1) {
+                                return response.json({ 
+                                    "message": `Tunnus ja salasana eivät täsmää. 1 yritys jäljellä.`
                             });   
                             } else {
                                 return response.json({ 

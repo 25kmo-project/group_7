@@ -40,12 +40,6 @@ const bank_user = {
         }
     );
     },
-    lock_card:function(card_number, callback) {
-        let sql = `UPDATE card SET log_in_attempts = 0 WHERE card_number = ?`;
-        db.query(sql, [card_number], function(err, result) {
-            callback(err, result);
-    });
-    },
     update_logins:function(card_number, attempts, callback) {
         let sql = `UPDATE card SET log_in_attempts = ? WHERE card_number = ?`;
         db.query(sql, [attempts, card_number], function(err, result) {
