@@ -31,8 +31,8 @@ const card = {
             if (err) {
                 return callback(err, null);
             }
-            return db.query('UPDATE card SET card_number = ?, card_type = ?, expiration_date = ?, card_pin_hash = ? WHERE card_id = ?',
-                [card.card_number, card.card_type, card.expiration_date, hash, card_id], callback);
+            return db.query('UPDATE card SET card_number = ?, card_type = ?, expiration_date = ?, card_pin_hash = ?, log_in_attempts = ? WHERE card_id = ?',
+                [card.card_number, card.card_type, card.expiration_date, hash, card.log_in_attempts, card_id], callback);
         });
     },
     delete:function(card_id, callback){
