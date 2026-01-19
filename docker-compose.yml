@@ -33,6 +33,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       TZ: Europe/Helsinki
+      MY_TOKEN: ${MY_TOKEN}
     depends_on:
       db:
         condition: service_healthy
