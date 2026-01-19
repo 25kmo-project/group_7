@@ -1,0 +1,1 @@
+Tee tänne adduser yms ja valmis data databaselle
