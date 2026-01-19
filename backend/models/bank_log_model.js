@@ -24,6 +24,10 @@ const bank_log = {
         return db.query("DELETE FROM log WHERE log_id = ?",
             [log_id], callback);
     },
-}
-
+    transfer: function (first_account_id, second_account_id, amount, callback) {
+        db.query("CALL transfer(?, ?, ?)",
+            [first_account_id, second_account_id, amount],
+            callback);
+    }
+};
 module.exports = bank_log;

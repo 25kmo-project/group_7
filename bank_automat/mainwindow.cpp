@@ -42,7 +42,6 @@ void MainWindow::loginAction()
         if (jsonObject.contains("token")) {
             qDebug() << "User ID at login:" << ui->textUsername->text();
 
-            // Siirrä token-määrittely tänne ylös, ennen ChooseCard:ia
             QString token = jsonObject["token"].toString();
             QByteArray tokenBytes = token.toUtf8();
             int userId = jsonObject["user_id"].toInt();
@@ -91,8 +90,13 @@ void MainWindow::loginAction()
             //objAccountinfo->setUsername(ui->textUsername->text());
            // objAccountinfo->show();
         } else {
+            QString backendMessage = "Sori, tapahtu virhe";
+            if (jsonObject.contains("message")) {
+                backendMessage = jsonObject["message"].toString();
+            }
+
             ui->labelInfo->setText("Tunnus ja salasana eivät täsmää");
-            QMessageBox::warning (this, "Kirjautumisvirhe","Tunnus ja salasana eivät täsmää. Yritä uudelleen.");
+            QMessageBox::warning (this, "Kirjautumisvirhe", backendMessage);
             ui->textUsername->clear();
             ui->textPassword->clear();
             ui->textUsername->setFocus();
