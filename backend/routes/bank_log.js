@@ -68,5 +68,17 @@ router.post('/transfer', function (request, response) {
         }
     });
 });
+router.post('/withdraw', function (request, response) { // Uusi reitti nostoa varten
+    const { oma_account_id, maara_amount } = request.body; //Pyyntö sisältää nää kentät
+    bankLogModel.withdraw(oma_account_id, maara_amount, function (err, result) { //Kutsuu withdraw funktiota modelissa
+        console.log("MYSQL ERROR:", err); //Debuggausta varte nämä
+        console.log("MYSQL RESULT:", result); //Debuggausta varte nämä
+        if (err) {
+            response.json(err);
+        } else {
+            response.json(result);
+        }
+    });
+});
 
 module.exports = router;
