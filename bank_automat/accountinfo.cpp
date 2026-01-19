@@ -2,6 +2,7 @@
 #include "ui_accountinfo.h"
 #include <QShowEvent>
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
+#include "withdraw.h"
 
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
@@ -10,6 +11,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     ui->setupUi(this);
     manager = new QNetworkAccessManager(this);
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
+    connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
 }
 
 Accountinfo::~Accountinfo()
@@ -111,6 +113,12 @@ void Accountinfo::btnMyDataClicked()
     reply = manager->get(request);
     connect(reply, &QNetworkReply::finished, this, [this]() { MyDataSlot(true); }); // Lambda: Välitä true
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
+}
+
+void Accountinfo::btnWithdrawClicked()
+{
+    Withdraw *objWd = new Withdraw(this);
+    objWd->show();
 }
 
 void Accountinfo::MyDataSlot(bool openData)
