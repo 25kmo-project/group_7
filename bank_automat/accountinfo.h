@@ -31,7 +31,7 @@ public:
     void setAccountType(const QString &type);
     //void setAccountType(const QString &type);
 protected:
-    //void showEvent(QShowEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 
 
@@ -47,7 +47,8 @@ private:
 private slots:
     void btnMyDataClicked();
     void btnWithdrawClicked();
-    void MyDataSlot(bool openData);
+    void MyDataSlot();
+    void MyPersonalDataSlot();
     void handleNetworkError(QNetworkReply::NetworkError error);
 
 };

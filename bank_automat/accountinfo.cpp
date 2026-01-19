@@ -25,22 +25,7 @@ void Accountinfo::setAccountType(const QString &type)
     qDebug() << "Accountinfo: account type set to" << accountType;
 }
 
-/*void Accountinfo::showEvent(QShowEvent *event)
-{
-    QDialog::showEvent(event);
-    if (username.isEmpty() || token.isEmpty() || accountType.isEmpty()) {
-        qDebug() << "Accountinfo: Username, token or accountType empty! Cannot fetch saldo.";
-        return;
-    }
-    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
-    qDebug() << "Accountinfo: Fetching saldo automatically from URL:" << url;
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QByteArray myToken = "Bearer " + token;
-    request.setRawHeader("Authorization", myToken);
-    reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);
-}*/
+
 
 void Accountinfo::setUsername(const QString &newUsername)
 {
@@ -98,6 +83,24 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
     this->update(); // Pakota UI-päivitys
 }
 
+
+void Accountinfo::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    if (username.isEmpty() || token.isEmpty() || accountType.isEmpty()) {
+        qDebug() << "Accountinfo: Username, token or accountType empty! Cannot fetch saldo.";
+        return;
+    }
+    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
+    qDebug() << "Accountinfo: Fetching saldo automatically from URL:" << url;
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QByteArray myToken = "Bearer " + token;
+    request.setRawHeader("Authorization", myToken);
+    reply = manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);  // Käytä vanhaa slottia saldon päivitykseen
+    connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
+}
 void Accountinfo::btnMyDataClicked()
 {
     if (username.isEmpty() || token.isEmpty()) {
@@ -111,31 +114,44 @@ void Accountinfo::btnMyDataClicked()
     QByteArray myToken = "Bearer " + token;
     request.setRawHeader("Authorization", myToken);
     reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [this]() { MyDataSlot(true); }); // Lambda: Välitä true
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyPersonalDataSlot);  // Uusi slotti vain henkilötiedoille ja Data-ikkunalle
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
 }
-
 void Accountinfo::btnWithdrawClicked()
 {
     Withdraw *objWd = new Withdraw(this);
     objWd->show();
 }
 
-void Accountinfo::MyDataSlot(bool openData)
+void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys (ei Data:a)
 {
     QByteArray response = reply->readAll();
-    qDebug() << "Accountinfo: Response from backend:" << response;
+    qDebug() << "Accountinfo: Response from backend (saldo):" << response;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
     if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-        setAccountData(jsonDoc.object()); // Päivitä labelit aina (esim. saldo automaattisesti)
-        qDebug() << "Accountinfo: Data parsed and set successfully";
-        if (openData) { // Vain jos true (napista), avaa Data-ikkuna henkilötiedoilla
-            Data *objData = new Data(this);
-            objData->setTestData(response);
-            objData->show();
-        }
+        setAccountData(jsonDoc.object());  // Päivitä Accountinfo:n labelit (saldo jne.)
+        qDebug() << "Accountinfo: Saldo data parsed and set successfully";
     } else {
-        qDebug() << "Accountinfo: Invalid JSON response";
+        qDebug() << "Accountinfo: Invalid JSON for saldo";
+    }
+    reply->deleteLater();
+}
+
+void Accountinfo::MyPersonalDataSlot()  // Uusi slotti: Henkilötiedot ja Data-ikkuna
+{
+    QByteArray response = reply->readAll();
+    qDebug() << "Accountinfo: Response from backend (personal):" << response;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        qDebug() << "Accountinfo: Personal data parsed successfully";
+
+        // Avaa Data-ikkuna (ei päivitä Accountinfo:n label:eitä)
+        Data *objData = new Data(this);
+        objData->setTestData(response);
+        objData->show();
+    } else {
+        qDebug() << "Accountinfo: Invalid JSON for personal data";
+        // QMessageBox::warning(this, "Virhe", "Ei henkilötietoja saatavilla.");
     }
     reply->deleteLater();
 }
