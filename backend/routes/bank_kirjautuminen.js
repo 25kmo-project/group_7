@@ -14,7 +14,7 @@ router.post('/', function(request, response) {
         const pin = request.body.pin;
 
         // Haetaan hashattu PIN card-taulun tietokannasta
-        bank_user.check_password(card_number, function(err, result) {
+        bank_user.check_password_and_logins(card_number, function(err, result) {
 
             if (err) {
                 return response.json(err.errno);
@@ -23,10 +23,21 @@ router.post('/', function(request, response) {
             // Löytyikö ?
             if (result.length > 0) {
 
+                const login_attempts = result[0].log_in_attempts;
+                if (login_attempts <= 0) {
+                    console.log("Kaikki yritykset käytetty");
+                    return response.json({ "message": "Kirjautuminen estetty" });
+                }
+                
                 // Verrataan syötettyä PIN-koodia hashattuun PIN:iin
                 bcrypt.compare(pin, result[0].card_pin_hash, function(err, compareResult) {
 
                     if (compareResult) {
+                        bank_user.reset_login_attempts(card_number, function(err, resetResult) {
+                            if (err) {
+                                return response.json(err.errno);
+                            }
+                        
                         const token = generateAccessToken(result[0].user_id); //Käytetään korttiin liitettyä user_id:t
                         response.setHeader('Content-Type', 'application/json');
                         response.json({
@@ -36,22 +47,36 @@ router.post('/', function(request, response) {
                             card_type: result[0].card_type, // Palautetaan card_type
                             token: token
                         });
+                    });
                     } else {
                         console.log("Väärä PIN");
-                        response.json({ "message": "tunnus ja salasana eivät täsmää" });
+                        //vähennetään login_attempts yhdellä ja muutetaan tietokantaan
+                        const attempts = login_attempts - 1;
+                        bank_user.update_logins(card_number, attempts, function(err, updateResult) {
+                            if (err) {
+                                return response.json({ "message": "tunnus ja salasana eivät täsmää" });
+                            }
+                            if (attempts <= 0) {bank_user.lock_card(card_number, function(err, lockResult) {
+                                if (err) {
+                                    return response.json({ "message": "Tili estetty" });
+                                }
+                                return response.json({ "message": "Tili estetty" });
+                            });   
+                            } else {
+                                return response.json({ 
+                                    "message": `Tunnus ja salasana eivät täsmää. ${attempts} yritystä jäljellä.`
+                        });
                     }
+                    
                 });
-
-            } else {
-                console.log("Käyttäjää ei ole");
-                response.json({ "message": "tunnus ja salasana eivät täsmää" });
             }
         });
-
     } else {
         console.log("Kortin numero tai PIN puuttuu");
-        response.json({ "message": "tunnus ja salasana eivät täsmää" });
+        return response.json({ "message": "tunnus ja salasana eivät täsmää" });
     }
+    });
+}
 });
 
 
