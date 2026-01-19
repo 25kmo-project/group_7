@@ -88,7 +88,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: "db/schema/er_bankdb.sql,db/init.sql"
-          target: "/opt/bank-app/db/"
+          target: "/opt/bank-app/"
+          strip_components: 0
 
       - name: Copy Docker Compose
         uses: appleboy/scp-action@v0.1.4
