@@ -28,6 +28,11 @@ const bank_log = {
         db.query("CALL transfer(?, ?, ?)",
             [first_account_id, second_account_id, amount],
             callback);
+    },
+    withdraw: function (oma_account_id,maara_amount, callback) { //Rahaa otetaan tililtä
+        db.query("CALL withdraw(?, ?)", //Kutsutaan tietokannan withdraw -proseduuria
+            [oma_account_id, maara_amount], //Annetaan proseduurille tilin id ja määrä
+            callback); //Suoritetaan callback funktio
     }
 };
 module.exports = bank_log;
