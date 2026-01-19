@@ -57,7 +57,7 @@ router.post('/', function(request, response) {
                                 return response.json({ "message": "tunnus ja salasana eivät täsmää" });
                             }
                             if (attempts <= 0) {
-                                    return response.json({ "message": "Tili estetty" });
+                                    return response.json({ "message": "Kortilla kirjautuminen estetty" });
                                 }
                             if (attempts === 1) {
                                 return response.json({ 
