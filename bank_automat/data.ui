@@ -16,8 +16,8 @@
   <widget class="QLabel" name="labelFirstName">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>30</y>
+     <x>100</x>
+     <y>90</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QLabel" name="labelLastName">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>80</y>
+     <x>100</x>
+     <y>130</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QLabel" name="labelAddress">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>130</y>
+     <x>100</x>
+     <y>170</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -56,7 +56,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
+     <y>100</y>
      <width>63</width>
      <height>20</height>
     </rect>
@@ -69,7 +69,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>90</y>
+     <y>140</y>
      <width>63</width>
      <height>20</height>
     </rect>
@@ -81,14 +81,40 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>140</y>
+     <x>30</x>
+     <y>180</y>
      <width>63</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>Osoite:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnLogOut">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>0</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kirjaudu ulos</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnBack">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Takaisin</string>
    </property>
   </widget>
  </widget>
