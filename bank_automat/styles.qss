@@ -1,0 +1,33 @@
+* {
+    background-color: #003366;  /* Tummansininen tausta kaikkeen */
+    color: #FFFFFF;  /* Valkoinen teksti hyvän kontrastin vuoksi */
+    font-family: Arial, sans-serif;
+    font-size: 16px;  /* Isompi fontti selkeyteen, vähentää leikkaantumista */
+}
+
+QMainWindow, QDialog {  /* Kaikki ikkunat */
+    background-color: #004488;  /* Vaaleampi sininen ikkunoille */
+    border: none;  /* Poista reunat */
+}
+
+QPushButton {  /* Kaikki napit */
+    background-color: #3498DB;  /* Sininen tausta */
+    color: #FFFFFF;  /* Valkoinen teksti napeissa – parempi kontrasti */
+    border-radius: 8px;  /* Pyöreät kulmat */
+    border: 2px solid #2980B9;  /* Reuna */
+    padding: 10px 20px;  /* Lisää sisätilaa – teksti mahtuu paremmin, vähentää leikkaantumista */
+    font-weight: bold;  /* Lihavoitu teksti */
+    min-width: 100px;  /* Minimileveys napeille – estää leikkaantumisen */
+}
+
+QPushButton:hover {  /* Hover */
+    background-color: #2980B9;  /* Tummempi sininen */
+}
+
+QLabel {  /* Kaikki labelit – korjattu rumuus */
+    background-color: transparent;  /* Läpinäkyvä tausta – poistaa harmaat "laatikot" */
+    color: #FFFFFF;  /* Valkoinen teksti */
+    border: none;  /* Poista reunukset */
+    padding: 5px;  /* Hieman tilaa tekstiin – parantaa luettavuutta */
+    font-size: 16px;  /* Isompi koko */
+}

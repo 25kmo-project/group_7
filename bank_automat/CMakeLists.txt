@@ -17,6 +17,7 @@ qt_add_executable(bank_automat
     data.h data.cpp data.ui
     choosecard.h choosecard.cpp choosecard.ui
     withdraw.h withdraw.cpp withdraw.ui
+    styles.qss
 
 )
 
@@ -41,3 +42,8 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+add_custom_command(TARGET bank_automat POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_SOURCE_DIR}/styles.qss
+    ${CMAKE_BINARY_DIR}/styles.qss
+)

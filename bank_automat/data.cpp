@@ -58,8 +58,10 @@ void Data::btnBackClicked()
 void Data::btnLogOutClicked()
 {
     qDebug() << "Data: Kirjaudu-ulos nappi painettu.";
+    this->close(); // sulkee data ikkunan ensin
 
-    this->parentWidget()->close();
-    MainWindow *mainWindow = new MainWindow();
+    emit logoutRequested(); // signaali ohjaa sulkemaan accountinfo ikkunan
+
+    MainWindow *mainWindow = new MainWindow(); // avaa uuden ikkunan kirjautumista varten
     mainWindow->show();
 }
