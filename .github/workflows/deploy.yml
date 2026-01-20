@@ -3,6 +3,12 @@ name: CI/CD for Bank ATM
 on:
   push:
     branches: [ main ] 
+    paths:
+        - 'backend/**'
+        - 'db/**'
+        - 'docker-compose.yml'
+        - 'nginx/nginx.conf'
+        - '.github/workflows/**'
 
 jobs:
   build-and-push:
@@ -78,7 +84,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo mkdir -p /opt/bank-app/db/schema
+            sudo mkdir -p /opt/bank-app/db
             sudo chown -R $USER:$USER /opt/bank-app
 
       - name: Copy SQL Schema
@@ -87,7 +93,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "db/schema/er_bankdb.sql,db/init.sql"
+          source: "db/er_bankdb.sql"
           target: "/opt/bank-app/"
           strip_components: 0
 
