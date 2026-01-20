@@ -20,6 +20,9 @@ public:
 
     void setTestData(const QByteArray &newTestData);
 
+signals:
+    void logoutRequested();
+
 private slots:
     void btnBackClicked();
     void btnLogOutClicked();

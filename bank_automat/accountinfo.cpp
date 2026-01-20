@@ -1,4 +1,5 @@
 #include "accountinfo.h"
+#include "build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/bank_automat_autogen/include/ui_accountinfo.h"
 #include "ui_accountinfo.h"
 #include <QShowEvent>
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
@@ -123,7 +124,7 @@ void Accountinfo::btnWithdrawClicked()
     objWd->show();
 }
 
-void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys (ei Data:a)
+void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
 {
     QByteArray response = reply->readAll();
     qDebug() << "Accountinfo: Response from backend (saldo):" << response;
@@ -131,6 +132,10 @@ void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys (ei Data:
     if (!jsonDoc.isNull() && jsonDoc.isObject()) {
         setAccountData(jsonDoc.object());  // Päivitä Accountinfo:n labelit (saldo jne.)
         qDebug() << "Accountinfo: Saldo data parsed and set successfully";
+        Data *objData = new Data(this);
+        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);  // signaali sulkemiseen
+        objData->setTestData(response);
+        objData->show();
     } else {
         qDebug() << "Accountinfo: Invalid JSON for saldo";
     }
@@ -147,6 +152,7 @@ void Accountinfo::MyPersonalDataSlot()  // Uusi slotti: Henkilötiedot ja Data-i
 
         // Avaa Data-ikkuna (ei päivitä Accountinfo:n label:eitä)
         Data *objData = new Data(this);
+        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);
         objData->setTestData(response);
         objData->show();
     } else {
