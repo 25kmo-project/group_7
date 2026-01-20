@@ -20,6 +20,10 @@ public:
 
     void setTestData(const QByteArray &newTestData);
 
+private slots:
+    void btnBackClicked();
+    void btnLogOutClicked();
+
 private:
     Ui::Data *ui;
     QByteArray testData;

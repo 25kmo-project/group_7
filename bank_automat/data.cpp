@@ -3,12 +3,16 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>  // Lisätty debuggausta varten
+#include <QApplication>
+#include "mainwindow.h"
 
 Data::Data(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Data)
 {
     ui->setupUi(this);
+    connect(ui->btnBack, &QPushButton::clicked, this, &Data::btnBackClicked);  // Yhdistä Takaisin-nappi
+    connect(ui->btnLogOut, &QPushButton::clicked, this, &Data::btnLogOutClicked); // Yhdistä kirjaudu-ulos nappi
 }
 
 Data::~Data()
@@ -43,4 +47,19 @@ void Data::setTestData(const QByteArray &newTestData)
     qDebug() << "labelAddress set to:" << ui->labelAddress->text();
 
     this->update();  // Pakota UI päivittyä heti
+}
+
+void Data::btnBackClicked()
+{
+    this->close();
+    qDebug() << "Data: Takaisin nappi painettu - ikkuna suljettu";
+}
+
+void Data::btnLogOutClicked()
+{
+    qDebug() << "Data: Kirjaudu-ulos nappi painettu.";
+
+    this->parentWidget()->close();
+    MainWindow *mainWindow = new MainWindow();
+    mainWindow->show();
 }
