@@ -158,6 +158,8 @@ void ChooseCard::openAccount(const QJsonObject &obj)
     acc->setAccountData(obj); // JSON-tilidata
     acc->setToken(token); // Token API-kutsuja varten
     acc->setUsername(username); // Käyttäjän ID
+    acc->setAccountId(obj["account_id"].toInt());
+    acc->setAccountType(obj["account_type"].toString());
     acc->show();
     this->close(); // Suljetaan ChooseCard → siirrytään Accountinfoon
 }

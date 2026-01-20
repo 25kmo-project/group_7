@@ -11,6 +11,7 @@
 #include "environment.h"
 #include "accountinfo.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
+
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
@@ -34,5 +37,7 @@ private slots:
     void btnLoginSlot();
     void loginAction();
     void onCardSelected(QString type);
+    //void onWithdrawReply(QNetworkReply *reply);
+
 };
 #endif // MAINWINDOW_H
