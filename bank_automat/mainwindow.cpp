@@ -2,12 +2,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox> //Messageboxia varten
+#include <QEvent>
+#include <QApplication>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //Inactive ajastus 30s
+    inactivityTimer = new QTimer(this);
+    inactivityTimer->setInterval(30000); //(30000ms)
+
     connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::btnLoginSlot);
+    connect(inactivityTimer, &QTimer::timeout, this, &MainWindow::onInactivityTimeout);
+
+    qApp->installEventFilter(this);
+
+    inactivityTimer->start(); // Aloittaa ajastimen alusta
 
     manager = new QNetworkAccessManager(this);//Luodaan verkko.
 }
@@ -15,6 +28,30 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    // Havaitse käyttäjän aktiivisuus (hiiri, näppäin)
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress) {
+        inactivityTimer->start();  // Käynnistä ajastin uudelleen (resetoi 30 sekuntia)
+    }
+    return QMainWindow::eventFilter(obj, event);
+}
+
+void MainWindow::onInactivityTimeout()
+{
+    qDebug() << "Inaktiivisuus: Palautetaan alkutilaan.";
+    // Sulje kaikki avoimet ikkunat
+    for (QWidget *widget : QApplication::topLevelWidgets()) {
+        if (widget != this) {  // Älä sulje MainWindow:ta vielä
+            widget->close();
+        }
+    }
+
+    // Palauta alkutilaan:
+    this->close();
+    MainWindow *newMain = new MainWindow();
+    newMain->show();
 }
 
 void MainWindow::btnLoginSlot()
