@@ -22,40 +22,14 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>190</y>
+     <x>280</x>
+     <y>180</y>
      <width>141</width>
      <height>51</height>
     </rect>
    </property>
    <property name="text">
     <string>Valitse kortti</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnDEBIT">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>280</y>
-     <width>181</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>DEBIT</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCREDIT">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>280</y>
-     <width>181</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>CREDIT</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnBack">
@@ -67,9 +41,53 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="text">
     <string>Takaisin</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>270</y>
+     <width>421</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="btnDEBIT">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>DEBIT</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="btnCREDIT">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>CREDIT</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

@@ -73,7 +73,7 @@ void MainWindow::loginAction()
     qDebug() << "Response data:" << responseData;
 
     if (responseData == "-4078" || responseData.length() == 0) { //Tietokanta virhe
-        ui->labelInfo->setText("Virhe tietokantayhteydessä");
+        ui->LabelErrorMessage->setText("Virhe tietokantayhteydessä");
     } else {
         QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData); //Jos onnistuu nii tokenin palautus
         QJsonObject jsonObject = jsonDoc.object();
@@ -192,7 +192,7 @@ void MainWindow::loginAction()
                 backendMessage = jsonObject["message"].toString();
             }
 
-            ui->labelInfo->setText("Tunnus ja salasana eivät täsmää");
+            ui->LabelErrorMessage->setText("Tunnus ja salasana eivät täsmää");
             QMessageBox::warning (this, "Kirjautumisvirhe", backendMessage);
             ui->textUsername->clear();
             ui->textPassword->clear();
