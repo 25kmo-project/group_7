@@ -31,7 +31,7 @@ void Accountinfo::setAccountType(const QString &type)
 void Accountinfo::setUsername(const QString &newUsername)
 {
     username = newUsername;
-    ui->labelUsername->setText(username);
+
     qDebug() << "Accountinfo: Username set to" << username;
 }
 
@@ -44,45 +44,42 @@ void Accountinfo::setToken(const QByteArray &newToken)
 void Accountinfo::setAccountData(const QJsonObject &obj)
 {
     qDebug() << "setAccountData called with obj:" << obj;
-    if (obj.contains("account_id")) {
-        ui->labelID->setText(QString::number(obj["account_id"].toInt()));
-        qDebug() << "labelID set to:" << ui->labelID->text();
-    } else {
-        ui->labelID->setText("Ei dataa");
-        qDebug() << "account_id missing!";
-    }
+
+    // 1. Tilityyppi → labelType
     if (obj.contains("account_type")) {
         ui->labelType->setText(obj["account_type"].toString());
         qDebug() << "labelType set to:" << ui->labelType->text();
     } else {
         ui->labelType->setText("Ei dataa");
     }
+
+    // 2. Tilinumero → labelAccountNumber
     if (obj.contains("account_number")) {
-        ui->labelNumber->setText(obj["account_number"].toString());
-        qDebug() << "labelNumber set to:" << ui->labelNumber->text();
+        ui->labelAccountNumber->setText(obj["account_number"].toString());
+        qDebug() << "labelAccountNumber set to:" << ui->labelAccountNumber->text();
     } else {
-        ui->labelNumber->setText("Ei dataa");
+        ui->labelAccountNumber->setText("Ei dataa");
     }
+
+    // 3. Saldo → labelBalance
     if (obj.contains("balance")) {
         ui->labelBalance->setText(obj["balance"].toString());
         qDebug() << "labelBalance set to:" << ui->labelBalance->text();
     } else {
         ui->labelBalance->setText("Ei dataa");
     }
+
+    // 4. Luottoraja → labelCreditLimit
     if (obj.contains("credit_limit")) {
         ui->labelCreditLimit->setText(obj["credit_limit"].toString());
         qDebug() << "labelCreditLimit set to:" << ui->labelCreditLimit->text();
     } else {
         ui->labelCreditLimit->setText("Ei dataa");
     }
-    if (obj.contains("user_id")) {
-        ui->labelUserID->setText(QString::number(obj["user_id"].toInt()));
-        qDebug() << "labelUserID set to:" << ui->labelUserID->text();
-    } else {
-        ui->labelUserID->setText("Ei dataa");
-    }
+
     this->update(); // Pakota UI-päivitys
 }
+
 
 
 void Accountinfo::showEvent(QShowEvent *event)

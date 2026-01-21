@@ -1,33 +1,88 @@
-* {
-    background-color: #003366;  /* Tummansininen tausta kaikkeen */
-    color: #FFFFFF;  /* Valkoinen teksti hyvän kontrastin vuoksi */
-    font-family: Arial, sans-serif;
-    font-size: 16px;  /* Isompi fontti selkeyteen, vähentää leikkaantumista */
+/* Yleinen tausta ja fontti */
+QDialog, QWidget {
+    background-color: #0F1C2E;
+    color: #E0E0E0;
+    font-family: "Segoe UI", "Arial", sans-serif;
+    font-size: 16px;
 }
 
-QMainWindow, QDialog {  /* Kaikki ikkunat */
-    background-color: #004488;  /* Vaaleampi sininen ikkunoille */
-    border: none;  /* Poista reunat */
+/* Otsikot */
+QLabel#labelTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 16px;
 }
 
-QPushButton {  /* Kaikki napit */
-    background-color: #3498DB;  /* Sininen tausta */
-    color: #FFFFFF;  /* Valkoinen teksti napeissa – parempi kontrasti */
-    border-radius: 8px;  /* Pyöreät kulmat */
-    border: 2px solid #2980B9;  /* Reuna */
-    padding: 10px 20px;  /* Lisää sisätilaa – teksti mahtuu paremmin, vähentää leikkaantumista */
-    font-weight: bold;  /* Lihavoitu teksti */
-    min-width: 100px;  /* Minimileveys napeille – estää leikkaantumisen */
+/* Kaikki QLabelit */
+QLabel {
+    color: white;
+    font-size: 16px;
 }
 
-QPushButton:hover {  /* Hover */
-    background-color: #2980B9;  /* Tummempi sininen */
+/* Staattiset tiedot (esim. labelFirstName, labelBalance) */
+QLabel[id^="label"] {
+    padding: 4px 8px;
 }
 
-QLabel {  /* Kaikki labelit – korjattu rumuus */
-    background-color: transparent;  /* Läpinäkyvä tausta – poistaa harmaat "laatikot" */
-    color: #FFFFFF;  /* Valkoinen teksti */
-    border: none;  /* Poista reunukset */
-    padding: 5px;  /* Hieman tilaa tekstiin – parantaa luettavuutta */
-    font-size: 16px;  /* Isompi koko */
+/* Tekstikentät (jos käytössä jossain) */
+QLineEdit {
+    background-color: #1F2D45;
+    color: white;
+    border: 1px solid #4A6FA5;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 16px;
+}
+
+/* Napit */
+QPushButton {
+    background-color: #2A3B55;
+    color: white;
+    border: 2px solid #4A6FA5;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 15px;
+}
+
+QPushButton:hover {
+    background-color: #3B4F70;
+    border-color: #6FA8DC;
+}
+
+/* Kehykset ja kortit */
+#profileCard {
+    background-color: transparent;
+    border-radius: 16px;
+    padding: 24px;
+    border: 5px solid white;
+    border-radius: 20px;
+}
+
+QLabel#labelTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
+
+/* Virheilmoitukset */
+QLabel#LabelErrorMessage {
+    color: #FF5555;
+    font-weight: bold;
+}
+
+/* Menubar ja statusbar */
+QMenuBar, QStatusBar {
+    background-color: #0F1C2E;
+    color: #CCCCCC;
+}
+
+/* Taulukot (jos käytössä) */
+QTableWidget {
+    background-color: #1F2D45;
+    color: white;
+    gridline-color: #4A6FA5;
+    selection-background-color: #4A6FA5;
+    selection-color: white;
 }
