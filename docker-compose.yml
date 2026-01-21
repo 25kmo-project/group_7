@@ -20,6 +20,7 @@ services:
     restart: unless-stopped
 
   app:
+    build: ./backend
     image: ${DOCKERHUB_USERNAME}/bank-backend:latest
     container_name: bank_api
     environment:
