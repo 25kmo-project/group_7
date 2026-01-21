@@ -1,12 +1,6 @@
--- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema bank_db
--- -----------------------------------------------------
 
 -- -----------------------------------------------------
 -- Schema bank_db
@@ -231,6 +225,62 @@ BEGIN
 
     INSERT INTO log(account_id, actions, amount, event_time)
     VALUES(oma_account_id, 'withdrawal', maara_amount, NOW());
+
+
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure deposit
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `bank_db`$$
+CREATE PROCEDURE deposit (
+    IN my_account_id INT,
+    IN amount DECIMAL(12,2)
+)
+BEGIN
+
+    DECLARE account_balance DECIMAL(12,2);
+    DECLARE account_type ENUM('debit', 'credit');
+    DECLARE account_credit_limit DECIMAL(12,2);
+
+	IF amount <= 0 THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Amount must be positive';
+		END IF;
+
+    START TRANSACTION;
+
+    SELECT balance, account_type, credit_limit
+    INTO account_balance, account_type, account_credit_limit
+    FROM account
+    WHERE account_id = my_account_id
+    FOR UPDATE;
+    
+    IF ROW_COUNT() = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Account doesnt exist';
+    END IF;
+    
+    IF account_type = 'credit' AND account_balance + amount > account_credit_limit THEN
+    ROLLBACK;
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Credit limit exceeded';
+    
+    END IF;
+
+    UPDATE account
+    SET balance = balance + amount
+    WHERE account_id = my_account_id;
+
+
+    INSERT INTO log(account_id, actions, amount, event_time)
+    VALUES(my_account_id, 'deposit', amount, NOW());
 
 
     COMMIT;

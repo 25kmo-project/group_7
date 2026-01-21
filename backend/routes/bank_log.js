@@ -80,5 +80,16 @@ router.post('/withdraw', function (request, response) { // Uusi reitti nostoa va
         }
     });
 });
+router.post('/deposit', function (request, response) {
+    const {my_account_id, amount } = request.body;
+    bankLogModel.deposit(my_account_id, amount, function (err, result) {
+        if (err)    {
+            console.log('MYSQL ERROR:', err);
+            response.json(err);
+        }else {
+            response.json(result);
+        }
+    });
+});
 
 module.exports = router;

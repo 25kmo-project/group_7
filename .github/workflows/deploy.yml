@@ -129,5 +129,5 @@ jobs:
           script: |
             cd /opt/bank-app
             docker compose pull
-            docker compose up -d
+            docker compose up -d --no-build
             docker system prune -f
