@@ -4,6 +4,7 @@
 #include <QShowEvent>
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
 #include "withdraw.h"
+#include "deposit.h"
 
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
@@ -13,6 +14,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     manager = new QNetworkAccessManager(this);
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
     connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
+    connect(ui->btnNewDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
 }
 
 Accountinfo::~Accountinfo()
@@ -140,6 +142,12 @@ void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
     objWd->balance = ui->labelBalance->text();
     connect(objWd,&Withdraw::withdrawDone, this, &Accountinfo::refreshBalance); //Tässä yhdistyy accountinfo ja refresh
     objWd->show();
+}
+
+void Accountinfo::btnNewDepositClicked()
+{
+    Deposit *objDeposit = new Deposit(this);
+    objDeposit->show();
 }
 
 void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
