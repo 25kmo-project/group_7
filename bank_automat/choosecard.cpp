@@ -183,6 +183,7 @@ void ChooseCard::handleNetworkError(QNetworkReply::NetworkError error)
 
 void ChooseCard::btnBackClicked()
 {
+    emit backRequested();
     qDebug() << "ChooseCard: Takaisin painettu → suljetaan dialogi";
     this->close();
 }
