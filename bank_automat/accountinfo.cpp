@@ -48,10 +48,10 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
     qDebug() << "setAccountData called with obj:" << obj;
     if (obj.contains("account_id")) {
         accountId = obj["account_id"].toInt();
-        ui->label_6->setText(QString::number(obj["account_id"].toInt()));
-        qDebug() << "labelID set to:" << ui->label_6->text();
+        ui->labelID->setText(QString::number(obj["account_id"].toInt()));
+        qDebug() << "labelID set to:" << ui->labelID->text();
     } else {
-        ui->label_6->setText("Ei dataa");
+        ui->labelID->setText("Ei dataa");
         qDebug() << "account_id missing!";
     }
 
@@ -158,10 +158,10 @@ void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
     if (!jsonDoc.isNull() && jsonDoc.isObject()) {
         setAccountData(jsonDoc.object());  // Päivitä Accountinfo:n labelit (saldo jne.)
         qDebug() << "Accountinfo: Saldo data parsed and set successfully";
-        Data *objData = new Data(this);
-        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);  // signaali sulkemiseen
-        objData->setTestData(response);
-        objData->show();
+        //Data *objData = new Data(this);
+        //connect(objData, &Data::logoutRequested, this, &Accountinfo::close);  // signaali sulkemiseen
+        //objData->setTestData(response);
+        //objData->show();
     } else {
         qDebug() << "Accountinfo: Invalid JSON for saldo";
     }
