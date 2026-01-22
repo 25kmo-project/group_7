@@ -108,6 +108,7 @@ void MainWindow::loginAction()
                     QJsonObject obj = accDoc.object();
 
                     Accountinfo *acc = new Accountinfo(this);//Luodaan accouninfo ja annetaan JSON-data
+                    connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
                     acc->setToken(tokenBytes);
                     acc->setUsername(QString::number(userId));
                     acc->setAccountData(obj);
@@ -141,6 +142,7 @@ void MainWindow::loginAction()
                     QJsonObject obj = accDoc.object();
 
                     Accountinfo *acc = new Accountinfo(this);
+                    connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
                     acc->setToken(tokenBytes);
                     acc->setUsername(QString::number(userId));
                     acc->setAccountData(obj);
@@ -168,6 +170,7 @@ void MainWindow::loginAction()
 
                 // Kun käyttäjä valitsee debit/credit, ChooseCard avaa Accountinfo-ikkunan
                 connect(objchoose, &ChooseCard::cardSelected, this, &MainWindow::onCardSelected);
+                connect(objchoose, &ChooseCard::backRequested, this, &MainWindow::show);
 
                 objchoose->exec();   // Näyttää valintadialogin
                 reply->deleteLater();
@@ -207,3 +210,9 @@ void MainWindow::onCardSelected(QString type)
     qDebug() << "Kortti valittu:" << type;
 
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->close();
+}
+

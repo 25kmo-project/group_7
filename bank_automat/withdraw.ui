@@ -113,9 +113,9 @@
   <widget class="QLabel" name="labelError">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>240</y>
-     <width>200</width>
+     <x>160</x>
+     <y>310</y>
+     <width>331</width>
      <height>21</height>
     </rect>
    </property>

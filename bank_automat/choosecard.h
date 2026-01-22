@@ -20,7 +20,8 @@ public:
     void setChooseCard(const QByteArray &newChooseCard);
 
 signals:
-    void cardSelected(QString type);  // Poistettu kommentti: Tämä signaali tarvitaan connect-funktiolle MainWindow:ssa
+    void cardSelected(QString type); // Poistettu kommentti: Tämä signaali tarvitaan connect-funktiolle MainWindow:ssa
+    void backRequested();    //Tarvii edelliseen ikkunaan palattessa(Päävalikosta kirjautumisikkunaan)
 
 private slots:
     //void on_btn_Credit_clicked();  // Jos tarvitset, poista kommentti ja toteuta .cpp:ssä

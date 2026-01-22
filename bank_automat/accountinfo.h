@@ -36,6 +36,9 @@ protected:
 
 
 
+signals:
+    void backRequested(); //Tarvii edelliseen ikkunaan palattessa(Päävalikosta kirjautumisikkunaan)
+
 
 private:
     Ui::Accountinfo *ui;
@@ -56,6 +59,8 @@ private slots:
     void handleNetworkError(QNetworkReply::NetworkError error);
     void refreshBalance(); //Päivittää automaattisesti accountinfon balancen
 
+    void on_btnBack_clicked();
+    void on_btnLogout_clicked();
 };
 
 #endif // ACCOUNTINFO_H

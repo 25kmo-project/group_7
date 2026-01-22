@@ -206,3 +206,17 @@ void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne si
     connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot); //Päivittää saldon ui:hin.
 }
 
+
+void Accountinfo::on_btnBack_clicked()
+{
+    emit backRequested();
+
+    this->close();
+}
+
+
+void Accountinfo::on_btnLogout_clicked()
+{
+    this->close();
+}
+

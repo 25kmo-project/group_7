@@ -44,5 +44,6 @@ private slots:
     //void onWithdrawReply(QNetworkReply *reply);
 
     void onInactivityTimeout();
+    void on_pushButton_clicked();
 };
 #endif // MAINWINDOW_H
