@@ -63,7 +63,7 @@ jobs:
         run: |
           docker run -d --name bank-db \
             --network bank-net \
-            -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }} \
+            -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
             -e MYSQL_DATABASE=bank_db \
             mysql:8.0
 
