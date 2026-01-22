@@ -47,6 +47,7 @@ private:
 private slots:
     void btnMyDataClicked();
     void btnWithdrawClicked();
+    void btnNewDepositClicked();
     void MyDataSlot();
     void MyPersonalDataSlot();
     void handleNetworkError(QNetworkReply::NetworkError error);
