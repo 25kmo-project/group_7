@@ -1,5 +1,5 @@
 #include "accountinfo.h"
-#include "build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/bank_automat_autogen/include/ui_accountinfo.h"
+//#include "build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/bank_automat_autogen/include/ui_accountinfo.h"
 #include "ui_accountinfo.h"
 #include <QShowEvent>
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
@@ -48,10 +48,10 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
     qDebug() << "setAccountData called with obj:" << obj;
     if (obj.contains("account_id")) {
         accountId = obj["account_id"].toInt();
-        ui->labelID->setText(QString::number(obj["account_id"].toInt()));
-        qDebug() << "labelID set to:" << ui->labelID->text();
+        ui->label_6->setText(QString::number(obj["account_id"].toInt()));
+        qDebug() << "labelID set to:" << ui->label_6->text();
     } else {
-        ui->labelID->setText("Ei dataa");
+        ui->label_6->setText("Ei dataa");
         qDebug() << "account_id missing!";
     }
 
