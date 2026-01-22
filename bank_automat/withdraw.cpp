@@ -1,6 +1,8 @@
 #include "withdraw.h"
 #include "ui_withdraw.h"
 #include "environment.h"
+#include <QMessageBox>
+
 
 #include <QNetworkReply>
 
@@ -10,15 +12,11 @@ Withdraw::Withdraw(QWidget *parent)
 {
     ui->setupUi(this);
 
-
-    //ui->labelBalance->setText("Saldo: " + balance + " €");
+    // HTTP-manageri joka hoitaa backend-kutsut
     manager = new QNetworkAccessManager(this);
 
-    connect(manager, &QNetworkAccessManager::finished,this, &Withdraw::onWithdrawReply);
-
-
-
-
+    // Kun backend vastaa POST-pyyntöön → kutsutaan onWithdrawReply()
+    connect(manager, &QNetworkAccessManager::finished, this, &Withdraw::onWithdrawReply);
 }
 
 Withdraw::~Withdraw()
@@ -28,31 +26,30 @@ Withdraw::~Withdraw()
 
 void Withdraw::on_btnWithdrawBack_clicked()
 {
-    qDebug() << "Paluu päävalikkoon";
+    // Käyttäjä palaa takaisin → ilmoitetaan Accountinfolle
     emit withdrawDone();
+
+    // Suljetaan ikkuna
     this->close();
-
-
 }
 
+//Nosto-napit
 
 void Withdraw::on_btn20_clicked()
 {
-
+    // Luodaan POST-pyyntö backendille
     QNetworkRequest req(Environment::base_url() + "bank_log/withdraw");
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
 
+    // JSON-data nostoa varten
     QJsonObject json;
     json["oma_account_id"] = accountId;
     json["maara_amount"] = 20;
-    qDebug() << "Withdraw: accountId =" << accountId;
 
-
+    // Lähetetään pyyntö
     manager->post(req, QJsonDocument(json).toJson());
 }
-
-
 
 void Withdraw::on_btn40_clicked()
 {
@@ -63,12 +60,9 @@ void Withdraw::on_btn40_clicked()
     QJsonObject json;
     json["oma_account_id"] = accountId;
     json["maara_amount"] = 40;
-    qDebug() << "Withdraw: accountId =" << accountId;
-
 
     manager->post(req, QJsonDocument(json).toJson());
 }
-
 
 void Withdraw::on_btn50_clicked()
 {
@@ -79,11 +73,10 @@ void Withdraw::on_btn50_clicked()
     QJsonObject json;
     json["oma_account_id"] = accountId;
     json["maara_amount"] = 50;
-    qDebug() << "Withdraw: accountId =" << accountId;
-
 
     manager->post(req, QJsonDocument(json).toJson());
 }
+
 void Withdraw::on_btn100_clicked()
 {
     QNetworkRequest req(Environment::base_url() + "bank_log/withdraw");
@@ -93,20 +86,21 @@ void Withdraw::on_btn100_clicked()
     QJsonObject json;
     json["oma_account_id"] = accountId;
     json["maara_amount"] = 100;
-    qDebug() << "Withdraw: accountId =" << accountId;
-
 
     manager->post(req, QJsonDocument(json).toJson());
 }
+
+
+//Backendin vastaus pyyntöön
+
 void Withdraw::onWithdrawReply(QNetworkReply *reply)
 {
-
     QByteArray response = reply->readAll();
     qDebug() << "WITHDRAW RESPONSE:" << response;
 
 
     if (reply->error() != QNetworkReply::NoError) {
-
+        QMessageBox::warning(this, "Virhe nostossa", "Verkkovirhe tapahtui.");
         reply->deleteLater();
         return;
     }
@@ -115,46 +109,56 @@ void Withdraw::onWithdrawReply(QNetworkReply *reply)
     QJsonDocument doc = QJsonDocument::fromJson(response);
     QJsonObject obj = doc.object();
 
-
-    if (obj.contains("error")) {
+    // 3. Backend virhe
+    if (obj.contains("sqlMessage")) {
+        QString err = obj["sqlMessage"].toString();
+        QMessageBox::warning(this, "Virhe nostossa", err);
+        qDebug() << "DEBUG: BACKEND-VIRHE, EI SULJETA IKKUNAA";
 
         reply->deleteLater();
         return;
     }
 
+    //Onnistui
+    emit withdrawDone();
+    this->close();
 
-
-
-
-
-  reply->deleteLater();
+    reply->deleteLater();
 }
+
+
+
+// Näyttää nosto-ikkunan saldon
 
 void Withdraw::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
-    ui->labelBalance->setText("Saldo: " + balance + " €");
 
+
+    ui->labelBalance->setText("Saldo: " + balance + " €");
 }
 
+
+// Muu summa
 
 void Withdraw::on_btnNosta_clicked()
 {
     QString text = ui->lineEditAmount->text();
     int amount = text.toInt();
 
-    // 1. Perustarkistukset
+
     if (amount < 20) {
         ui->labelError->setText("Miniminosto on 20 €");
         return;
     }
+
 
     if (amount % 10 != 0) {
         ui->labelError->setText("Summa pitää olla 10 € tarkkuudella");
         return;
     }
 
-    // 2. Tarkista voiko summan muodostaa 20 ja 50 seteleillä
+
     bool possible = false;
 
     for (int fifties = 0; fifties * 50 <= amount; fifties++) {
@@ -170,8 +174,8 @@ void Withdraw::on_btnNosta_clicked()
         return;
     }
 
-    // 3. Lähetä nosto backendille
-    lastAmount = amount;
+    //Nosto backendille
+    //lastAmount = amount;
 
     QNetworkRequest req(Environment::base_url() + "bank_log/withdraw");
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -183,5 +187,3 @@ void Withdraw::on_btnNosta_clicked()
 
     manager->post(req, QJsonDocument(json).toJson());
 }
-
-

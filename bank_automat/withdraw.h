@@ -23,31 +23,31 @@ public:
     ~Withdraw();
 
     QString token;
-    int accountId = -1;
+    int accountId = -1; //Tarvitaan et account_id siirtyy ikkunalta ikkunalle!!!
     QString balance;
 
 signals:
-    void withdrawDone();
+    void withdrawDone(); //Accountinfolle tieto
 
 private slots:
-    void on_btnWithdrawBack_clicked();
+    void on_btnWithdrawBack_clicked(); //Takaisin nappi
 
-    void on_btn20_clicked();
+    void on_btn20_clicked(); //20€
 
-    void on_btn40_clicked();
+    void on_btn40_clicked(); //40€
 
-    void on_btn50_clicked();
+    void on_btn50_clicked(); //50€
 
-    void on_btn100_clicked();
+    void on_btn100_clicked(); //100€
 
-    void onWithdrawReply(QNetworkReply *reply);
+    void onWithdrawReply(QNetworkReply *reply); //Bäkkärin vastaus
 
-    void on_btnNosta_clicked();
+    void on_btnNosta_clicked(); //nosto nappi
 
 private:
     Ui::Withdraw *ui;
     QNetworkAccessManager *manager;
-    int lastAmount = 0;
+    //int lastAmount = 0;
 
     //int luku = 0;
     //void sendWithdraw(int amount);

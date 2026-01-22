@@ -103,7 +103,7 @@ void Accountinfo::showEvent(QShowEvent *event)
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
 }
 
-void Accountinfo::setAccountId(int id)
+void Accountinfo::setAccountId(int id) //Tallettaa id ikkunalta ikkunalle jne.
 {
     accountId = id;
     qDebug() << "Accountinfo: accountId set to" << accountId;
@@ -126,7 +126,7 @@ void Accountinfo::btnMyDataClicked()
     connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyPersonalDataSlot);  // Uusi slotti vain henkilötiedoille ja Data-ikkunalle
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
 }
-void Accountinfo::btnWithdrawClicked()
+void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
 {
     qDebug() << "DEBUG: btnWithdrawClicked, accountId =" << accountId;
     Withdraw *objWd = new Withdraw(this); //Luo nosto ikkunan
@@ -175,9 +175,9 @@ void Accountinfo::handleNetworkError(QNetworkReply::NetworkError error)
     qDebug() << "Accountinfo: Network error:" << error << "-" << reply->errorString();
 }
 
-void Accountinfo::refreshBalance()
+void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne signaalin
 {
-    qDebug() << "Refreshing balance after withdraw...";
+    //qDebug() << "Refreshing balance after withdraw...";
 
     QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
     QNetworkRequest request(url);
@@ -185,6 +185,6 @@ void Accountinfo::refreshBalance()
     request.setRawHeader("Authorization", "Bearer " + token);
 
     reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot); //Päivittää saldon ui:hin.
 }
 
