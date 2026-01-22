@@ -33,6 +33,13 @@ const bank_log = {
         db.query("CALL withdraw(?, ?)", //Kutsutaan tietokannan withdraw -proseduuria
             [oma_account_id, maara_amount], //Annetaan proseduurille tilin id ja määrä
             callback); //Suoritetaan callback funktio
+    },
+    deposit: function (my_account_id, amount, callback) {
+        db.query("CALL deposit(?, ?)",
+            [my_account_id, amount],
+            callback);
     }
+
+
 };
 module.exports = bank_log;

@@ -17,8 +17,9 @@ qt_add_executable(bank_automat
     data.h data.cpp data.ui
     choosecard.h choosecard.cpp choosecard.ui
     withdraw.h withdraw.cpp withdraw.ui
-
+    styles.qss
 )
+
 
 target_link_libraries(bank_automat
     PRIVATE
@@ -40,4 +41,4 @@ qt_generate_deploy_app_script(
     OUTPUT_SCRIPT deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
-install(SCRIPT ${deploy_script})
+

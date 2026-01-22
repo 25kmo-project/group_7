@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include "environment.h"
 #include "accountinfo.h"
+#include <QTimer>
 
 
 QT_BEGIN_NAMESPACE
@@ -26,12 +27,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+bool eventFilter(QObject *obj, QEvent *event) override;
 
 
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
+    QTimer *inactivityTimer; // 30sek
 
 private slots:
     void btnLoginSlot();
@@ -39,5 +43,6 @@ private slots:
     void onCardSelected(QString type);
     //void onWithdrawReply(QNetworkReply *reply);
 
+    void onInactivityTimeout();
 };
 #endif // MAINWINDOW_H

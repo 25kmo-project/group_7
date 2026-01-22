@@ -1,0 +1,88 @@
+/* Yleinen tausta ja fontti */
+QDialog, QWidget {
+    background-color: #0F1C2E;
+    color: #E0E0E0;
+    font-family: "Segoe UI", "Arial", sans-serif;
+    font-size: 16px;
+}
+
+/* Otsikot */
+QLabel#labelTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 16px;
+}
+
+/* Kaikki QLabelit */
+QLabel {
+    color: white;
+    font-size: 16px;
+}
+
+/* Staattiset tiedot (esim. labelFirstName, labelBalance) */
+QLabel[id^="label"] {
+    padding: 4px 8px;
+}
+
+/* Tekstikentät (jos käytössä jossain) */
+QLineEdit {
+    background-color: #1F2D45;
+    color: white;
+    border: 1px solid #4A6FA5;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 16px;
+}
+
+/* Napit */
+QPushButton {
+    background-color: #2A3B55;
+    color: white;
+    border: 2px solid #4A6FA5;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 15px;
+}
+
+QPushButton:hover {
+    background-color: #3B4F70;
+    border-color: #6FA8DC;
+}
+
+/* Kehykset ja kortit */
+#profileCard {
+    background-color: transparent;
+    border-radius: 16px;
+    padding: 24px;
+    border: 5px solid white;
+    border-radius: 20px;
+}
+
+QLabel#labelTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
+
+/* Virheilmoitukset */
+QLabel#LabelErrorMessage {
+    color: #FF5555;
+    font-weight: bold;
+}
+
+/* Menubar ja statusbar */
+QMenuBar, QStatusBar {
+    background-color: #0F1C2E;
+    color: #CCCCCC;
+}
+
+/* Taulukot (jos käytössä) */
+QTableWidget {
+    background-color: #1F2D45;
+    color: white;
+    gridline-color: #4A6FA5;
+    selection-background-color: #4A6FA5;
+    selection-color: white;
+}

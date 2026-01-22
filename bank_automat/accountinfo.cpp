@@ -1,4 +1,5 @@
 #include "accountinfo.h"
+#include "build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/bank_automat_autogen/include/ui_accountinfo.h"
 #include "ui_accountinfo.h"
 #include <QShowEvent>
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
@@ -30,7 +31,7 @@ void Accountinfo::setAccountType(const QString &type)
 void Accountinfo::setUsername(const QString &newUsername)
 {
     username = newUsername;
-    ui->labelUsername->setText(username);
+
     qDebug() << "Accountinfo: Username set to" << username;
 }
 
@@ -51,38 +52,42 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
         ui->labelID->setText("Ei dataa");
         qDebug() << "account_id missing!";
     }
+
+    // 1. Tilityyppi → labelType
     if (obj.contains("account_type")) {
         ui->labelType->setText(obj["account_type"].toString());
         qDebug() << "labelType set to:" << ui->labelType->text();
     } else {
         ui->labelType->setText("Ei dataa");
     }
+
+    // 2. Tilinumero → labelAccountNumber
     if (obj.contains("account_number")) {
-        ui->labelNumber->setText(obj["account_number"].toString());
-        qDebug() << "labelNumber set to:" << ui->labelNumber->text();
+        ui->labelAccountNumber->setText(obj["account_number"].toString());
+        qDebug() << "labelAccountNumber set to:" << ui->labelAccountNumber->text();
     } else {
-        ui->labelNumber->setText("Ei dataa");
+        ui->labelAccountNumber->setText("Ei dataa");
     }
+
+    // 3. Saldo → labelBalance
     if (obj.contains("balance")) {
         ui->labelBalance->setText(obj["balance"].toString());
         qDebug() << "labelBalance set to:" << ui->labelBalance->text();
     } else {
         ui->labelBalance->setText("Ei dataa");
     }
+
+    // 4. Luottoraja → labelCreditLimit
     if (obj.contains("credit_limit")) {
         ui->labelCreditLimit->setText(obj["credit_limit"].toString());
         qDebug() << "labelCreditLimit set to:" << ui->labelCreditLimit->text();
     } else {
         ui->labelCreditLimit->setText("Ei dataa");
     }
-    if (obj.contains("user_id")) {
-        ui->labelUserID->setText(QString::number(obj["user_id"].toInt()));
-        qDebug() << "labelUserID set to:" << ui->labelUserID->text();
-    } else {
-        ui->labelUserID->setText("Ei dataa");
-    }
+
     this->update(); // Pakota UI-päivitys
 }
+
 
 
 void Accountinfo::showEvent(QShowEvent *event)
@@ -137,7 +142,7 @@ void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
     objWd->show();
 }
 
-void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys (ei Data:a)
+void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
 {
     QByteArray response = reply->readAll();
     qDebug() << "Accountinfo: Response from backend (saldo):" << response;
@@ -145,6 +150,10 @@ void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys (ei Data:
     if (!jsonDoc.isNull() && jsonDoc.isObject()) {
         setAccountData(jsonDoc.object());  // Päivitä Accountinfo:n labelit (saldo jne.)
         qDebug() << "Accountinfo: Saldo data parsed and set successfully";
+        Data *objData = new Data(this);
+        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);  // signaali sulkemiseen
+        objData->setTestData(response);
+        objData->show();
     } else {
         qDebug() << "Accountinfo: Invalid JSON for saldo";
     }
@@ -161,6 +170,7 @@ void Accountinfo::MyPersonalDataSlot()  // Uusi slotti: Henkilötiedot ja Data-i
 
         // Avaa Data-ikkuna (ei päivitä Accountinfo:n label:eitä)
         Data *objData = new Data(this);
+        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);
         objData->setTestData(response);
         objData->show();
     } else {
