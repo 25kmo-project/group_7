@@ -44,6 +44,14 @@ void Accountinfo::setToken(const QByteArray &newToken)
 void Accountinfo::setAccountData(const QJsonObject &obj)
 {
     qDebug() << "setAccountData called with obj:" << obj;
+    if (obj.contains("account_id")) {
+        accountId = obj["account_id"].toInt();
+        ui->labelID->setText(QString::number(obj["account_id"].toInt()));
+        qDebug() << "labelID set to:" << ui->labelID->text();
+    } else {
+        ui->labelID->setText("Ei dataa");
+        qDebug() << "account_id missing!";
+    }
 
     // 1. Tilityyppi → labelType
     if (obj.contains("account_type")) {
@@ -99,6 +107,14 @@ void Accountinfo::showEvent(QShowEvent *event)
     connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);  // Käytä vanhaa slottia saldon päivitykseen
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
 }
+
+void Accountinfo::setAccountId(int id) //Tallettaa id ikkunalta ikkunalle jne.
+{
+    accountId = id;
+    qDebug() << "Accountinfo: accountId set to" << accountId;
+
+
+}
 void Accountinfo::btnMyDataClicked()
 {
     if (username.isEmpty() || token.isEmpty()) {
@@ -115,9 +131,14 @@ void Accountinfo::btnMyDataClicked()
     connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyPersonalDataSlot);  // Uusi slotti vain henkilötiedoille ja Data-ikkunalle
     connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
 }
-void Accountinfo::btnWithdrawClicked()
+void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
 {
-    Withdraw *objWd = new Withdraw(this);
+    qDebug() << "DEBUG: btnWithdrawClicked, accountId =" << accountId;
+    Withdraw *objWd = new Withdraw(this); //Luo nosto ikkunan
+    objWd->token = this->token; //Annetaa token nosto ikkunalle
+    objWd->accountId = this->accountId; //Annetaan accountid nosto ikkunalle
+    objWd->balance = ui->labelBalance->text();
+    connect(objWd,&Withdraw::withdrawDone, this, &Accountinfo::refreshBalance); //Tässä yhdistyy accountinfo ja refresh
     objWd->show();
 }
 
@@ -163,3 +184,17 @@ void Accountinfo::handleNetworkError(QNetworkReply::NetworkError error)
 {
     qDebug() << "Accountinfo: Network error:" << error << "-" << reply->errorString();
 }
+
+void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne signaalin
+{
+    //qDebug() << "Refreshing balance after withdraw...";
+
+    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("Authorization", "Bearer " + token);
+
+    reply = manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot); //Päivittää saldon ui:hin.
+}
+

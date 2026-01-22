@@ -12,6 +12,7 @@
 #include "accountinfo.h"
 #include <QTimer>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -40,6 +41,8 @@ private slots:
     void btnLoginSlot();
     void loginAction();
     void onCardSelected(QString type);
+    //void onWithdrawReply(QNetworkReply *reply);
+
     void onInactivityTimeout();
 };
 #endif // MAINWINDOW_H
