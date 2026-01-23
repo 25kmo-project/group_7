@@ -14,7 +14,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     manager = new QNetworkAccessManager(this);
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
     connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
-    connect(ui->btnNewDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
+    connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
 }
 
 Accountinfo::~Accountinfo()
