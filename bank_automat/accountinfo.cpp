@@ -14,7 +14,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     manager = new QNetworkAccessManager(this);
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
     connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
-    connect(ui->btnNewDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
+    connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
 }
 
 Accountinfo::~Accountinfo()
@@ -147,7 +147,10 @@ void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
 void Accountinfo::btnNewDepositClicked()
 {
     Deposit *objDeposit = new Deposit(this);
+    objDeposit->setToken(QString(token));
+    objDeposit->setAccountId((accountId));
     objDeposit->show();
+    connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
 }
 
 void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
