@@ -1,12 +1,25 @@
 #include "deposit.h"
 #include "ui_deposit.h"
 
+
+void Deposit::setToken(const QString &t)
+{
+    token = t;
+}
+
+void Deposit::setAccountId(int id)
+{
+    accountId = id;
+
+}
+
 Deposit::Deposit(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Deposit)
 {
     ui->setupUi(this);
     manager=new QNetworkAccessManager (this);
+    connect(manager, &QNetworkAccessManager::finished, this, &Deposit::onDepositReply);
     connect(ui->btnDepositBack, &QPushButton::clicked, this, &Deposit::btnDepositBackClicked);
     connect(ui->btnAddFive, &QPushButton::clicked, this, &Deposit::btnAddFiveClicked);
     connect(ui->btnAddTen, &QPushButton::clicked, this, &Deposit::btnAddTenClicked);
@@ -16,6 +29,7 @@ Deposit::Deposit(QWidget *parent)
     connect(ui->btnAddTwoHundred, &QPushButton::clicked, this, &Deposit::btnAddTwoHundredClicked);
     connect(ui->btnAddFiveHundred, &QPushButton::clicked, this, &Deposit::btnAddFiveHundredClicked);
     connect(ui->btnReset, &QPushButton::clicked, this, &Deposit::btnResetClicked);
+    connect(ui->btnNewDeposit, &QPushButton::clicked, this, &Deposit::btnNewDepositClicked);
 }
 
 Deposit::~Deposit()
@@ -72,11 +86,56 @@ void Deposit::btnAddFiveHundredClicked()
 
 void Deposit::btnNewDepositClicked()
 {
+    if (currentAmount > 10000){
+        currentAmount = 0;
+        ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
+        QMessageBox::warning(this, "Virhe!", "Maksimi talletus on 10000 €");
+        return;
+    }else if (currentAmount <= 0) {
+        QMessageBox::warning(this, "Virhe!", "Syötä summa");
+    }else{
+        QNetworkRequest req(Environment::base_url() + "bank_log/deposit");
+        req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
 
+        QJsonObject json;
+        json["my_account_id"] = accountId;
+        json["amount"] = currentAmount;
+
+        qDebug() << "TOKEN:" << token;
+        qDebug() << "ACCOUNT ID:" << accountId;
+        qDebug() << "URL:" << Environment::base_url() + "bank_log/deposit";
+        qDebug() << "JSON:" << QJsonDocument(json).toJson();
+
+        manager->post(req, QJsonDocument(json).toJson());
+
+        qDebug() << "Tallennetaa: " << currentAmount << "€";
+    }
 }
 
 void Deposit::btnResetClicked()
 {
     currentAmount = 0;
     ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
+}
+
+void Deposit::onDepositReply(QNetworkReply *reply)
+{
+    // qDebug() << "HTTP STATUS:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    // qDebug() << "REPLY ERROR:" << reply->error();
+    // qDebug() << "REPLY TEXT:" << reply->readAll();
+
+    if(token.isEmpty() || accountId < 0) {
+        QMessageBox::warning(this, "Virhe", "Tili tai token puuttuu!");
+        return;
+    }
+
+    if(reply->error() == QNetworkReply::NoError) {
+        ui->labelAddedAmount->setText(QString::number(currentAmount) + " € talletettu");
+        currentAmount = 0;
+        emit depositSuccessful();
+    }else{
+        QMessageBox::warning(this, "Virhe", reply->errorString());
+    }
+    reply->deleteLater();
 }

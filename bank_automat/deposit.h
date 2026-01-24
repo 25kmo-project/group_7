@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QMessageBox>
 #include "environment.h"
 
 namespace Ui {
@@ -19,14 +20,18 @@ class Deposit : public QDialog
     Q_OBJECT
 
 public:
+    void setToken(const QString &t);
+    void setAccountId(int id);
     explicit Deposit(QWidget *parent = nullptr);
+    int currentAmount = 0;
     ~Deposit();
 
 private:
     Ui::Deposit *ui;
-
     QNetworkAccessManager *manager;
-    int currentAmount = 0;
+    int accountId = -1;
+    QString token;
+
 private slots:
     void btnDepositBackClicked();
     void btnAddFiveClicked();
@@ -38,9 +43,10 @@ private slots:
     void btnAddFiveHundredClicked();
     void btnNewDepositClicked();
     void btnResetClicked();
+    void onDepositReply(QNetworkReply *reply);
 
 signals:
-    void depositSuccesful();
+    void depositSuccessful();
 };
 
 #endif // DEPOSIT_H

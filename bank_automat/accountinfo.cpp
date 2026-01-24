@@ -147,7 +147,10 @@ void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
 void Accountinfo::btnNewDepositClicked()
 {
     Deposit *objDeposit = new Deposit(this);
+    objDeposit->setToken(QString(token));
+    objDeposit->setAccountId((accountId));
     objDeposit->show();
+    connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
 }
 
 void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys

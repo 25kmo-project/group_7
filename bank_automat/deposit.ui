@@ -33,10 +33,10 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item alignment="Qt::AlignmentFlag::AlignHCenter">
     <widget class="QLabel" name="labelAddedAmount">
      <property name="text">
-      <string/>
+      <string>0 €</string>
      </property>
     </widget>
    </item>
