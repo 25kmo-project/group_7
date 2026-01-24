@@ -109,7 +109,7 @@ void Deposit::btnNewDepositClicked()
 
         manager->post(req, QJsonDocument(json).toJson());
 
-        qDebug() << "Tallennetaa: " << currentAmount << "€";
+        qDebug() << "Tallennettu: " << currentAmount << "€";
     }
 }
 
