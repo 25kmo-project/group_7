@@ -153,6 +153,11 @@ void Accountinfo::btnNewDepositClicked()
     connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
 }
 
+void Accountinfo::btnTransferClicked()
+{
+
+}
+
 void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
 {
     QByteArray response = reply->readAll();
