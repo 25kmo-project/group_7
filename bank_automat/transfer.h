@@ -7,6 +7,8 @@
 #include <QJsonArray>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "environment.h"
+#include <QMessageBox>
 
 namespace Ui {
 class transfer;

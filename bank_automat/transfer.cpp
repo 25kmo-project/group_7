@@ -1,8 +1,5 @@
-#include "environment.h"
 #include "transfer.h"
 #include "ui_transfer.h"
-#include <QMessageBox>
-#include <qevent.h>
 
 
 transfer::transfer(QWidget *parent)
@@ -34,10 +31,11 @@ void transfer::setToken(const QString &t)
     token = t;
 }
 
+
 void transfer::onTransferReply(QNetworkReply *reply)
 {
-    QByteArray data = reply->readAll();
-    qDebug() << "WITHDRAW RESPONSE:" << data;
+    emit transferSuccesful();
+    reply->deleteLater();
 }
 
 void transfer::btnBackClicked()
@@ -75,5 +73,5 @@ void transfer::showEvent(QShowEvent *event)
 
     qDebug() << "WITHDRAW RESPONSE:" << balance;
 
-    ui->labelTransferAccountBalance->setText("Saldo: " + balance + " €");
+    ui->labelTransferAccountBalance->setText(balance + " €");
 }
