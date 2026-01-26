@@ -23,7 +23,6 @@ public:
     void setAccountId(int id);
     void setToken(const QString &t);
     QString balance;
-    int accountID = -1;
     QString token;
 
 private:
@@ -31,12 +30,12 @@ private:
     QNetworkAccessManager *manager;
 
     // QString balance;
-
+    int accountId = -1;
     void onTransferReply(QNetworkReply *reply);
 
 private slots:
     void btnBackClicked();
-    void btnTransferClicked();
+    void btnTransferMoneyClicked();
 
 
 signals:

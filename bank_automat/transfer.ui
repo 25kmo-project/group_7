@@ -39,7 +39,7 @@
     <string>Paluu</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEditTransferAccountNumber">
+  <widget class="QLineEdit" name="textTransferAccountNumber">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -62,7 +62,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Siirrettävä summa:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEditTrasferAmount">
+  <widget class="QLineEdit" name="textTrasferAmount">
    <property name="geometry">
     <rect>
      <x>190</x>

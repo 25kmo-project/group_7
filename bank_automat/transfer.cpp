@@ -15,6 +15,7 @@ transfer::transfer(QWidget *parent)
 
     connect(manager, &QNetworkAccessManager::finished, this, &transfer::onTransferReply);
     connect(ui->btnTransferBack, &QPushButton::clicked, this, &transfer::btnBackClicked);
+    connect(ui->btnTransferMoney, &QPushButton::clicked, this, &transfer::btnTransferMoneyClicked);
 
 }
 
@@ -25,7 +26,7 @@ transfer::~transfer()
 
 void transfer::setAccountId(int id)
 {
-    accountID = id;
+    accountId = id;
 }
 
 void transfer::setToken(const QString &t)
@@ -45,18 +46,29 @@ void transfer::btnBackClicked()
     this->close();
 }
 
-void transfer::btnTransferClicked()
+void transfer::btnTransferMoneyClicked()
 {
+    qDebug() << "nappia painettu";
     QNetworkRequest req(Environment::base_url() + "bank_log/transfer");
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
 
     QJsonObject json;
+    json["first_account"] = accountId;
+
+    // Poista lopusta << .toIint() >> kun tietokannan transfer funktio on muutettu käyttämään tilinumeroa eikä accountID
+    json["second_account"] = ui->textTransferAccountNumber->text().toInt();
+
+    json["amount"] = ui->textTrasferAmount->text().toDouble();
+    qDebug() << "amount = " << json["amount"].toDouble();
+
+    manager->post(req, QJsonDocument(json).toJson());
+
+
 
 }
 
-// nosto ikkunna saldo
-
+// siirto-ikkunan saldo
 void transfer::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
