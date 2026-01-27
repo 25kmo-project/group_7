@@ -45,23 +45,25 @@ void transfer::onTransferReply(QNetworkReply *reply)
 {
     //päivitetään siirto ikkunan saldo *
 
-    QByteArray response = reply->readAll();
-    qDebug() << "RESPONSEEEEEE:" << response;
+    // QByteArray response = reply->readAll();
+    // qDebug() << "RESPONSEEEEEE:" << response;
 
-    if (reply->url().toString().contains("bank_log/transfer")) {
-        getBalance();
-        reply->deleteLater();
-        return;
-    }
+    // // haetaan uusin balance
+    // if (reply->url().toString().contains("bank_log/transfer")) {
+    //     getBalance();
+    //     reply->deleteLater();
+    //     return;
+    // }
 
-    QJsonDocument doc = QJsonDocument::fromJson(response);
-    QJsonObject obj = doc.object();
-     qDebug() << "BALANCE RAW VALUE:" << obj["balance"];
+    // // jos löytyy nii päivitetää balance
+    // QJsonDocument doc = QJsonDocument::fromJson(response);
+    // QJsonObject obj = doc.object();
+    // //  qDebug() << "BALANCE IS =  :" << obj["balance"];
 
-    if (obj.contains("balance")) {
-        balance = obj["balance"].toString();
-        // ui->labelTransferAccountBalance->setText(balance + " €");
-    }
+    // if (obj.contains("balance")) {
+    //     balance = obj["balance"].toString();
+    //     ui->labelTransferAccountBalance->setText(balance + " €");
+    // }
 
 
     emit transferSuccesful();
