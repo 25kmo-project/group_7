@@ -26,6 +26,7 @@ public:
     void setToken(const QString &t);
     QString balance;
     QString token;
+    void getBalance();
 
 private:
     Ui::transfer *ui;

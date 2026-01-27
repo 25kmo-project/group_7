@@ -213,7 +213,7 @@ void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne si
 {
     //qDebug() << "Refreshing balance after withdraw...";
 
-    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
+    QString url = Environment::base_url() + "bank_account/" + username;// + "/" + accountType;
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", "Bearer " + token);
