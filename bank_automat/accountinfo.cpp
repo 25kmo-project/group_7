@@ -5,6 +5,7 @@
 #include "data.h"  // Lisää tämä, jos Data on eri headerissa
 #include "withdraw.h"
 #include "deposit.h"
+#include "transfer.h"
 
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
@@ -15,6 +16,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
     connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
     connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
+    connect(ui->btnTransfer, &QPushButton::clicked, this, &Accountinfo::btnTransferClicked);
 }
 
 Accountinfo::~Accountinfo()
@@ -153,6 +155,17 @@ void Accountinfo::btnNewDepositClicked()
     connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
 }
 
+void Accountinfo::btnTransferClicked()
+{
+    qDebug() << "DEBUG: btnTrasferClicked, accountId =" << accountId;
+    transfer *objTransfer = new transfer(this);
+    objTransfer->setToken(QString(token));
+    objTransfer->setAccountId((accountId));
+    objTransfer->balance = ui->labelBalance->text();
+    connect(objTransfer, &transfer::transferSuccesful, this, &Accountinfo::refreshBalance);
+    objTransfer->show();
+}
+
 void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
 {
     QByteArray response = reply->readAll();
@@ -200,7 +213,7 @@ void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne si
 {
     //qDebug() << "Refreshing balance after withdraw...";
 
-    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
+    QString url = Environment::base_url() + "bank_account/" + QString::number(accountId); // muokkasin linkin oikein -v
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", "Bearer " + token);
