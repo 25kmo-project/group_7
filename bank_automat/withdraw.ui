@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1168</width>
-    <height>850</height>
+    <width>600</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -41,8 +41,8 @@
   <widget class="QLabel" name="labelBalance">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>60</y>
+     <x>20</x>
+     <y>50</y>
      <width>200</width>
      <height>31</height>
     </rect>
@@ -57,130 +57,104 @@
     <string>Saldo:</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLabel" name="labelError">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>160</y>
-     <width>116</width>
-     <height>191</height>
+     <x>40</x>
+     <y>490</y>
+     <width>511</width>
+     <height>81</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="formLayout">
-    <property name="horizontalSpacing">
-     <number>12</number>
-    </property>
-    <property name="verticalSpacing">
-     <number>12</number>
-    </property>
-    <property name="leftMargin">
-     <number>12</number>
-    </property>
-    <property name="topMargin">
-     <number>12</number>
-    </property>
-    <property name="rightMargin">
-     <number>12</number>
-    </property>
-    <property name="bottomMargin">
-     <number>12</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="btn20">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>20</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="btn40">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>40</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="btn50">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>50</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="btn100">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>100</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QSplitter" name="splitter">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>160</y>
-     <width>371</width>
-     <height>191</height>
+     <x>70</x>
+     <y>250</y>
+     <width>451</width>
+     <height>161</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QPushButton" name="btnNosta">
-      <property name="text">
-       <string>Nosta</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="btnWithdrawBack_6">
-      <property name="text">
-       <string>Muu</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Syötä summa:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEditAmount"/>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QLabel" name="labelError">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+   <widget class="QPushButton" name="btnWithdrawBack_6">
+    <property name="text">
+     <string>Muu</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn100">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>100€</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn50">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>50€</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn40">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>40€</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn20">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>20€</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QSplitter" name="splitter_2">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>100</y>
+     <width>201</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Vertical</enum>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="text">
+     <string>Syötä summa:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditAmount"/>
+   <widget class="QPushButton" name="btnNosta">
+    <property name="text">
+     <string>Nosta</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

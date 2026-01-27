@@ -1,5 +1,6 @@
 #include "deposit.h"
 #include "ui_deposit.h"
+#include <QMessageBox>
 
 
 void Deposit::setToken(const QString &t)
@@ -131,6 +132,8 @@ void Deposit::onDepositReply(QNetworkReply *reply)
     }
 
     if(reply->error() == QNetworkReply::NoError) {
+
+        QMessageBox::information(this, "Talletus onnistui", "Talletus suoritettu onnistuneesti.");
         ui->labelAddedAmount->setText(QString::number(currentAmount) + " € talletettu");
         currentAmount = 0;
         emit depositSuccessful();

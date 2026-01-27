@@ -210,6 +210,11 @@ void MainWindow::onCardSelected(QString type)
     qDebug() << "Kortti valittu:" << type;
 
 }
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QApplication::quit();
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {
