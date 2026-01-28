@@ -11,6 +11,12 @@
 #include "deposit.h"
 #include "transfer.h"
 
+/**
+ * @brief Accountinfo-luokan konstruktori.
+ *
+ * Alustaa käyttöliittymän ja yhdistää painikkeet niiden
+ * vastaaviin slotteihin (henkilötiedot, nosto, talletus, siirto).
+ */
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Accountinfo)
@@ -23,31 +29,51 @@ Accountinfo::Accountinfo(QWidget *parent)
     connect(ui->btnTransfer, &QPushButton::clicked, this, &Accountinfo::btnTransferClicked);
 }
 
+/**
+ * @brief Accountinfo-luokan destruktori.
+ */
 Accountinfo::~Accountinfo()
 {
     delete ui;
 }
 
+/**
+ * @brief Asettaa tilin tyypin (debit/credit).
+ */
 void Accountinfo::setAccountType(const QString &type)
 {
     accountType = type;
 }
 
+/**
+ * @brief Asettaa käyttäjän ID:n merkkijonona.
+ */
 void Accountinfo::setUsername(const QString &newUsername)
 {
     username = newUsername;
 }
 
+/**
+ * @brief Asettaa JWT-tokenin, jota käytetään aliluokkien (Withdraw/Deposit/Transfer) API-kutsuissa.
+ */
 void Accountinfo::setToken(const QByteArray &newToken)
 {
-    token = newToken; // tämä on Withdraw/Deposit/Transfer ikkunoita varten
+    token = newToken;
 }
 
-
+/**
+ * @brief Asettaa tilin ID:n.
+ */
 void Accountinfo::setAccountId(int id)
 {
     accountId = id;
 }
+
+/**
+ * @brief Täyttää käyttöliittymän tilin JSON-datalla.
+ *
+ * @param obj JSON-olio, joka sisältää tilin tiedot.
+ */
 void Accountinfo::setAccountData(const QJsonObject &obj)
 {
     if (obj.contains("account_id")) {
@@ -61,6 +87,11 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
     ui->labelCreditLimit->setText(obj.value("credit_limit").toString("Ei dataa"));
 }
 
+/**
+ * @brief Suoritetaan aina, kun Accountinfo-ikkuna näytetään.
+ *
+ * Hakee tilin ajantasaiset tiedot backendiltä ja päivittää UI:n.
+ */
 void Accountinfo::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
@@ -86,6 +117,9 @@ void Accountinfo::showEvent(QShowEvent *event)
     });
 }
 
+/**
+ * @brief Avaa henkilötietonäkymän (Data-dialogin).
+ */
 void Accountinfo::btnMyDataClicked()
 {
     QString endpoint = "bank_user/" + username;
@@ -99,7 +133,10 @@ void Accountinfo::btnMyDataClicked()
         if (doc.isObject()) {
             Data *objData = new Data(this);
             objData->setTestData(data);
+
+            // Jos käyttäjä kirjautuu ulos Data-ikkunasta, suljetaan myös Accountinfo
             connect(objData, &Data::logoutRequested, this, &Accountinfo::close);
+
             objData->show();
         }
 
@@ -107,6 +144,9 @@ void Accountinfo::btnMyDataClicked()
     });
 }
 
+/**
+ * @brief Avaa nostonäkymän.
+ */
 void Accountinfo::btnWithdrawClicked()
 {
     Withdraw *objWd = new Withdraw(this);
@@ -118,6 +158,9 @@ void Accountinfo::btnWithdrawClicked()
     objWd->show();
 }
 
+/**
+ * @brief Avaa talletusnäkymän.
+ */
 void Accountinfo::btnNewDepositClicked()
 {
     Deposit *objDeposit = new Deposit(this);
@@ -128,6 +171,9 @@ void Accountinfo::btnNewDepositClicked()
     objDeposit->show();
 }
 
+/**
+ * @brief Avaa tilisiirtonäkymän.
+ */
 void Accountinfo::btnTransferClicked()
 {
     transfer *objTransfer = new transfer(this);
@@ -139,6 +185,9 @@ void Accountinfo::btnTransferClicked()
     objTransfer->show();
 }
 
+/**
+ * @brief Päivittää saldon noston, talletuksen tai siirron jälkeen.
+ */
 void Accountinfo::refreshBalance()
 {
     QString endpoint = "bank_account/" + QString::number(accountId);
@@ -157,19 +206,19 @@ void Accountinfo::refreshBalance()
     });
 }
 
+/**
+ * @brief Käsittelee Takaisin-napin painalluksen.
+ */
 void Accountinfo::on_btnBack_clicked()
 {
     emit backRequested();
     close();
 }
 
+/**
+ * @brief Käsittelee Kirjaudu ulos -napin painalluksen.
+ */
 void Accountinfo::on_btnLogout_clicked()
 {
     close();
 }
-
-
-// void Accountinfo::MyDataSlot()
-// {
-//     //Ei ole enään käytössä mutta MOC vaatii tämän olemassa olon(?)
-// }
