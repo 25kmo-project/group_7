@@ -19,10 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Inaktiivisuusajastin
     inactivityTimer = new QTimer(this);
     inactivityTimer->setInterval(30000);
-
+    //Login-napin signaali
     connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::btnLoginSlot);
+    // Ajastimen timeout-> Käyttäjä ollut liian kauan tekemättä mitäöän
     connect(inactivityTimer, &QTimer::timeout, this, &MainWindow::onInactivityTimeout);
-
+    //Kuuntelee hiireä ja näppäimistö
     qApp->installEventFilter(this);
     inactivityTimer->start();
 }
@@ -34,6 +35,7 @@ MainWindow::~MainWindow()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
+    // Nollataan inaktiivisuusajastin aina kun käyttäjä liikuttaa hiirtä tai käyttää näppäimistöä
     if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::KeyPress ||
         event->type() == QEvent::MouseButtonPress)
@@ -46,7 +48,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::onInactivityTimeout()
 {
     qDebug() << "Inaktiivisuus: Palautetaan alkutilaan.";
-
+    //Suljetaan kaikki muut ikkunat (tilitiedot etc)
     for (QWidget *widget : QApplication::topLevelWidgets()) {
         if (widget != this)
             widget->close();
@@ -60,13 +62,13 @@ void MainWindow::onInactivityTimeout()
 void MainWindow::btnLoginSlot()
 {
     QString endpoint = "bank_kirjautuminen";
-
+    // JSON-data kirjautumiseen
     QJsonObject body;
     body["card_number"] = ui->textUsername->text();
     body["pin"] = ui->textPassword->text();
-
+    // Lähetetään POST backendille
     QNetworkReply *reply = ApiClient::instance().post(endpoint, body);
-
+    // Vastaus saapuu-> käsitellään login funktiossa
     connect(reply, &QNetworkReply::finished, this, [=]() {
         loginAction(reply);
     });
@@ -76,7 +78,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
 {
     QByteArray responseData = reply->readAll();
     qDebug() << "Response data:" << responseData;
-
+    //Palauttaa 4078 jos tietokantayhteys epäonnistuu
     if (responseData == "-4078" || responseData.isEmpty()) {
         ui->LabelErrorMessage->setText("Virhe tietokantayhteydessä");
         reply->deleteLater();
@@ -85,7 +87,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
     QJsonObject jsonObject = jsonDoc.object();
-
+    //Jos token puuttuu -> kirjautuminen epäonnistuu
     if (!jsonObject.contains("token")) {
         QString backendMessage = jsonObject.contains("message")
         ? jsonObject["message"].toString()
@@ -93,7 +95,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
 
         ui->LabelErrorMessage->setText("Tunnus ja salasana eivät täsmää");
         QMessageBox::warning(this, "Kirjautumisvirhe", backendMessage);
-
+        //tyhjentää kentät uutta yritystä varten
         ui->textUsername->clear();
         ui->textPassword->clear();
         ui->textUsername->setFocus();
@@ -106,7 +108,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
     QString token = jsonObject["token"].toString();
     int userId = jsonObject["user_id"].toInt();
     QString cardType = jsonObject["card_type"].toString();
-
+    // Tämä tallentaa tokenin ApiClienttiin
     ApiClient::instance().setToken(token.toUtf8());
 
     qDebug() << "Login OK. User ID:" << userId << "Card type:" << cardType;
@@ -120,6 +122,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
         openAccountWindow(userId, "debit");
     }
     else if (cardType == "dual") {
+        // dual-kortti -> käyttäjä pitää valita debit tai credit
         ChooseCard *dlg = new ChooseCard(this);
         dlg->setUsername(QString::number(userId));
         dlg->setChooseCard(token.toUtf8());
@@ -135,6 +138,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
 
 void MainWindow::openAccountWindow(int userId, const QString &type)
 {
+    // Haetaan tilitiedot backendistä
     QString endpoint = "bank_account/" + QString::number(userId) + "/" + type;
 
     QNetworkReply *accReply = ApiClient::instance().get(endpoint);
@@ -143,7 +147,7 @@ void MainWindow::openAccountWindow(int userId, const QString &type)
         QByteArray accData = accReply->readAll();
         QJsonDocument accDoc = QJsonDocument::fromJson(accData);
         QJsonObject obj = accDoc.object();
-
+        //Luodaan tilitietoikkuna
         Accountinfo *acc = new Accountinfo(this);
         connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
 
@@ -152,7 +156,7 @@ void MainWindow::openAccountWindow(int userId, const QString &type)
         acc->setAccountData(obj);
 
         acc->show();
-        this->hide();
+        this->hide(); //Piilotetaanm login-ikkuna tilinäkymän ajaksi
 
         accReply->deleteLater();
     });
@@ -165,6 +169,7 @@ void MainWindow::onCardSelected(QString type)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // Suljetaan koko sovellus, jos pöäikkuna suljetaan
     QApplication::quit();
 }
 
