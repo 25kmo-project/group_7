@@ -2,15 +2,7 @@
 #define ACCOUNTINFO_H
 
 #include <QDialog>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include "environment.h"
-#include "data.h"
-#include "choosecard.h"
 
 namespace Ui {
 class Accountinfo;
@@ -25,43 +17,37 @@ public:
     ~Accountinfo();
 
     void setUsername(const QString &newUsername);
-
-    void setToken(const QByteArray &newToken);
-    void setAccountData(const QJsonObject &obj);
+    void setToken(const QByteArray &newToken);     // vain UI:lle
+    void setAccountData(const QJsonObject &obj);   // täyttää labelit
     void setAccountType(const QString &type);
-    //void setAccountType(const QString &type);
-    void setAccountId(int id); //Tarvitaan et id siirtyy ikkunalta ikkunalle
+    void setAccountId(int id);
+
 protected:
     void showEvent(QShowEvent *event) override;
 
-
-
 signals:
-    void backRequested(); //Tarvii edelliseen ikkunaan palattessa(Päävalikosta kirjautumisikkunaan)
-
-
-private:
-    Ui::Accountinfo *ui;
-    QString username;
-    QByteArray token;
-    QNetworkAccessManager *manager;
-    QNetworkReply *reply;
-    QString accountType;
-    int accountId = -1; //Tarvitaan et id siirtyy ikkunalta ikkunalle
-
+    void backRequested();
 
 private slots:
     void btnMyDataClicked();
     void btnWithdrawClicked();
     void btnNewDepositClicked();
     void btnTransferClicked();
-    void MyDataSlot();
-    void MyPersonalDataSlot();
-    void handleNetworkError(QNetworkReply::NetworkError error);
-    void refreshBalance(); //Päivittää automaattisesti accountinfon balancen
+
+    void MyDataSlot();            // saldo / tilitiedot
+    void MyPersonalDataSlot();    // henkilötiedot
+    void refreshBalance();        // päivitys noston/talletuksen jälkeen
 
     void on_btnBack_clicked();
     void on_btnLogout_clicked();
+
+private:
+    Ui::Accountinfo *ui;
+
+    QString username;
+    QByteArray token;     // vain UI:lle, API-kutsut käyttävät ApiClientiä
+    QString accountType;
+    int accountId = -1;
 };
 
 #endif // ACCOUNTINFO_H

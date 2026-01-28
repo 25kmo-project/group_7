@@ -2,8 +2,7 @@
 #define CHOOSECARD_H
 
 #include <QDialog>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QJsonObject>
 
 namespace Ui {
 class ChooseCard;
@@ -16,34 +15,26 @@ class ChooseCard : public QDialog
 public:
     explicit ChooseCard(QWidget *parent = nullptr);
     ~ChooseCard();
+
     void setUsername(const QString &newUsername);
     void setChooseCard(const QByteArray &newChooseCard);
 
 signals:
-    void cardSelected(QString type); // Poistettu kommentti: Tämä signaali tarvitaan connect-funktiolle MainWindow:ssa
-    void backRequested();    //Tarvii edelliseen ikkunaan palattessa(Päävalikosta kirjautumisikkunaan)
+    void cardSelected(QString type);
+    void backRequested();
 
 private slots:
-    //void on_btn_Credit_clicked();  // Jos tarvitset, poista kommentti ja toteuta .cpp:ssä
-    //void on_btn_Debit_clicked();   // Jos tarvitset, poista kommentti ja toteuta .cpp:ssä
-    //void debitTiedot(QNetworkReply *reply);  // Jos tarvitset, poista kommentti
-    //void creditTiedot(QNetworkReply *reply); // Jos tarvitset, poista kommentti
     void btnDEBITClicked();
-    //void ChooseCardSlot();
     void btnCREDITClicked();
-    void handleDebit();
-    void handleCredit();
-    void handleNetworkError(QNetworkReply::NetworkError error);
     void btnBackClicked();
 
 private:
     Ui::ChooseCard *ui;
-    QNetworkAccessManager *manager;
-    QByteArray token;
-    QNetworkReply *reply;
-    QByteArray chooseCard;
-    void openAccount(const QJsonObject &obj);
+
     QString username;
+    QByteArray token;
+
+    void openAccount(const QJsonObject &obj);
 };
 
 #endif // CHOOSECARD_H

@@ -1,6 +1,12 @@
 #include "transfer.h"
 #include "ui_transfer.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QDebug>
+
+#include "apiclient.h"
 
 transfer::transfer(QWidget *parent)
     : QDialog(parent)
@@ -8,14 +14,8 @@ transfer::transfer(QWidget *parent)
 {
     ui->setupUi(this);
 
-    manager = new QNetworkAccessManager(this);
-
-    // ui->labelTransferAccountBalance->setText("");
-
-    connect(manager, &QNetworkAccessManager::finished, this, &transfer::onTransferReply);
     connect(ui->btnTransferBack, &QPushButton::clicked, this, &transfer::btnBackClicked);
     connect(ui->btnTransferMoney, &QPushButton::clicked, this, &transfer::btnTransferMoneyClicked);
-
 }
 
 transfer::~transfer()
@@ -30,77 +30,82 @@ void transfer::setAccountId(int id)
 
 void transfer::setToken(const QString &t)
 {
-    token = t;
+    token = t; // vain UI:lle, ei API-kutsuihin
 }
 
+// -----------------------------
+//  HAE SALDO
+// -----------------------------
 void transfer::getBalance()
 {
-    QNetworkRequest req(Environment::base_url() + "bank_account/" + QString::number(accountId));
-    req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
-    manager->get(req);
+    QString endpoint = "bank_account/" + QString::number(accountId);
+
+    auto reply = ApiClient::instance().get(endpoint);
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray response = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(response);
+
+        if (doc.isObject()) {
+            QJsonObject obj = doc.object();
+            balance = obj.value("balance").toString();
+            ui->labelTransferAccountBalance->setText(balance + " €");
+        }
+
+        reply->deleteLater();
+    });
 }
 
-
-void transfer::onTransferReply(QNetworkReply *reply)
+// -----------------------------
+//  SIIRTO
+// -----------------------------
+void transfer::btnTransferMoneyClicked()
 {
-    // päivitetään siirto ikkunan saldo *
+    int targetAccount = ui->textTransferAccountNumber->text().toInt();
+    double amount = ui->textTrasferAmount->text().toDouble();
 
-    QByteArray response = reply->readAll();
-    qDebug() << "RESPONSEEEEEE:" << response;
-
-    // haetaan uusin balance
-    if (reply->url().toString().contains("bank_log/transfer")) {
-        getBalance();
-        reply->deleteLater();
+    if (targetAccount <= 0 || amount <= 0) {
+        QMessageBox::warning(this, "Virhe", "Syötä kelvollinen tili ja summa.");
         return;
     }
 
-    // jos löytyy nii päivitetää balance
-    QJsonDocument doc = QJsonDocument::fromJson(response);
-    QJsonObject obj = doc.object();
-    //  qDebug() << "BALANCE IS =  :" << obj["balance"];
+    QJsonObject json;
+    json["first_account"] = accountId;
+    json["second_account"] = targetAccount;
+    json["amount"] = amount;
 
-    if (obj.contains("balance")) {
-        balance = obj["balance"].toString();
-        ui->labelTransferAccountBalance->setText(balance + " €");
-    }
+    auto reply = ApiClient::instance().post("bank_log/transfer", json);
 
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray response = reply->readAll();
+        qDebug() << "TRANSFER RESPONSE:" << response;
 
-    emit transferSuccesful();
-    reply->deleteLater();
+        if (reply->error() != QNetworkReply::NoError) {
+            QMessageBox::warning(this, "Virhe siirrossa", reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        // Siirto onnistui → päivitä saldo
+        getBalance();
+
+        QMessageBox::information(this, "Siirto onnistui", "Rahansiirto suoritettu.");
+        emit transferSuccesful();
+
+        reply->deleteLater();
+    });
+}
+
+// -----------------------------
+//  UI
+// -----------------------------
+void transfer::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    ui->labelTransferAccountBalance->setText(balance + " €");
 }
 
 void transfer::btnBackClicked()
 {
-    this->close();
-}
-
-void transfer::btnTransferMoneyClicked()
-{
-    // POST-pyyntö backendille
-    QNetworkRequest req(Environment::base_url() + "bank_log/transfer");
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
-
-    QJsonObject json;
-    json["first_account"] = accountId;
-
-    // Poista lopusta << .toIint() >> kun tietokannan transfer funktio on muutettu käyttämään tilinumeroa eikä accountID
-    json["second_account"] = ui->textTransferAccountNumber->text().toInt();
-
-    // qDebug() << "amount = " << json["amount"].toDouble();
-    json["amount"] = ui->textTrasferAmount->text().toDouble();
-
-    manager->post(req, QJsonDocument(json).toJson());
-
-}
-
-// siirto-ikkunan saldo
-void transfer::showEvent(QShowEvent *event)
-{
-    QDialog::showEvent(event);
-
-    // qDebug() << "TRANSFER RESPONSE:" << balance;
-
-    ui->labelTransferAccountBalance->setText(balance + " €");
+    close();
 }

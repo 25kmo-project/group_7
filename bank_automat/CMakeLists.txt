@@ -20,6 +20,8 @@ qt_add_executable(bank_automat
     styles.qss
     deposit.h deposit.cpp deposit.ui
     transfer.h transfer.cpp transfer.ui
+    ApiClient.h
+    ApiClient.cpp
 )
 
 
