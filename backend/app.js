@@ -11,6 +11,7 @@ var card_Router= require('./routes/bank_card');
 var kirjautuminen_router= require('./routes/bank_kirjautuminen');
 var card_account_Router= require('./routes/bank_card_account');
 
+const authenticateToken = require('./middleware/authenticateToken');
 
 var app = express();
 
@@ -21,6 +22,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+app.use('/bank_kirjautuminen', kirjautuminen_router); // Julkinen reitti, ei vaadi todennusta
+
+app.use(authenticateToken); // Kaikki tämän jälkeen tulevat reitit vaativat todennuksen
 
 console.log("bank_user_Router =", bank_user_Router);
 console.log("account_Router =", account_Router);
