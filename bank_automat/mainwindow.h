@@ -38,10 +38,11 @@ private:
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
     QTimer *inactivityTimer; // 30sek
+    void openAccountWindow(int userId, const QString &type);
 
 private slots:
     void btnLoginSlot();
-    void loginAction();
+    void loginAction(QNetworkReply *reply);
     void onCardSelected(QString type);
     //void onWithdrawReply(QNetworkReply *reply);
 

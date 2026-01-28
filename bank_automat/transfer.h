@@ -2,13 +2,7 @@
 #define TRANSFER_H
 
 #include <QDialog>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include "environment.h"
-#include <QMessageBox>
 
 namespace Ui {
 class transfer;
@@ -24,31 +18,25 @@ public:
 
     void setAccountId(int id);
     void setToken(const QString &t);
+
+    void getBalance();
     QString balance;
     QString token;
-    void getBalance();
 
-private:
-    Ui::transfer *ui;
-    QNetworkAccessManager *manager;
-
-    // QString balance;
-    int accountId = -1;
-    void onTransferReply(QNetworkReply *reply);
+signals:
+    void transferSuccesful();
 
 private slots:
     void btnBackClicked();
     void btnTransferMoneyClicked();
 
-
-signals:
-    void transferSuccesful();
-
 protected:
     void showEvent(QShowEvent *event) override;
 
+private:
+    Ui::transfer *ui;
 
-
+    int accountId = -1;
 };
 
 #endif // TRANSFER_H

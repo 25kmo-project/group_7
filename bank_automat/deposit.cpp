@@ -1,26 +1,18 @@
 #include "deposit.h"
 #include "ui_deposit.h"
+
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-
-void Deposit::setToken(const QString &t)
-{
-    token = t;
-}
-
-void Deposit::setAccountId(int id)
-{
-    accountId = id;
-
-}
+#include "apiclient.h"
 
 Deposit::Deposit(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Deposit)
 {
     ui->setupUi(this);
-    manager=new QNetworkAccessManager (this);
-    connect(manager, &QNetworkAccessManager::finished, this, &Deposit::onDepositReply);
+
     connect(ui->btnDepositBack, &QPushButton::clicked, this, &Deposit::btnDepositBackClicked);
     connect(ui->btnAddFive, &QPushButton::clicked, this, &Deposit::btnAddFiveClicked);
     connect(ui->btnAddTen, &QPushButton::clicked, this, &Deposit::btnAddTenClicked);
@@ -38,11 +30,55 @@ Deposit::~Deposit()
     delete ui;
 }
 
-void Deposit::btnDepositBackClicked()
+void Deposit::setToken(const QString &t)
 {
-    this->close();
+    token = t; // vain UI-ikkunoita varten
 }
 
+void Deposit::setAccountId(int id)
+{
+    accountId = id;
+}
+
+void Deposit::btnDepositBackClicked()
+{
+    close();
+}
+
+// -----------------------------
+//  YHTEINEN FUNKTIO TALLETUKSILLE
+// -----------------------------
+void Deposit::sendDepositRequest(int amount)
+{
+    QJsonObject json;
+    json["my_account_id"] = accountId;
+    json["amount"] = amount;
+
+    auto reply = ApiClient::instance().post("bank_log/deposit", json);
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray response = reply->readAll();
+        qDebug() << "DEPOSIT RESPONSE:" << response;
+
+        if (reply->error() != QNetworkReply::NoError) {
+            QMessageBox::warning(this, "Virhe talletuksessa", reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        QMessageBox::information(this, "Talletus onnistui", "Talletus suoritettu onnistuneesti.");
+        emit depositSuccessful();
+
+        currentAmount = 0;
+        ui->labelAddedAmount->setText("0 €");
+
+        reply->deleteLater();
+    });
+}
+
+// -----------------------------
+//  NAPIT LISÄÄ SUMMAA
+// -----------------------------
 void Deposit::btnAddFiveClicked()
 {
     currentAmount += 5;
@@ -63,82 +99,53 @@ void Deposit::btnAddTwentyClicked()
 
 void Deposit::btnAddFiftyClicked()
 {
-    currentAmount +=50;
+    currentAmount += 50;
     ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
 }
 
 void Deposit::btnAddHundredClicked()
 {
-    currentAmount +=100;
+    currentAmount += 100;
     ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
 }
 
 void Deposit::btnAddTwoHundredClicked()
 {
-    currentAmount +=200;
+    currentAmount += 200;
     ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
 }
 
 void Deposit::btnAddFiveHundredClicked()
 {
-    currentAmount +=500;
+    currentAmount += 500;
     ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
 }
 
+// -----------------------------
+//  TALLETUS
+// -----------------------------
 void Deposit::btnNewDepositClicked()
 {
-    if (currentAmount > 10000){
+    if (currentAmount > 10000) {
         currentAmount = 0;
-        ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
+        ui->labelAddedAmount->setText("0 €");
         QMessageBox::warning(this, "Virhe!", "Maksimi talletus on 10000 €");
         return;
-    }else if (currentAmount <= 0) {
-        QMessageBox::warning(this, "Virhe!", "Syötä summa");
-    }else{
-        QNetworkRequest req(Environment::base_url() + "bank_log/deposit");
-        req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        req.setRawHeader("Authorization", ("Bearer " + token).toUtf8());
-
-        QJsonObject json;
-        json["my_account_id"] = accountId;
-        json["amount"] = currentAmount;
-
-        qDebug() << "TOKEN:" << token;
-        qDebug() << "ACCOUNT ID:" << accountId;
-        qDebug() << "URL:" << Environment::base_url() + "bank_log/deposit";
-        qDebug() << "JSON:" << QJsonDocument(json).toJson();
-
-        manager->post(req, QJsonDocument(json).toJson());
-
-        qDebug() << "Tallennetaa: " << currentAmount << "€";
     }
+
+    if (currentAmount <= 0) {
+        QMessageBox::warning(this, "Virhe!", "Syötä summa");
+        return;
+    }
+
+    sendDepositRequest(currentAmount);
 }
 
+// -----------------------------
+//  RESET
+// -----------------------------
 void Deposit::btnResetClicked()
 {
     currentAmount = 0;
-    ui->labelAddedAmount->setText(QString::number(currentAmount) + " €");
-}
-
-void Deposit::onDepositReply(QNetworkReply *reply)
-{
-    // qDebug() << "HTTP STATUS:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    // qDebug() << "REPLY ERROR:" << reply->error();
-    // qDebug() << "REPLY TEXT:" << reply->readAll();
-
-    if(token.isEmpty() || accountId < 0) {
-        QMessageBox::warning(this, "Virhe", "Tili tai token puuttuu!");
-        return;
-    }
-
-    if(reply->error() == QNetworkReply::NoError) {
-
-        QMessageBox::information(this, "Talletus onnistui", "Talletus suoritettu onnistuneesti.");
-        ui->labelAddedAmount->setText(QString::number(currentAmount) + " € talletettu");
-        currentAmount = 0;
-        emit depositSuccessful();
-    }else{
-        QMessageBox::warning(this, "Virhe", reply->errorString());
-    }
-    reply->deleteLater();
+    ui->labelAddedAmount->setText("0 €");
 }
