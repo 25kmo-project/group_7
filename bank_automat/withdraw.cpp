@@ -120,6 +120,7 @@ void Withdraw::onWithdrawReply(QNetworkReply *reply)
     }
 
     //Onnistui
+    QMessageBox::information(this, "Nosto onnistui", "Nosto suoritettu onnistuneesti.");
     emit withdrawDone();
     this->close();
 
