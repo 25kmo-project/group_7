@@ -169,7 +169,7 @@ void Accountinfo::on_btnLogout_clicked()
 }
 
 
-void Accountinfo::MyDataSlot()
-{
-    //Ei ole enään käytössä mutta MOC vaatii tämän olemassa olon(?)
-}
+// void Accountinfo::MyDataSlot()
+// {
+//     //Ei ole enään käytössä mutta MOC vaatii tämän olemassa olon(?)
+// }
