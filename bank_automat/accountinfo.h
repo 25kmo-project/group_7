@@ -34,7 +34,7 @@ private slots:
     void btnNewDepositClicked();
     void btnTransferClicked();
 
-    void MyDataSlot();            // saldo / tilitiedot
+    // void MyDataSlot();            // saldo / tilitiedot
     // void MyPersonalDataSlot();    // henkilötiedot
     void refreshBalance();        // päivitys noston/talletuksen jälkeen
 
