@@ -145,7 +145,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ## 10. Tilakaavio
 
-  ![Tilakaavio](./docs/Tilakaavio_v1.3.png)
+  ![Tilakaavio](./docs/Tilakaavio_v1.4.png)
 
   Kirjautuminen
 - Kirjautuessa 10 sekunnin inaktiivisuus alustaa kirjautumis-ikkunan
