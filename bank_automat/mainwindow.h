@@ -38,6 +38,7 @@ private:
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
     QTimer *inactivityTimer; // 30sek
+    QTimer *loginInactivityTimer; // 10sek
     void openAccountWindow(int userId, const QString &type);
 
 private slots:
@@ -46,6 +47,7 @@ private slots:
     void onCardSelected(QString type);
     //void onWithdrawReply(QNetworkReply *reply);
 
+    void onLoginInactivityTimeout();
     void onInactivityTimeout();
     void on_pushButton_clicked();
 };
