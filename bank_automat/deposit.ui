@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Talletus</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -33,19 +33,39 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item alignment="Qt::AlignmentFlag::AlignHCenter">
     <widget class="QLabel" name="labelAddedAmount">
      <property name="text">
-      <string/>
+      <string>0 €</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btnDeposit">
+    <widget class="QPushButton" name="btnNewDeposit">
      <property name="text">
       <string>Talleta</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnReset">
+     <property name="text">
+      <string>Nollaa</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <widget class="QPushButton" name="btnAddFive">

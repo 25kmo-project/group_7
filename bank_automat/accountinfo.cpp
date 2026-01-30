@@ -1,222 +1,224 @@
 #include "accountinfo.h"
-//#include "build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/bank_automat_autogen/include/ui_accountinfo.h"
 #include "ui_accountinfo.h"
+
 #include <QShowEvent>
-#include "data.h"  // Lisää tämä, jos Data on eri headerissa
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include "apiclient.h"
+#include "data.h"
 #include "withdraw.h"
 #include "deposit.h"
+#include "transfer.h"
 
+/**
+ * @brief Accountinfo-luokan konstruktori.
+ *
+ * Alustaa käyttöliittymän ja yhdistää painikkeet niiden
+ * vastaaviin slotteihin (henkilötiedot, nosto, talletus, siirto).
+ */
 Accountinfo::Accountinfo(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Accountinfo)
 {
     ui->setupUi(this);
-    manager = new QNetworkAccessManager(this);
+
     connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
-    connect(ui->btnWithdraw, &QPushButton::clicked,this, &Accountinfo :: btnWithdrawClicked);
-    connect(ui->btnNewDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
+    connect(ui->btnWithdraw, &QPushButton::clicked, this, &Accountinfo::btnWithdrawClicked);
+    connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
+    connect(ui->btnTransfer, &QPushButton::clicked, this, &Accountinfo::btnTransferClicked);
 }
 
+/**
+ * @brief Accountinfo-luokan destruktori.
+ */
 Accountinfo::~Accountinfo()
 {
     delete ui;
 }
 
+/**
+ * @brief Asettaa tilin tyypin (debit/credit).
+ */
 void Accountinfo::setAccountType(const QString &type)
 {
     accountType = type;
-    qDebug() << "Accountinfo: account type set to" << accountType;
 }
 
-
-
+/**
+ * @brief Asettaa käyttäjän ID:n merkkijonona.
+ */
 void Accountinfo::setUsername(const QString &newUsername)
 {
     username = newUsername;
-
-    qDebug() << "Accountinfo: Username set to" << username;
 }
 
+/**
+ * @brief Asettaa JWT-tokenin, jota käytetään aliluokkien (Withdraw/Deposit/Transfer) API-kutsuissa.
+ */
 void Accountinfo::setToken(const QByteArray &newToken)
 {
     token = newToken;
-    qDebug() << "Accountinfo: Token set to" << token;
 }
 
+/**
+ * @brief Asettaa tilin ID:n.
+ */
+void Accountinfo::setAccountId(int id)
+{
+    accountId = id;
+}
+
+/**
+ * @brief Täyttää käyttöliittymän tilin JSON-datalla.
+ *
+ * @param obj JSON-olio, joka sisältää tilin tiedot.
+ */
 void Accountinfo::setAccountData(const QJsonObject &obj)
 {
-    qDebug() << "setAccountData called with obj:" << obj;
     if (obj.contains("account_id")) {
         accountId = obj["account_id"].toInt();
-        ui->labelID->setText(QString::number(obj["account_id"].toInt()));
-        qDebug() << "labelID set to:" << ui->labelID->text();
-    } else {
-        ui->labelID->setText("Ei dataa");
-        qDebug() << "account_id missing!";
+        ui->labelID->setText(QString::number(accountId));
     }
 
-    // 1. Tilityyppi → labelType
-    if (obj.contains("account_type")) {
-        ui->labelType->setText(obj["account_type"].toString());
-        qDebug() << "labelType set to:" << ui->labelType->text();
-    } else {
-        ui->labelType->setText("Ei dataa");
-    }
-
-    // 2. Tilinumero → labelAccountNumber
-    if (obj.contains("account_number")) {
-        ui->labelAccountNumber->setText(obj["account_number"].toString());
-        qDebug() << "labelAccountNumber set to:" << ui->labelAccountNumber->text();
-    } else {
-        ui->labelAccountNumber->setText("Ei dataa");
-    }
-
-    // 3. Saldo → labelBalance
-    if (obj.contains("balance")) {
-        ui->labelBalance->setText(obj["balance"].toString());
-        qDebug() << "labelBalance set to:" << ui->labelBalance->text();
-    } else {
-        ui->labelBalance->setText("Ei dataa");
-    }
-
-    // 4. Luottoraja → labelCreditLimit
-    if (obj.contains("credit_limit")) {
-        ui->labelCreditLimit->setText(obj["credit_limit"].toString());
-        qDebug() << "labelCreditLimit set to:" << ui->labelCreditLimit->text();
-    } else {
-        ui->labelCreditLimit->setText("Ei dataa");
-    }
-
-    this->update(); // Pakota UI-päivitys
+    ui->labelType->setText(obj.value("account_type").toString("Ei dataa"));
+    ui->labelAccountNumber->setText(obj.value("account_number").toString("Ei dataa"));
+    ui->labelBalance->setText(obj.value("balance").toString("Ei dataa"));
+    ui->labelCreditLimit->setText(obj.value("credit_limit").toString("Ei dataa"));
 }
 
-
-
+/**
+ * @brief Suoritetaan aina, kun Accountinfo-ikkuna näytetään.
+ *
+ * Hakee tilin ajantasaiset tiedot backendiltä ja päivittää UI:n.
+ */
 void Accountinfo::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
-    if (username.isEmpty() || token.isEmpty() || accountType.isEmpty()) {
-        qDebug() << "Accountinfo: Username, token or accountType empty! Cannot fetch saldo.";
+
+    if (username.isEmpty() || accountType.isEmpty()) {
+        qDebug() << "Accountinfo: Missing username or accountType";
         return;
     }
-    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
-    qDebug() << "Accountinfo: Fetching saldo automatically from URL:" << url;
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QByteArray myToken = "Bearer " + token;
-    request.setRawHeader("Authorization", myToken);
-    reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot);  // Käytä vanhaa slottia saldon päivitykseen
-    connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
+
+    QString endpoint = "bank_account/" + username + "/" + accountType;
+
+    auto reply = ApiClient::instance().get(endpoint);
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+
+        if (doc.isObject()) {
+            setAccountData(doc.object());
+        }
+
+        reply->deleteLater();
+    });
 }
 
-void Accountinfo::setAccountId(int id) //Tallettaa id ikkunalta ikkunalle jne.
-{
-    accountId = id;
-    qDebug() << "Accountinfo: accountId set to" << accountId;
-
-
-}
+/**
+ * @brief Avaa henkilötietonäkymän (Data-dialogin).
+ */
 void Accountinfo::btnMyDataClicked()
 {
-    if (username.isEmpty() || token.isEmpty()) {
-        qDebug() << "Accountinfo: Username or token empty! Cannot fetch personal data.";
-        return;
-    }
-    QString url = Environment::base_url() + "bank_user/" + username;
-    qDebug() << "Accountinfo: Fetching personal data from URL:" << url;
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QByteArray myToken = "Bearer " + token;
-    request.setRawHeader("Authorization", myToken);
-    reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyPersonalDataSlot);  // Uusi slotti vain henkilötiedoille ja Data-ikkunalle
-    connect(reply, &QNetworkReply::errorOccurred, this, &Accountinfo::handleNetworkError);
+    QString endpoint = "bank_user/" + username;
+
+    auto reply = ApiClient::instance().get(endpoint);
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+
+        if (doc.isObject()) {
+            Data *objData = new Data(this);
+            objData->setTestData(data);
+
+            // Jos käyttäjä kirjautuu ulos Data-ikkunasta, suljetaan myös Accountinfo
+            connect(objData, &Data::logoutRequested, this, &Accountinfo::close);
+
+            objData->show();
+        }
+
+        reply->deleteLater();
+    });
 }
-void Accountinfo::btnWithdrawClicked() //Nosto-nappi päävalikossa
+
+/**
+ * @brief Avaa nostonäkymän.
+ */
+void Accountinfo::btnWithdrawClicked()
 {
-    qDebug() << "DEBUG: btnWithdrawClicked, accountId =" << accountId;
-    Withdraw *objWd = new Withdraw(this); //Luo nosto ikkunan
-    objWd->token = this->token; //Annetaa token nosto ikkunalle
-    objWd->accountId = this->accountId; //Annetaan accountid nosto ikkunalle
+    Withdraw *objWd = new Withdraw(this);
+    objWd->token = token;
+    objWd->accountId = accountId;
     objWd->balance = ui->labelBalance->text();
-    connect(objWd,&Withdraw::withdrawDone, this, &Accountinfo::refreshBalance); //Tässä yhdistyy accountinfo ja refresh
+
+    connect(objWd, &Withdraw::withdrawDone, this, &Accountinfo::refreshBalance);
     objWd->show();
 }
 
+/**
+ * @brief Avaa talletusnäkymän.
+ */
 void Accountinfo::btnNewDepositClicked()
 {
     Deposit *objDeposit = new Deposit(this);
+    objDeposit->setToken(QString(token));
+    objDeposit->setAccountId(accountId);
+
+    connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
     objDeposit->show();
 }
 
-void Accountinfo::MyDataSlot()  // Vanha slotti: Vain saldon päivitys
+/**
+ * @brief Avaa tilisiirtonäkymän.
+ */
+void Accountinfo::btnTransferClicked()
 {
-    QByteArray response = reply->readAll();
-    qDebug() << "Accountinfo: Response from backend (saldo):" << response;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
-    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-        setAccountData(jsonDoc.object());  // Päivitä Accountinfo:n labelit (saldo jne.)
-        qDebug() << "Accountinfo: Saldo data parsed and set successfully";
-        //Data *objData = new Data(this);
-        //connect(objData, &Data::logoutRequested, this, &Accountinfo::close);  // signaali sulkemiseen
-        //objData->setTestData(response);
-        //objData->show();
-    } else {
-        qDebug() << "Accountinfo: Invalid JSON for saldo";
-    }
-    reply->deleteLater();
+    transfer *objTransfer = new transfer(this);
+    objTransfer->setToken(QString(token));
+    objTransfer->setAccountId(accountId);
+    objTransfer->balance = ui->labelBalance->text();
+
+    connect(objTransfer, &transfer::transferSuccesful, this, &Accountinfo::refreshBalance);
+    objTransfer->show();
 }
 
-void Accountinfo::MyPersonalDataSlot()  // Uusi slotti: Henkilötiedot ja Data-ikkuna
+/**
+ * @brief Päivittää saldon noston, talletuksen tai siirron jälkeen.
+ */
+void Accountinfo::refreshBalance()
 {
-    QByteArray response = reply->readAll();
-    qDebug() << "Accountinfo: Response from backend (personal):" << response;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
-    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-        qDebug() << "Accountinfo: Personal data parsed successfully";
+    QString endpoint = "bank_account/" + QString::number(accountId);
 
-        // Avaa Data-ikkuna (ei päivitä Accountinfo:n label:eitä)
-        Data *objData = new Data(this);
-        connect(objData, &Data::logoutRequested, this, &Accountinfo::close);
-        objData->setTestData(response);
-        objData->show();
-    } else {
-        qDebug() << "Accountinfo: Invalid JSON for personal data";
-        // QMessageBox::warning(this, "Virhe", "Ei henkilötietoja saatavilla.");
-    }
-    reply->deleteLater();
+    auto reply = ApiClient::instance().get(endpoint);
+
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+
+        if (doc.isObject()) {
+            setAccountData(doc.object());
+        }
+
+        reply->deleteLater();
+    });
 }
 
-void Accountinfo::handleNetworkError(QNetworkReply::NetworkError error)
-{
-    qDebug() << "Accountinfo: Network error:" << error << "-" << reply->errorString();
-}
-
-void Accountinfo::refreshBalance() //emit withDraw(); done lähettää tänne signaalin
-{
-    //qDebug() << "Refreshing balance after withdraw...";
-
-    QString url = Environment::base_url() + "bank_account/" + username + "/" + accountType;
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", "Bearer " + token);
-
-    reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, &Accountinfo::MyDataSlot); //Päivittää saldon ui:hin.
-}
-
-
+/**
+ * @brief Käsittelee Takaisin-napin painalluksen.
+ */
 void Accountinfo::on_btnBack_clicked()
 {
     emit backRequested();
-
-    this->close();
+    close();
 }
 
-
+/**
+ * @brief Käsittelee Kirjaudu ulos -napin painalluksen.
+ */
 void Accountinfo::on_btnLogout_clicked()
 {
-    this->close();
+    close();
 }
-

@@ -13,146 +13,234 @@
   <property name="windowTitle">
    <string>Tilitiedot</string>
   </property>
-
-  <!-- Ylävalikko -->
   <widget class="QWidget" name="topBarWidget">
    <property name="geometry">
-    <rect><x>0</x><y>0</y><width>1031</width><height>51</height></rect>
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1031</width>
+     <height>51</height>
+    </rect>
    </property>
    <layout class="QHBoxLayout" name="topBar">
     <item>
      <widget class="QPushButton" name="btnBack">
-      <property name="text"><string>Paluu</string></property>
+      <property name="text">
+       <string>Paluu</string>
+      </property>
      </widget>
     </item>
     <item>
      <spacer name="horizontalSpacer">
-      <property name="orientation"><enum>Qt::Horizontal</enum></property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
      </spacer>
     </item>
     <item>
      <widget class="QPushButton" name="btnLogout">
-      <property name="text"><string>Kirjaudu ulos</string></property>
+      <property name="text">
+       <string>Kirjaudu ulos</string>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
-
-  <!-- Toiminnot -->
   <widget class="QWidget" name="actionsWidget">
    <property name="geometry">
-    <rect><x>100</x><y>100</y><width>851</width><height>81</height></rect>
+    <rect>
+     <x>100</x>
+     <y>100</y>
+     <width>851</width>
+     <height>81</height>
+    </rect>
    </property>
    <layout class="QHBoxLayout" name="actionsLayout">
     <item>
-     <widget class="QPushButton" name="btnNewDeposit">
-      <property name="text"><string>Talletus</string></property>
+     <widget class="QPushButton" name="btnDeposit">
+      <property name="text">
+       <string>Talletus</string>
+      </property>
      </widget>
     </item>
-    <item><spacer name="spacer1"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+    <item>
+     <spacer name="spacer1">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <widget class="QPushButton" name="btnWithdraw">
-      <property name="text"><string>Nosto</string></property>
+      <property name="text">
+       <string>Nosto</string>
+      </property>
      </widget>
     </item>
-    <item><spacer name="spacer2"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+    <item>
+     <spacer name="spacer2">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <widget class="QPushButton" name="btnTransfer">
-      <property name="text"><string>Siirrä</string></property>
+      <property name="text">
+       <string>Siirrä</string>
+      </property>
      </widget>
     </item>
-    <item><spacer name="spacer3"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+    <item>
+     <spacer name="spacer3">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <widget class="QPushButton" name="btnTransactions">
-      <property name="text"><string>Tilitapahtumat</string></property>
+      <property name="text">
+       <string>Tilitapahtumat</string>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
-
-  <!-- Tilitiedot -->
   <widget class="QWidget" name="infoWidget">
    <property name="geometry">
-    <rect><x>110</x><y>240</y><width>841</width><height>251</height></rect>
+    <rect>
+     <x>110</x>
+     <y>240</y>
+     <width>841</width>
+     <height>251</height>
+    </rect>
    </property>
    <layout class="QGridLayout" name="infoLayout">
-
-    <!-- Tili-ID -->
     <item row="0" column="0">
      <widget class="QLabel" name="labelIDTitle">
-      <property name="text"><string>Tili-ID:</string></property>
+      <property name="text">
+       <string>Tili-ID:</string>
+      </property>
      </widget>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="labelID">
-      <property name="text"><string>-</string></property>
-      <property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-
-    <!-- Tilityyppi -->
     <item row="1" column="0">
      <widget class="QLabel" name="labelTypeTitle">
-      <property name="text"><string>Tilin tyyppi:</string></property>
+      <property name="text">
+       <string>Tilin tyyppi:</string>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QLabel" name="labelType">
-      <property name="text"><string>-</string></property>
-      <property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-
-    <!-- Tilinumero -->
     <item row="2" column="0">
      <widget class="QLabel" name="labelAccountNumberTitle">
-      <property name="text"><string>Tilinumero:</string></property>
+      <property name="text">
+       <string>Tilinumero:</string>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
      <widget class="QLabel" name="labelAccountNumber">
-      <property name="text"><string>-</string></property>
-      <property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-
-    <!-- Saldo -->
     <item row="3" column="0">
      <widget class="QLabel" name="labelBalanceTitle">
-      <property name="text"><string>Saldo:</string></property>
+      <property name="text">
+       <string>Saldo:</string>
+      </property>
      </widget>
     </item>
     <item row="3" column="1">
      <widget class="QLabel" name="labelBalance">
-      <property name="text"><string>-</string></property>
-      <property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-
-    <!-- Luottoraja -->
     <item row="4" column="0">
      <widget class="QLabel" name="labelCreditLimitTitle">
-      <property name="text"><string>Luottoraja:</string></property>
+      <property name="text">
+       <string>Luottoraja:</string>
+      </property>
      </widget>
     </item>
     <item row="4" column="1">
      <widget class="QLabel" name="labelCreditLimit">
-      <property name="text"><string>-</string></property>
-      <property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
      </widget>
     </item>
-
    </layout>
   </widget>
-
-  <!-- Omat tiedot -nappi -->
   <widget class="QPushButton" name="btnMyData">
    <property name="geometry">
-    <rect><x>880</x><y>610</y><width>121</width><height>51</height></rect>
+    <rect>
+     <x>910</x>
+     <y>720</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
    </property>
-   <property name="text"><string>Omat tiedot</string></property>
+   <property name="text">
+    <string>Omat tiedot</string>
+   </property>
   </widget>
-
  </widget>
  <resources/>
  <connections/>

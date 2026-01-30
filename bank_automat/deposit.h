@@ -15,14 +15,32 @@ public:
     explicit Deposit(QWidget *parent = nullptr);
     ~Deposit();
 
-private:
-    Ui::Deposit *ui;
+    void setToken(const QString &t);
+    void setAccountId(int id);
+
+signals:
+    void depositSuccessful();
 
 private slots:
     void btnDepositBackClicked();
+    void btnAddFiveClicked();
+    void btnAddTenClicked();
+    void btnAddTwentyClicked();
+    void btnAddFiftyClicked();
+    void btnAddHundredClicked();
+    void btnAddTwoHundredClicked();
+    void btnAddFiveHundredClicked();
+    void btnResetClicked();
+    void btnNewDepositClicked();
+
+private:
+    Ui::Deposit *ui;
+
+    QString token;
+    int accountId = -1;
+    int currentAmount = 0;
+
+    void sendDepositRequest(int amount);
 };
-
-
-
 
 #endif // DEPOSIT_H

@@ -1,9 +1,14 @@
 #include "choosecard.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QMessageBox> //Messageboxia varten
+#include "apiclient.h"
+#include "environment.h"
+
+#include <QMessageBox>
 #include <QEvent>
 #include <QApplication>
+#include <QNetworkReply>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,29 +16,31 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //Inactive ajastus 30s
+    // Inaktiivisuusajastin
     inactivityTimer = new QTimer(this);
-    inactivityTimer->setInterval(30000); //(30000ms)
-
+    inactivityTimer->setInterval(30000);
+    //Login-napin signaali
     connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::btnLoginSlot);
+    // Ajastimen timeout-> Käyttäjä ollut liian kauan tekemättä mitäöän
     connect(inactivityTimer, &QTimer::timeout, this, &MainWindow::onInactivityTimeout);
-
+    //Kuuntelee hiireä ja näppäimistö
     qApp->installEventFilter(this);
-
-    inactivityTimer->start(); // Aloittaa ajastimen alusta
-
-    manager = new QNetworkAccessManager(this);//Luodaan verkko.
+    inactivityTimer->start();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    // Havaitse käyttäjän aktiivisuus (hiiri, näppäin)
-    if (event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress) {
-        inactivityTimer->start();  // Käynnistä ajastin uudelleen (resetoi 30 sekuntia)
+    // Nollataan inaktiivisuusajastin aina kun käyttäjä liikuttaa hiirtä tai käyttää näppäimistöä
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::KeyPress ||
+        event->type() == QEvent::MouseButtonPress)
+    {
+        inactivityTimer->start();
     }
     return QMainWindow::eventFilter(obj, event);
 }
@@ -41,14 +48,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::onInactivityTimeout()
 {
     qDebug() << "Inaktiivisuus: Palautetaan alkutilaan.";
-    // Sulje kaikki avoimet ikkunat
+    //Suljetaan kaikki muut ikkunat (tilitiedot etc)
     for (QWidget *widget : QApplication::topLevelWidgets()) {
-        if (widget != this) {  // Älä sulje MainWindow:ta vielä
+        if (widget != this)
             widget->close();
-        }
     }
 
-    // Palauta alkutilaan:
     this->close();
     MainWindow *newMain = new MainWindow();
     newMain->show();
@@ -56,163 +61,119 @@ void MainWindow::onInactivityTimeout()
 
 void MainWindow::btnLoginSlot()
 {
-    QString url = Environment::base_url() + "bank_kirjautuminen"; //Backendin kirjautusmis url
-    QNetworkRequest request(url); // Post pyynnnöt
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QJsonObject jObject; //JSon dataa
-    jObject.insert("card_number", ui->textUsername->text());
-    jObject.insert("pin", ui->textPassword->text());
-    QJsonDocument jsonDoc(jObject); //Lähetään dataa backendil
-    reply = manager->post(request, jsonDoc.toJson());
-    connect(reply, &QNetworkReply::finished, this, &MainWindow::loginAction); //kirjautuu
+    QString endpoint = "bank_kirjautuminen";
+    // JSON-data kirjautumiseen
+    QJsonObject body;
+    body["card_number"] = ui->textUsername->text();
+    body["pin"] = ui->textPassword->text();
+    // Lähetetään POST backendille
+    QNetworkReply *reply = ApiClient::instance().post(endpoint, body);
+    // Vastaus saapuu-> käsitellään login funktiossa
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        loginAction(reply);
+    });
 }
 
-void MainWindow::loginAction()
+void MainWindow::loginAction(QNetworkReply *reply)
 {
-    QByteArray responseData = reply->readAll(); //Backendin vastaus
+    QByteArray responseData = reply->readAll();
     qDebug() << "Response data:" << responseData;
-
-    if (responseData == "-4078" || responseData.length() == 0) { //Tietokanta virhe
+    //Palauttaa 4078 jos tietokantayhteys epäonnistuu
+    if (responseData == "-4078" || responseData.isEmpty()) {
         ui->LabelErrorMessage->setText("Virhe tietokantayhteydessä");
-    } else {
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData); //Jos onnistuu nii tokenin palautus
-        QJsonObject jsonObject = jsonDoc.object();
-        if (jsonObject.contains("token")) {
-            qDebug() << "User ID at login:" << ui->textUsername->text();
-
-            QString token = jsonObject["token"].toString();
-            QByteArray tokenBytes = token.toUtf8();
-            int userId = jsonObject["user_id"].toInt();
-            QString cardType = jsonObject["card_type"].toString();
-
-            qDebug() << "Login OK. User ID:" << userId << "Card type:" << cardType;
-            qDebug() << "Login ok";
-            qDebug() << "Token:" << token;
-
-            if (cardType == "credit") {
-                qDebug() << "Kirjaudutaan suoraan DEBIT-tiliin";
-                //Haetaan credit-tilin tiedot
-
-                QString url = Environment::base_url() + "bank_account/" + QString::number(userId) + "/credit";
-
-                QNetworkRequest request(url); //Lähettää GET
-                request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-                request.setRawHeader("Authorization", "Bearer " + tokenBytes);
-
-                QNetworkReply *accReply = manager->get(request);
-                //Avaa accountinfon
-
-                connect(accReply, &QNetworkReply::finished, this, [=]() {
-                    QByteArray accData = accReply->readAll();
-                    QJsonDocument accDoc = QJsonDocument::fromJson(accData);
-                    QJsonObject obj = accDoc.object();
-
-                    Accountinfo *acc = new Accountinfo(this);//Luodaan accouninfo ja annetaan JSON-data
-                    connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
-                    acc->setToken(tokenBytes);
-                    acc->setUsername(QString::number(userId));
-                    acc->setAccountData(obj);
-                    acc->show();
-
-                    this->hide(); //Piilotetaan kirjautumisikkuna
-                    accReply->deleteLater();
-                });
-
-                reply->deleteLater();
-                return;
-            }
-
-
-            if (cardType == "debit") {
-                qDebug() << "Kirjaudutaan suoraan DEBIT-tiliin";
-                //Haetaan debit tilin tiedot
-
-                QString url = Environment::base_url() + "bank_account/" + QString::number(userId) + "/debit";
-
-                QNetworkRequest request(url);
-                request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-                request.setRawHeader("Authorization", "Bearer " + tokenBytes);
-
-                QNetworkReply *accReply = manager->get(request);
-                //avataan accouninfo
-
-                connect(accReply, &QNetworkReply::finished, this, [=]() {
-                    QByteArray accData = accReply->readAll();
-                    QJsonDocument accDoc = QJsonDocument::fromJson(accData);
-                    QJsonObject obj = accDoc.object();
-
-                    Accountinfo *acc = new Accountinfo(this);
-                    connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
-                    acc->setToken(tokenBytes);
-                    acc->setUsername(QString::number(userId));
-                    acc->setAccountData(obj);
-                    acc->show();
-
-                    this->hide();
-                    accReply->deleteLater();
-                });
-
-                reply->deleteLater();
-                return;
-            }
-
-
-
-
-
-
-            if (cardType == "dual") {
-                qDebug() << "Kirjaudutaan DUAL-tilillä → avataan ChooseCard";
-
-                ChooseCard *objchoose = new ChooseCard(this);
-                objchoose->setUsername(QString::number(userId));
-                objchoose->setChooseCard(tokenBytes);
-
-                // Kun käyttäjä valitsee debit/credit, ChooseCard avaa Accountinfo-ikkunan
-                connect(objchoose, &ChooseCard::cardSelected, this, &MainWindow::onCardSelected);
-                connect(objchoose, &ChooseCard::backRequested, this, &MainWindow::show);
-
-                objchoose->exec();   // Näyttää valintadialogin
-                reply->deleteLater();
-                return;
-            }
-
-
-
-            /*ChooseCard *objchoose = new ChooseCard(this);
-            objchoose->setUsername(QString::number(userId));
-            objchoose->setChooseCard(tokenBytes);  // Nyt tokenBytes on määritelty!
-            connect(objchoose, &ChooseCard::cardSelected, this, &MainWindow::onCardSelected);
-            objchoose->exec();*/
-
-            //Accountinfo *objAccountinfo = new Accountinfo(this);
-            ///objAccountinfo->setToken(tokenBytes);
-            //objAccountinfo->setUsername(ui->textUsername->text());
-           // objAccountinfo->show();
-        } else {
-            QString backendMessage = "Sori, tapahtu virhe";
-            if (jsonObject.contains("message")) {
-                backendMessage = jsonObject["message"].toString();
-            }
-
-            ui->LabelErrorMessage->setText("Tunnus ja salasana eivät täsmää");
-            QMessageBox::warning (this, "Kirjautumisvirhe", backendMessage);
-            ui->textUsername->clear();
-            ui->textPassword->clear();
-            ui->textUsername->setFocus();
-        }
+        reply->deleteLater();
+        return;
     }
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+    QJsonObject jsonObject = jsonDoc.object();
+    //Jos token puuttuu -> kirjautuminen epäonnistuu
+    if (!jsonObject.contains("token")) {
+        QString backendMessage = jsonObject.contains("message")
+        ? jsonObject["message"].toString()
+        : "Sori, tapahtu virhe";
+
+        ui->LabelErrorMessage->setText("Tunnus ja salasana eivät täsmää");
+        QMessageBox::warning(this, "Kirjautumisvirhe", backendMessage);
+        //tyhjentää kentät uutta yritystä varten
+        ui->textUsername->clear();
+        ui->textPassword->clear();
+        ui->textUsername->setFocus();
+
+        reply->deleteLater();
+        return;
+    }
+
+    // --- Kirjautuminen OK ---
+    QString token = jsonObject["token"].toString();
+    int userId = jsonObject["user_id"].toInt();
+    QString cardType = jsonObject["card_type"].toString();
+    // Tämä tallentaa tokenin ApiClienttiin
+    ApiClient::instance().setToken(token.toUtf8());
+
+    qDebug() << "Login OK. User ID:" << userId << "Card type:" << cardType;
+    qDebug() << "Token:" << token;
+
+    // --- Debit / Credit / Dual käsittely ---
+    if (cardType == "credit") {
+        openAccountWindow(userId, "credit");
+    }
+    else if (cardType == "debit") {
+        openAccountWindow(userId, "debit");
+    }
+    else if (cardType == "dual") {
+        // dual-kortti -> käyttäjä pitää valita debit tai credit
+        ChooseCard *dlg = new ChooseCard(this);
+        dlg->setUsername(QString::number(userId));
+        dlg->setChooseCard(token.toUtf8());
+
+        connect(dlg, &ChooseCard::cardSelected, this, &MainWindow::onCardSelected);
+        connect(dlg, &ChooseCard::backRequested, this, &MainWindow::show);
+
+        dlg->exec();
+    }
+
     reply->deleteLater();
+}
+
+void MainWindow::openAccountWindow(int userId, const QString &type)
+{
+    // Haetaan tilitiedot backendistä
+    QString endpoint = "bank_account/" + QString::number(userId) + "/" + type;
+
+    QNetworkReply *accReply = ApiClient::instance().get(endpoint);
+
+    connect(accReply, &QNetworkReply::finished, this, [=]() {
+        QByteArray accData = accReply->readAll();
+        QJsonDocument accDoc = QJsonDocument::fromJson(accData);
+        QJsonObject obj = accDoc.object();
+        //Luodaan tilitietoikkuna
+        Accountinfo *acc = new Accountinfo(this);
+        connect(acc, &Accountinfo::backRequested, this, &MainWindow::show);
+
+        acc->setToken(ApiClient::instance().getToken());
+        acc->setUsername(QString::number(userId));
+        acc->setAccountData(obj);
+
+        acc->show();
+        this->hide(); //Piilotetaanm login-ikkuna tilinäkymän ajaksi
+
+        accReply->deleteLater();
+    });
 }
 
 void MainWindow::onCardSelected(QString type)
 {
     qDebug() << "Kortti valittu:" << type;
+}
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    // Suljetaan koko sovellus, jos pöäikkuna suljetaan
+    QApplication::quit();
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     this->close();
 }
-

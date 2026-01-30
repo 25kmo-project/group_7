@@ -28,7 +28,9 @@ public:
     ~MainWindow();
 
 protected:
-bool eventFilter(QObject *obj, QEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+
 
 
 private:
@@ -36,10 +38,11 @@ private:
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
     QTimer *inactivityTimer; // 30sek
+    void openAccountWindow(int userId, const QString &type);
 
 private slots:
     void btnLoginSlot();
-    void loginAction();
+    void loginAction(QNetworkReply *reply);
     void onCardSelected(QString type);
     //void onWithdrawReply(QNetworkReply *reply);
 

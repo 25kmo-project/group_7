@@ -5,6 +5,8 @@
 **Tekijät: Valtteri Sippala, Vili Virnes, Aleksi Jussila ja Santeri Rautio**  
 **2026 kevät**  
 
+Dokumentaatio Doxygen-dokumentaatio löytyy täältä: 👉[Bank Automat ‑dokumentaatio](https://aleksijohan.github.io/bank-automat-docs/)
+
 ---
 (Käännetään jossain vaiheessa enkuksi?)
 ## 1. Johdanto
@@ -53,7 +55,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Sovelluksella voi siirtää rahaa käyttäjän tilien välillä
 - Sovelluksessa voi selata tilitapahtumia
 
-(Lisää tähän kuva ER-kaaviosta)
+![ER-kaavio](./docs/ER-kaavio.png)
 
 
 ### 4.1 Api - kutsut
@@ -80,7 +82,9 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Käyttäjä syöttää kortin numeron ja PIN‑koodin  
 - Sovellus lähettää POST‑pyynnön backendille  
 - Backend palauttaa tokenin ja käyttäjän tiedot  
-- Virhetilanteet näytetään käyttöliittymässä  
+- Virhetilanteet näytetään käyttöliittymässä 
+
+(Tänne kuvia kun Qt sovellus on viimeistelty)
 
 ### 5.2 Tilitietojen näyttäminen
 - Accountinfo hakee tilin tiedot automaattisesti  
@@ -139,9 +143,24 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ## 9. Johtopäätökset
 
-## 10. Tilakaavio 
 
 
+## 10. Tilakaavio
 
 
+  ![Tilakaavio](./docs/Tilakaavio_v1.5.png)
 
+  Kirjautuminen
+- Kirjautuessa 10 sekunnin inaktiivisuus alustaa kirjautumis-ikkunan
+
+Kortin valinta (vain dual‑kortilla)
+- Kortin valinnan jälkeen siirtyy päävalikkoon
+- Pelkällä credit tai debit kortilla siirtyy suoraan päävalikkoon
+
+Päävalikon toiminnot
+- Nosto
+- Talletus
+- Siirto
+- Tilitapahtumat
+- Omat tiedot
+- 30 sekunnin inaktiivisuus istunnon aikana palauttaa takaisin kirjautumis-ikkunan
