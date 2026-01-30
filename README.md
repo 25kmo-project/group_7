@@ -64,16 +64,33 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Lähetetään pyyntö (get, post, put, delete)
 - Odotetaan vastausta signaalilla finished
 
-- (Tähän joku esim kuva koodista + kuva jostain pyynnöstä)
+![kutsu](./docs/kutsu.png)
 
 
 ### 4.1 JSON - vastaukset
-- ( Kirjoita JSON- vastauksista + kuva vastauksesta)
+ - JSON (JavaScript Object Notation) on kevyt ja selkeä tietomuoto, jota käytetään tiedon siirtämiseen sovellusten välillä.
+
+- JSON koostuu avain–arvo‑pareista ja muistuttaa rakenteeltaan JavaScript‑olioita.
+
+- JSON‑vastauksia käytetään esimerkiksi API‑kutsuissa, palvelimen ja käyttöliittymän välisessä kommunikoinnissa sekä sovelluksen sisäisessä tiedonvaihdossa.
+
+- JSON on helppolukuinen sekä ihmisille että koneille, ja se on yksi yleisimmistä tiedonsiirtostandardeista.
+
+![vastaus](./docs/vastaus.png)
+
 
 
 ### 4.2 Ikkunoiden kommunikointi
 
-- Kirjoita miten ikkunat kommunikoi. esim takaisin painike eli void backRequested();
+- Sovelluksen eri ikkunat kommunikoivat keskenään signaalien, metodikutsujen tai parametrien avulla.
+
+- Pääikkuna voi avata alavalikon tai toisen näkymän ja kuunnella sen lähettämiä signaaleja.
+
+- Alavalikko voi lähettää takaisin signaalin, joka kertoo pääikkunalle käyttäjän toiminnasta (esim. takaisin‑painike).
+
+- Tyypillinen kommunikointitapa on signaali, kuten: void backRequested();
+
+![back](./docs/back.png)
 ---
 
 ## 5. Toiminnallisuudet
@@ -143,7 +160,10 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ## 9. Johtopäätökset
 
+
+
 ## 10. Tilakaavio
+
 
   ![Tilakaavio](./docs/Tilakaavio_v1.5.png)
 
