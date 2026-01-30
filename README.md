@@ -139,4 +139,9 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ## 9. Johtopäätökset
 
+## 10. Tilakaavio 
+
+
+
+
 
