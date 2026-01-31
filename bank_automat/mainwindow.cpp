@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <QApplication>
 #include <QNetworkReply>
+#include <QLineEdit>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,13 +20,20 @@ MainWindow::MainWindow(QWidget *parent)
     // Inaktiivisuusajastin
     inactivityTimer = new QTimer(this);
     inactivityTimer->setInterval(30000);
+    // 10 sek inaktiivisuusajastin
+    loginInactivityTimer = new QTimer(this);
+    loginInactivityTimer->setInterval(10000);
     //Login-napin signaali
     connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::btnLoginSlot);
+    // Kirjautuminen Enterillä
+    connect(ui->textPassword, &QLineEdit::returnPressed, this, &MainWindow::btnLoginSlot);
     // Ajastimen timeout-> Käyttäjä ollut liian kauan tekemättä mitäöän
     connect(inactivityTimer, &QTimer::timeout, this, &MainWindow::onInactivityTimeout);
+    connect(loginInactivityTimer, &QTimer::timeout, this, &MainWindow::onLoginInactivityTimeout);
     //Kuuntelee hiireä ja näppäimistö
     qApp->installEventFilter(this);
     inactivityTimer->start();
+    loginInactivityTimer->start();
 }
 
 MainWindow::~MainWindow()
@@ -35,19 +43,21 @@ MainWindow::~MainWindow()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    // Nollataan inaktiivisuusajastin aina kun käyttäjä liikuttaa hiirtä tai käyttää näppäimistöä
+    // Nollataan inaktiivisuusajastimet aina kun käyttäjä liikuttaa hiirtä tai käyttää näppäimistöä
     if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::KeyPress ||
         event->type() == QEvent::MouseButtonPress)
     {
         inactivityTimer->start();
+        loginInactivityTimer->start();
     }
     return QMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::onInactivityTimeout()
 {
-    qDebug() << "Inaktiivisuus: Palautetaan alkutilaan.";
+    // 30s-ajastin laukaissut -> palautetaan alkutilaan
+    qDebug() << "30s Inaktiivisuus: Palautetaan alkutilaan.";
     //Suljetaan kaikki muut ikkunat (tilitiedot etc)
     for (QWidget *widget : QApplication::topLevelWidgets()) {
         if (widget != this)
@@ -57,6 +67,16 @@ void MainWindow::onInactivityTimeout()
     this->close();
     MainWindow *newMain = new MainWindow();
     newMain->show();
+}
+
+void MainWindow::onLoginInactivityTimeout()
+{
+    qDebug() << "10s Inaktiivisuus -> Tyhjennetään kirjautumiskentät.";
+    if (ui) {
+        ui->textPassword->clear();
+        ui->textUsername->clear();
+    }
+    loginInactivityTimer->start();
 }
 
 void MainWindow::btnLoginSlot()
