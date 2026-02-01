@@ -87,13 +87,13 @@ jobs:
             sudo mkdir -p /opt/bank-app/db
             sudo chown -R $USER:$USER /opt/bank-app
 
-      - name: Copy SQL Schema
+      - name: Copy SQL Schema and Scripts
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "db/er_bankdb.sql"
+          source: "db/er_bankdb.sql, db/backup_db.sh"
           target: "/opt/bank-app/"
           strip_components: 0
 
@@ -128,6 +128,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /opt/bank-app
+            chmod +x db/backup_db.sh
             docker compose pull
             docker compose up -d --no-build
             docker system prune -f
