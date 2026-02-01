@@ -2,10 +2,10 @@ const db = require('../database');
 
 const bank_log = {
     getAll: function (callback) {
-        return db.query("SELECT * FROM log", callback);
+        return db.query("SELECT log_id, actions, amount, account_id, user_id, card_id, DATE_FORMAT(event_time, '%d.%m.%Y %H:%i:%s') AS event_time FROM log", callback);
     },
     getOne: function (log_id, callback) {
-        return db.query("SELECT * FROM log WHERE log_id = ?",
+        return db.query("SELECT log_id, actions, amount, account_id, user_id, card_id, DATE_FORMAT(event_time, '%d.%m.%Y %H:%i:%s') AS event_time FROM log WHERE log_id = ?",
             [log_id], callback);
     },
     add: function (log, callback) {
