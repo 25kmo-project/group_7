@@ -94,7 +94,7 @@ router.post('/deposit', function (request, response) {
 router.get('/paginated/:account_id', function (request, response) {
     const account_id = request.params.account_id;
     const limit = request.query.limit || 10;
-    const offset = request-query.offset || 0;
+    const offset = request.query.offset || 0;
     bankLogModel.getAccountLogs(account_id, limit, offset, function (err, result) {
         if (err){
             response.json(err);
