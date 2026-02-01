@@ -38,6 +38,11 @@ const bank_log = {
         db.query("CALL deposit(?, ?)",
             [my_account_id, amount],
             callback);
+    },
+    getAccountLogs: function (account_id, limit, offset, callback) {
+        db.query("SELECT * FROM log WHERE account_id = ? ORDER BY date DESC LIMIT ? OFFSET ?",
+            [account_id, parseInt(limit), parseInt(offset)],
+            callback);
     }
 
 
