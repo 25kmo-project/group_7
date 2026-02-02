@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QNetworkReply>
 #include <QLineEdit>
+#include <qevent.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -47,19 +48,15 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         event->type() == QEvent::KeyPress ||
         event->type() == QEvent::MouseButtonPress)
     {
-        // Kirjautumisen 10s inaktiivisuusajastin
-        loginInactivityTimer->start();
+        inactivityTimer->start();
 
+        // Login-inaktiivisuusajastin käynnistyy jos kentissä on tekstiä
         if (ui && (!ui->textUsername->text().isEmpty() || !ui->textPassword->text().isEmpty())) {
-            // Varmistetaan, että timer ei ole jo käynnissä
-            if (!loginInactivityTimer->isActive()) {
-                loginInactivityTimer->start();
-            }
+            loginInactivityTimer->start();
         } else {
-            // Jos kentät ovat tyhjiä, pysäytetään login-inaktiivisuusajastin
-            if (loginInactivityTimer->isActive()) {
-                loginInactivityTimer->stop();
-            }
+        // Jos kentät ovat tyhjiä, pysäytetään login-inaktiivisuusajastin
+            loginInactivityTimer->stop();
+
         }
     }
     return QMainWindow::eventFilter(obj, event);
@@ -75,18 +72,9 @@ void MainWindow::onInactivityTimeout()
     loginInactivityTimer->stop();
 
     // Suljetaan muut ikkunat
-    for (QWidget *widget : QApplication::topLevelWidgets()) {
-        if (widget != this) {
-            widget->close();
-        }
+    for (QWidget *w : QApplication::topLevelWidgets()) {
+        if (w != this) w->close();
     }
-
-    // Luodaan uusi pääikkuna
-    MainWindow *newMain = new MainWindow();
-    newMain->show();
-
-    // Sitten suljetaan tämä ikkuna
-    this->close();
 }
 
 void MainWindow::onLoginInactivityTimeout()
@@ -220,6 +208,9 @@ void MainWindow::onCardSelected(QString type)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    if (!event->spontaneous()) {
+        return;
+    }
     // Suljetaan koko sovellus, jos pöäikkuna suljetaan
     QApplication::quit();
 }
