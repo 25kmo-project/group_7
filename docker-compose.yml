@@ -40,7 +40,7 @@ services:
 
   nginx:
     environment:
-      - TZ =Europe/Helsinki
+      TZ: Europe/Helsinki
     image: nginx:alpine
     container_name: bank_nginx
     ports:
