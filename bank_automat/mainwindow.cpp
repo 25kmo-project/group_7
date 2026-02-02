@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     //Kuuntelee hiireä ja näppäimistö
     qApp->installEventFilter(this);
     inactivityTimer->start();
-    loginInactivityTimer->start();
 }
 
 MainWindow::~MainWindow()
@@ -48,8 +47,20 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         event->type() == QEvent::KeyPress ||
         event->type() == QEvent::MouseButtonPress)
     {
-        inactivityTimer->start();
+        // Kirjautumisen 10s ajastin
         loginInactivityTimer->start();
+
+        if (ui && (!ui->textUsername->text().isEmpty() || !ui->textPassword->text().isEmpty())) {
+            // Varmistetaan, että timer ei ole jo käynnissä
+            if (!loginInactivityTimer->isActive()) {
+                loginInactivityTimer->start();
+            }
+        } else {
+            // Jos kentät ovat tyhjiä, pysäytetään login-inaktiivisuusajastin
+            if (loginInactivityTimer->isActive()) {
+                loginInactivityTimer->stop();
+            }
+        }
     }
     return QMainWindow::eventFilter(obj, event);
 }
@@ -76,7 +87,7 @@ void MainWindow::onLoginInactivityTimeout()
         ui->textPassword->clear();
         ui->textUsername->clear();
     }
-    loginInactivityTimer->start();
+    loginInactivityTimer->stop();
 }
 
 void MainWindow::btnLoginSlot()
@@ -133,6 +144,17 @@ void MainWindow::loginAction(QNetworkReply *reply)
 
     qDebug() << "Login OK. User ID:" << userId << "Card type:" << cardType;
     qDebug() << "Token:" << token;
+
+    // Tyhjennetään kirjautumiskentät onnistuneen kirjautumisen yhteydessä
+    if (ui) {
+        ui->textUsername->clear();
+        ui->textPassword->clear();
+    }
+
+    // Pysäytetään login-inaktiivisuusajastin, koska kentät ovat nyt tyhjiä
+    if (loginInactivityTimer->isActive()) {
+        loginInactivityTimer->stop();
+    }
 
     // --- Debit / Credit / Dual käsittely ---
     if (cardType == "credit") {
