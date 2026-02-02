@@ -39,6 +39,8 @@ services:
     restart: unless-stopped
 
   nginx:
+    environment:
+      - TZ =Europe/Helsinki
     image: nginx:alpine
     container_name: bank_nginx
     ports:
