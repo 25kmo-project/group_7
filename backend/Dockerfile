@@ -1,5 +1,11 @@
 FROM node:20-alpine
 
+# Asennetaan tzdata, jotta TZ-muuttuja toimii Alpinessa
+RUN dpk add --no-cache tzdata
+
+# Asetetaan aikavyöhyke
+ENV TZ=Europe/Helsinki
+
 # Aseta työskentelyhakemisto kontin sisälle
 WORKDIR /usr/src/app
 
