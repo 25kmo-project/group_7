@@ -47,7 +47,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         event->type() == QEvent::KeyPress ||
         event->type() == QEvent::MouseButtonPress)
     {
-        // Kirjautumisen 10s ajastin
+        // Kirjautumisen 10s inaktiivisuusajastin
         loginInactivityTimer->start();
 
         if (ui && (!ui->textUsername->text().isEmpty() || !ui->textPassword->text().isEmpty())) {
@@ -69,15 +69,24 @@ void MainWindow::onInactivityTimeout()
 {
     // 30s-ajastin laukaissut -> palautetaan alkutilaan
     qDebug() << "30s Inaktiivisuus: Palautetaan alkutilaan.";
-    //Suljetaan kaikki muut ikkunat (tilitiedot etc)
+
+    // Pysäytetään ajastimet
+    inactivityTimer->stop();
+    loginInactivityTimer->stop();
+
+    // Suljetaan muut ikkunat
     for (QWidget *widget : QApplication::topLevelWidgets()) {
-        if (widget != this)
+        if (widget != this) {
             widget->close();
+        }
     }
 
-    this->close();
+    // Luodaan uusi pääikkuna
     MainWindow *newMain = new MainWindow();
     newMain->show();
+
+    // Sitten suljetaan tämä ikkuna
+    this->close();
 }
 
 void MainWindow::onLoginInactivityTimeout()
