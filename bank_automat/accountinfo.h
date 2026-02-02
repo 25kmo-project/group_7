@@ -116,9 +116,14 @@ private slots:
     void on_btnBack_clicked();
 
     /**
-     * @brief Käsittelee Kirjaudu ulos -napin painalluksen.
+     * @brief Käsittelee Kirjaudu ulos-napin painalluksen.
      */
     void on_btnLogout_clicked();
+
+    /**
+     * @brief Käsittelee Tilitapahtumat-napin painalluksen.
+     */
+    void btnTransactionsClicked();
 
 private:
     Ui::Accountinfo *ui;   ///< Qt Designerin generoima käyttöliittymäolio

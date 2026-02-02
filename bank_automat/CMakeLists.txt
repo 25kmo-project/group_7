@@ -22,6 +22,7 @@ qt_add_executable(bank_automat
     transfer.h transfer.cpp transfer.ui
     ApiClient.h
     ApiClient.cpp
+    transactions.h transactions.cpp transactions.ui
 )
 
 

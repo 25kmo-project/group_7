@@ -10,6 +10,7 @@
 #include "withdraw.h"
 #include "deposit.h"
 #include "transfer.h"
+#include "transactions.h"
 
 
 Accountinfo::Accountinfo(QWidget *parent)
@@ -22,6 +23,7 @@ Accountinfo::Accountinfo(QWidget *parent)
     connect(ui->btnWithdraw, &QPushButton::clicked, this, &Accountinfo::btnWithdrawClicked);
     connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
     connect(ui->btnTransfer, &QPushButton::clicked, this, &Accountinfo::btnTransferClicked);
+    connect(ui->btnTransactions, &QPushButton::clicked, this, &Accountinfo::btnTransactionsClicked);
 }
 
 
@@ -176,4 +178,12 @@ void Accountinfo::on_btnBack_clicked()
 void Accountinfo::on_btnLogout_clicked()
 {
     close();
+}
+
+void Accountinfo::btnTransactionsClicked()
+{
+    Transactions *objTransactions = new Transactions(this);
+    objTransactions->setToken(QString(token));
+    objTransactions->setAccountId(accountId);
+    objTransactions->show();
 }
