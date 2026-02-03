@@ -58,7 +58,7 @@ router.delete('/:id', function (request, response) {
 });
 
 router.post('/transfer', function (request, response) {
-    const { first_account, second_account, amount } = request.body;
+    const {first_account, second_account, amount } = request.body;
 
     bankLogModel.transfer(first_account, second_account, amount, function (err, result) {
         if (err) {
