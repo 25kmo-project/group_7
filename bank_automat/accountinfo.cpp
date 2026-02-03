@@ -18,7 +18,7 @@ Accountinfo::Accountinfo(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->btnMyData, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
+    connect(ui->Omatiedot, &QPushButton::clicked, this, &Accountinfo::btnMyDataClicked);
     connect(ui->btnWithdraw, &QPushButton::clicked, this, &Accountinfo::btnWithdrawClicked);
     connect(ui->btnDeposit, &QPushButton::clicked, this, &Accountinfo::btnNewDepositClicked);
     connect(ui->btnTransfer, &QPushButton::clicked, this, &Accountinfo::btnTransferClicked);
