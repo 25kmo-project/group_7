@@ -29,44 +29,49 @@
    <property name="bottomMargin">
     <number>30</number>
    </property>
-
-   <!-- Top bar -->
    <item>
     <layout class="QHBoxLayout" name="topBar">
      <item>
       <widget class="QPushButton" name="btnBack">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Paluu</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
-        <size><width>40</width><height>20</height></size>
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
       </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="btnLogout">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Kirjaudu ulos</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-
-   <!-- Neljä päätoimintanappia – nyt tasavälein ja venyvät -->
    <item>
     <layout class="QHBoxLayout" name="actionsLayout">
      <property name="spacing">
@@ -74,57 +79,67 @@
      </property>
      <item>
       <widget class="QPushButton" name="btnDeposit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Talletus</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnWithdraw">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Nosto</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnTransfer">
-       <property name="text">
-        <string>Siirrä</string>
-       </property>
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed"/>
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Tilisiirto</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnTransactions">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Tilitapahtumat</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-
-   <!-- Info-kortti -->
    <item>
     <widget class="QFrame" name="infoFrame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="infoLayout">
+     <layout class="QGridLayout" name="infoLayout" columnstretch="0,0">
       <property name="leftMargin">
        <number>40</number>
       </property>
@@ -140,49 +155,119 @@
       <property name="spacing">
        <number>12</number>
       </property>
-      <property name="columnStretch">
-       <set>0,1</set>
-      </property>
-
-      <!-- Sama sisältö kuin sinulla, vain layout parannettu -->
-      <item row="0" column="0"><widget class="QLabel" name="labelIDTitle"><property name="text"><string>Tili-ID:</string></property></widget></item>
-      <item row="0" column="1"><widget class="QLabel" name="labelID"><property name="text"><string>-</string></property><property name="alignment"><set>Qt::AlignRight</set></property></widget></item>
-
-      <item row="1" column="0"><widget class="QLabel" name="labelTypeTitle"><property name="text"><string>Tilin tyyppi:</string></property></widget></item>
-      <item row="1" column="1"><widget class="QLabel" name="labelType"><property name="text"><string>-</string></property><property name="alignment"><set>Qt::AlignRight</set></property></widget></item>
-
-      <item row="2" column="0"><widget class="QLabel" name="labelAccountNumberTitle"><property name="text"><string>Tilinumero:</string></property></widget></item>
-      <item row="2" column="1"><widget class="QLabel" name="labelAccountNumber"><property name="text"><string>-</string></property><property name="alignment"><set>Qt::AlignRight</set></property></widget></item>
-
-      <item row="3" column="0"><widget class="QLabel" name="labelBalanceTitle"><property name="text"><string>Saldo:</string></property></widget></item>
-      <item row="3" column="1"><widget class="QLabel" name="labelBalance"><property name="text"><string>-</string></property><property name="alignment"><set>Qt::AlignRight</set></property></widget></item>
-
-      <item row="4" column="0"><widget class="QLabel" name="labelCreditLimitTitle"><property name="text"><string>Luottoraja:</string></property></widget></item>
-      <item row="4" column="1"><widget class="QLabel" name="labelCreditLimit"><property name="text"><string>-</string></property><property name="alignment"><set>Qt::AlignRight</set></property></widget></item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelIDTitle">
+        <property name="text">
+         <string>Tili-ID:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="labelID">
+        <property name="text">
+         <string>-</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelTypeTitle">
+        <property name="text">
+         <string>Tilin tyyppi:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="labelType">
+        <property name="text">
+         <string>-</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelAccountNumberTitle">
+        <property name="text">
+         <string>Tilinumero:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="labelAccountNumber">
+        <property name="text">
+         <string>-</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labelBalanceTitle">
+        <property name="text">
+         <string>Saldo:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="labelBalance">
+        <property name="text">
+         <string>-</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="labelCreditLimitTitle">
+        <property name="text">
+         <string>Luottoraja:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="labelCreditLimit">
+        <property name="text">
+         <string>-</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight</set>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-
-   <!-- Omat tiedot -nappi oikeassa alakulmassa -->
    <item>
     <layout class="QHBoxLayout" name="bottomLayout">
      <item>
       <spacer name="bottomSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
-        <size><width>40</width><height>20</height></size>
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
       </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="Omatiedot">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Omat tiedot</string>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed"/>
        </property>
       </widget>
      </item>

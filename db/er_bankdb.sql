@@ -136,32 +136,79 @@ USE `bank_db` ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `bank_db`$$
-CREATE PROCEDURE `transfer` (IN first_account INT, IN second_account INT, IN amount DECIMAL(12,2) )
-BEGIN
-DECLARE test1,test2 INT DEFAULT 0;
 
-IF amount <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Amount must be positive';
-    END IF;
-    
-  START TRANSACTION;
-  
-  UPDATE account SET balance=balance-amount WHERE account_id=first_account AND balance >= amount;
-  SET test1=ROW_COUNT();
-  
-  UPDATE account SET balance=balance+amount WHERE account_id=second_account;
-  SET test2=ROW_COUNT();
-  
-    IF (test1 > 0 AND test2 >0) THEN
-      INSERT INTO log(account_id,actions,amount,event_time) VALUES(first_account,'withdrawal',amount,NOW());
-      INSERT INTO log(account_id,actions,amount,event_time) VALUES(second_account,'deposit',amount,NOW());
-      COMMIT;
-    ELSE
-      ROLLBACK;
+CREATE PROCEDURE transfer (
+  IN first_account INT,             
+  IN second_account VARCHAR(45),     
+  IN amount DECIMAL(12,2)
+  )
+BEGIN
+  DECLARE from_balance DECIMAL(12,2);
+  DECLARE to_balance DECIMAL(12,2);
+  DECLARE to_account_id INT;
+
+  IF first_account = second_account THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Et voi siirtää rahaa samalle tilille';
   END IF;
-  
+
+  IF amount <= 0 THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Summan oltava positiivinen';
+  END IF;
+
+START TRANSACTION;
+
+  SELECT balance INTO from_balance
+  FROM account
+  WHERE account_id = first_account
+  FOR UPDATE;
+
+  IF from_balance IS NULL THEN
+    ROLLBACK;
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Lähtötiliä ei ole';
+  END IF;
+
+  SELECT account_id, balance
+  INTO to_account_id, to_balance
+  FROM account
+  WHERE account_number = second_account
+  FOR UPDATE;
+
+  IF to_account_id IS NULL THEN
+    ROLLBACK;
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Kohdetiliä ei ole';
+  END IF;
+
+  IF to_account_id = first_account THEN
+    ROLLBACK;
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Et voi siirtää rahaa samalle tilille';
+  END IF;
+
+  IF from_balance < amount THEN
+    ROLLBACK;
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ei katetta';
+  END IF;
+
+  UPDATE account
+    SET balance = balance - amount
+    WHERE account_id = first_account;
+
+  UPDATE account
+    SET balance = balance + amount
+    WHERE account_id = to_account_id;
+
+  INSERT INTO log (account_id, actions, amount, event_time)
+    VALUES (first_account, 'withdrawal', amount, NOW());
+
+  INSERT INTO log (account_id, actions, amount, event_time)
+    VALUES (to_account_id, 'deposit', amount, NOW());
+
+  COMMIT;
 END$$
 
 DELIMITER ;

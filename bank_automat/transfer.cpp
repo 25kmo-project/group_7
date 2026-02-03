@@ -61,10 +61,10 @@ void transfer::getBalance()
 // -----------------------------
 void transfer::btnTransferMoneyClicked()
 {
-    int targetAccount = ui->textTransferAccountNumber->text().toInt();
+    QString targetAccount = ui->textTransferAccountNumber->text().trimmed();
     double amount = ui->textTrasferAmount->text().toDouble();
 
-    if (targetAccount <= 0 || amount <= 0) {
+    if (targetAccount.isEmpty() || amount <= 0) {
         QMessageBox::warning(this, "Virhe", "Syötä kelvollinen tili ja summa.");
         return;
     }
@@ -85,6 +85,17 @@ void transfer::btnTransferMoneyClicked()
             reply->deleteLater();
             return;
         }
+
+        QJsonDocument doc = QJsonDocument::fromJson(response);
+        QJsonObject obj = doc.object();
+
+        if (obj.contains("sqlMessage")) {
+            QString errorText = "Siirto epäonnistui: " + obj["sqlMessage"].toString();
+            QMessageBox::warning(this, "Virhe", errorText);
+            reply->deleteLater();
+            return;
+        }
+
 
         // Siirto onnistui → päivitä saldo
         getBalance();
