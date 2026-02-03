@@ -212,7 +212,7 @@ void MainWindow::onCardSelected(QString type)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    // Suljetaan koko sovellus jos pääikkuna suljetaan
+    // Suljetaan koko sovellus, jos pöäikkuna suljetaan
     QApplication::quit();
 }
 
