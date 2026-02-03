@@ -16,6 +16,7 @@ transfer::transfer(QWidget *parent)
 
     connect(ui->btnTransferBack, &QPushButton::clicked, this, &transfer::btnBackClicked);
     connect(ui->btnTransferMoney, &QPushButton::clicked, this, &transfer::btnTransferMoneyClicked);
+    connect(ui->textTrasferAmount, &QLineEdit::returnPressed, this, &transfer::btnTransferMoneyClicked);
 }
 
 transfer::~transfer()

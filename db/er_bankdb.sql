@@ -154,7 +154,7 @@ BEGIN
 
   IF amount <= 0 THEN
     SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = 'Summan oltava positiivinen';
+      SET MESSAGE_TEXT = 'Summan on oltava positiivinen';
   END IF;
 
 START TRANSACTION;
@@ -167,7 +167,7 @@ START TRANSACTION;
   IF from_balance IS NULL THEN
     ROLLBACK;
       SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Lähtötiliä ei ole';
+        SET MESSAGE_TEXT = 'Eii ole rahhoo';
   END IF;
 
   SELECT account_id, balance
@@ -202,11 +202,16 @@ START TRANSACTION;
     SET balance = balance + amount
     WHERE account_id = to_account_id;
 
-  INSERT INTO log (account_id, actions, amount, event_time)
-    VALUES (first_account, 'withdrawal', amount, NOW());
+INSERT INTO log (account_id, user_id, actions, amount, event_time)
+  VALUES (first_account, 
+    (SELECT user_id FROM account WHERE account_id = to_account_id),
+    'transfer', amount, NOW());
 
-  INSERT INTO log (account_id, actions, amount, event_time)
-    VALUES (to_account_id, 'deposit', amount, NOW());
+INSERT INTO log (account_id, user_id, actions, amount, event_time)
+  VALUES (to_account_id,
+    (SELECT user_id FROM account WHERE account_id = first_account),
+    'deposit', amount, NOW());
+
 
   COMMIT;
 END$$
