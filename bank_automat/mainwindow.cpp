@@ -82,7 +82,6 @@ void MainWindow::onInactivityTimeout()
     this->show();
     this->raise();
 
-    // Event filterin voi laittaa takaisin päälle jos haluat jatkaa inaktiivisuus seurantaa
     qApp->installEventFilter(this);
     inactivityTimer->start();
 }
