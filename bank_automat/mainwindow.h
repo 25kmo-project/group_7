@@ -134,6 +134,7 @@ private slots:
      * @brief Sulkee pääikkunan, kun sulkupainiketta painetaan.
      */
     void on_pushButton_clicked();
+
 };
 
 #endif // MAINWINDOW_H

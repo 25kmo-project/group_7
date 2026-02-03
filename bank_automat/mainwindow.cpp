@@ -64,17 +64,21 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::onInactivityTimeout()
 {
-    // 30s-ajastin laukaissut -> palautetaan alkutilaan
-    qDebug() << "30s Inaktiivisuus: Palautetaan alkutilaan.";
+    qDebug() << "30s Inaktiivisuus: palautetaan alkutilaan";
 
-    // Pysäytetään ajastimet
+    // suljetaan ajastimet ja eventfilter kutsu poies päältä
+    qApp->removeEventFilter(this);
     inactivityTimer->stop();
     loginInactivityTimer->stop();
 
-    // Suljetaan muut ikkunat
-    for (QWidget *w : QApplication::topLevelWidgets()) {
-        if (w != this) w->close();
-    }
+    // suljetaan muut ikkunat
+    for (QWidget *w : QApplication::topLevelWidgets()) { if (w != this) w->close(); }
+
+    this->show();
+    this->raise();
+
+    qApp->installEventFilter(this);
+    inactivityTimer->start();
 }
 
 void MainWindow::onLoginInactivityTimeout()
@@ -208,9 +212,6 @@ void MainWindow::onCardSelected(QString type)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!event->spontaneous()) {
-        return;
-    }
     // Suljetaan koko sovellus, jos pöäikkuna suljetaan
     QApplication::quit();
 }

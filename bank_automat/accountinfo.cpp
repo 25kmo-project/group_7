@@ -175,5 +175,6 @@ void Accountinfo::on_btnBack_clicked()
 
 void Accountinfo::on_btnLogout_clicked()
 {
+    emit backRequested();
     close();
 }
