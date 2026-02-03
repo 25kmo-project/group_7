@@ -136,7 +136,7 @@ USE `bank_db` ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-
+USE `bank_db`$$
 CREATE PROCEDURE transfer (
   IN first_account INT,             
   IN second_account VARCHAR(45),     
