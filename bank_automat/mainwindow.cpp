@@ -64,7 +64,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::onInactivityTimeout()
 {
-    qDebug() << "30s Inaktiivisuus -> palautetaan alkutilaan";
+    qDebug() << "30s Inaktiivisuus: palautetaan alkutilaan";
 
     qApp->removeEventFilter(this);
     inactivityTimer->stop();
