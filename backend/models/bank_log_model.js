@@ -23,10 +23,10 @@ const bank_log = {
     delete: function (log_id, callback) {
         return db.query("DELETE FROM log WHERE log_id = ?",
             [log_id], callback);
-    },
-    transfer: function (first_account_id, second_account_id, amount, callback) {
+    },  // Rahansiirto kahden tilin välillä
+    transfer: function (first_account, second_account, amount, callback) {
         db.query("CALL transfer(?, ?, ?)",
-            [first_account_id, second_account_id, amount],
+            [first_account, second_account, amount],
             callback);
     },
     withdraw: function (oma_account_id,maara_amount, callback) { //Rahaa otetaan tililtä
