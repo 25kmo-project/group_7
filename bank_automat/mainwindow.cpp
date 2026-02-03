@@ -66,18 +66,13 @@ void MainWindow::onInactivityTimeout()
 {
     qDebug() << "30s Inaktiivisuus: palautetaan alkutilaan";
 
+    // suljetaan ajastimet ja eventfilter kutsu poies päältä
     qApp->removeEventFilter(this);
     inactivityTimer->stop();
     loginInactivityTimer->stop();
 
     // suljetaan muut ikkunat
     for (QWidget *w : QApplication::topLevelWidgets()) { if (w != this) w->close(); }
-
-    if (ui) {
-        ui->textUsername->clear();
-        ui->textPassword->clear();
-        ui->LabelErrorMessage->clear();
-    }
 
     this->show();
     this->raise();
