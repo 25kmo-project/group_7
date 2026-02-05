@@ -69,12 +69,23 @@ void Transactions::updateLogs()
             for (const QJsonValue &value : json_array) {
                 QJsonObject obj = value.toObject();
 
+                QString action = obj["actions"].toString();
+                QString translatedAction = action;
+
+                if(action == "deposit"){
+                    translatedAction = "Talletus";
+                }else if(action == "withdrawal"){
+                    translatedAction = "Nosto";
+                }else if(action == "transfer"){
+                    translatedAction = "Tilisiirto";
+                }
+
                 QString rawDate = obj["event_time"].toString();
                 QString formattedDate = QDateTime::fromString(rawDate, Qt::ISODate).toString("dd.MM.yy hh:mm");
 
                 QList<QStandardItem*> row;
                 row << new QStandardItem(formattedDate);
-                row << new QStandardItem(obj["actions"].toString());
+                row << new QStandardItem(translatedAction);
                 row << new QStandardItem(obj["amount"].toString() + " €");
                 model->appendRow(row);
             }
