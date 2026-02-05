@@ -185,5 +185,6 @@ void Accountinfo::btnTransactionsClicked()
     Transactions *objTransactions = new Transactions(this);
     objTransactions->setToken(QString(token));
     objTransactions->setAccountId(accountId);
+    objTransactions->updateLogs();
     objTransactions->show();
 }

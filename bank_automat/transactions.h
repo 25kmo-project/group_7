@@ -2,6 +2,7 @@
 #define TRANSACTIONS_H
 
 #include <QDialog>
+#include <QNetworkReply>
 
 namespace Ui {
 class Transactions;
@@ -35,6 +36,9 @@ public:
      */
     void setAccountId(int id);
 
+
+    void updateLogs();
+
 private slots:
     /**
      * @brief Palaa takaisin edelliseen näkymään.
@@ -51,11 +55,15 @@ private slots:
      */
     void btnNextClicked();
 
+    void getLogsSlot();
+
 private:
     Ui::Transactions *ui;   ///< Käyttöliittymäolio
 
     QString token;       ///< Backend-token
     int accountId = -1;  ///< Tili, jolle talletus tehdään
+    int currentOffset = 0;
+    const int pageSize = 10;
 };
 
 #endif // TRANSACTIONS_H
