@@ -36,7 +36,9 @@ public:
      */
     void setAccountId(int id);
 
-
+    /**
+     * @brief Haetaan tilitapahtumat backendistä ja päivittää taulukkonäkymän.
+     */
     void updateLogs();
 
 private slots:
@@ -55,15 +57,14 @@ private slots:
      */
     void btnNextClicked();
 
-    void getLogsSlot();
 
 private:
     Ui::Transactions *ui;   ///< Käyttöliittymäolio
 
     QString token;       ///< Backend-token
     int accountId = -1;  ///< Tili, jolle talletus tehdään
-    int currentOffset = 0;
-    const int pageSize = 10;
+    int currentOffset = 0;      ///< Määritetään kuinka monta riviä hypätään kun painetaan edellinen tai seuraava nappeja
+    const int pageSize = 10;    ///< Tapahtumien määrä per sivu
 };
 
 #endif // TRANSACTIONS_H

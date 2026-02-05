@@ -16,6 +16,8 @@ Transactions::Transactions(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->btnClose, &QPushButton::clicked, this, &Transactions::btnCloseClicked);
+    connect(ui->btnNext, &QPushButton::clicked, this, &Transactions::btnNextClicked);
+    connect(ui->btnPrevious, &QPushButton::clicked, this, &Transactions::btnPreviousClicked);
 }
 
 Transactions::~Transactions()
@@ -45,11 +47,6 @@ void Transactions::btnNextClicked()
 {
     currentOffset += pageSize;
     updateLogs();
-}
-
-void Transactions::getLogsSlot()
-{
-
 }
 
 void Transactions::updateLogs()
@@ -83,6 +80,7 @@ void Transactions::updateLogs()
             }
 
             ui->tableTransactions->setModel(model);
+            ui->tableTransactions->verticalHeader()->hide();
             ui->tableTransactions->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
             ui->btnNext->setEnabled(json_array.size() == pageSize);
