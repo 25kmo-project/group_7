@@ -146,6 +146,8 @@ BEGIN
   DECLARE from_balance DECIMAL(12,2);
   DECLARE to_balance DECIMAL(12,2);
   DECLARE to_account_id INT;
+  DECLARE from_credit_limit DECIMAL(12,2);
+  DECLARE from_type ENUM('debit', 'credit');
 
   IF first_account = second_account THEN
     SIGNAL SQLSTATE '45000'
@@ -159,7 +161,7 @@ BEGIN
 
 START TRANSACTION;
 
-  SELECT balance INTO from_balance
+  SELECT balance, account_type, credit_limit INTO from_balance, from_type, from_credit_limit
   FROM account
   WHERE account_id = first_account
   FOR UPDATE;
@@ -188,10 +190,16 @@ START TRANSACTION;
         SET MESSAGE_TEXT = 'Et voi siirtää rahaa samalle tilille';
   END IF;
 
-  IF from_balance < amount THEN
+  IF from_type = 'debit' AND (from_balance - amount) < 0 THEN
     ROLLBACK;
-      SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Ei katetta';
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Debit-tili ei voi mennä miinukselle';
+  END IF;
+
+  IF from_type = 'credit' AND (from_balance - amount) < -from_credit_limit THEN
+    ROLLBACK;
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Luottoraja ylittyy';
   END IF;
 
   UPDATE account
