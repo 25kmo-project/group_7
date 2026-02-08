@@ -71,21 +71,30 @@ void Transactions::updateLogs()
 
                 QString action = obj["actions"].toString();
                 QString translatedAction = action;
+                QColor actionColor;
 
                 if(action == "deposit"){
                     translatedAction = "Talletus";
+                    actionColor = QColor(0, 255, 0);
                 }else if(action == "withdrawal"){
                     translatedAction = "Nosto";
+                    actionColor = QColor(255, 49, 49);
                 }else if(action == "transfer"){
                     translatedAction = "Tilisiirto";
+                    actionColor = QColor(0, 255, 255);
                 }
 
+                QStandardItem *actionItem = new QStandardItem(translatedAction);
+                actionItem->setForeground(QBrush(actionColor));
+
                 QString rawDate = obj["event_time"].toString();
-                QString formattedDate = QDateTime::fromString(rawDate, Qt::ISODate).toString("dd.MM.yy hh:mm");
+                QDateTime dateTime = QDateTime::fromString(rawDate, Qt::ISODate);
+                dateTime = dateTime.toLocalTime();
+                QString formattedDate = dateTime.toString("dd.MM.yy hh:mm");
 
                 QList<QStandardItem*> row;
                 row << new QStandardItem(formattedDate);
-                row << new QStandardItem(translatedAction);
+                row << actionItem;
                 row << new QStandardItem(obj["amount"].toString() + " €");
                 model->appendRow(row);
             }
