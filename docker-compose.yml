@@ -8,7 +8,6 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      TZ: Europe/Helsinki
     volumes:
       - db_data:/var/lib/mysql
       - ./db/er_bankdb.sql:/docker-entrypoint-initdb.d/_er_bankdb.sql:ro
@@ -31,7 +30,6 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      TZ: Europe/Helsinki
       MY_TOKEN: ${MY_TOKEN}
     depends_on:
       db:
@@ -39,8 +37,6 @@ services:
     restart: unless-stopped
 
   nginx:
-    environment:
-      TZ: Europe/Helsinki
     image: nginx:alpine
     container_name: bank_nginx
     ports:
