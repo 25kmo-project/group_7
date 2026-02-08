@@ -56,12 +56,12 @@ private slots:
     void btnCloseClicked();
 
     /**
-     * @brief Siirtyy tilitapahtumissa edelliselle sivulle (uudemmat tapahtumat).
+     * @brief Siirtyy tilitapahtumissa uudempiin tapahtumiin.
      */
     void btnNewerClicked();
 
     /**
-     * @brief Siirtyy tilitapahtumissa seuraavalle sivulle (vanhemmat tapahtumat).
+     * @brief Siirtyy tilitapahtumissa vanhempiin tapahtumiin
      */
     void btnOlderClicked();
 
