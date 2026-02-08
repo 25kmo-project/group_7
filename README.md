@@ -46,7 +46,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 
 ---
-![kaavio](./docs/yleiskuva1.png)
+![kaavio](./docs/yleiskuva.png)
 
 ## 4. Sovelluksen arkkitehtuuri
 
@@ -149,12 +149,14 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 - Kirjautumisikkuna sisältää kirjautumiskentät  
 - Accountinfo näyttää tilitiedot ja toiminnot  
-- Withdraw, Deposit, siirto ja tilitapahtumat ovat erillisiä toimintoja
+- Nosto, talletus, siirto ja tilitapahtumat ovat erillisiä toimintoja
 - Valitsekortti-ikkuna avautuu yhdistelmäkortilla  
 
 (Tähän kuvia käyttöliittymästä)
 
 ## 7. Lisäominaisuudet
+- Sovelluksen backend ja tietokanta toimii Linux-palvelimella
+- Git actions CI/CD putki huolehtii sovelluksen 
 - (Kuvaile lisäominaisuudet + kuva?)
 
 
