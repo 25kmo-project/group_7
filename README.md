@@ -35,14 +35,18 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 | Teknologia | Käyttötarkoitus |
 |-----------|-----------------|
-| Qt       | Käyttöliittymä |
+| Qt        | Käyttöliittymä |
 | C++       | Sovelluslogiikka |
 | REST API  | Backend‑yhteydet |
 | MySQL     | Tietokanta |
 | JSON      | Datan siirto backendin ja frontendin välillä |
+| Nginx     | Reverse proxy  |
+| Docker    | Paketoi sovelluksen ja sen riippuvuudet samaan pakettin |
+| Git actions CI/CD | Hoitaa sovelluksen päivitysten automaattisen käyttöönoton
+
 
 ---
-(Lisää tähän kuva)
+![kaavio](./docs/yleiskuva1.png)
 
 ## 4. Sovelluksen arkkitehtuuri
 
@@ -131,6 +135,13 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 ### 5.7 Tilitapahtumat
 - Käyttäjä pystyy selamaan tilitapahtumia
 - Tiedot haetaan backendistä log-taulusta.
+
+### 5.8 Kirjautumisajastin
+- Ajastin aktivoituu kun kirjautumiskentissä on merkkejä.
+- Jos käyttäjä ei täytä ajastimen ehtoja, niin ajastin tyhjentää kirjautumiskentät.
+
+### 5.9 Inaktiivisuusajastin
+- 30 sekunnin inaktiivisuus istunnon aikana palauttaa takaisin kirjautumis-ikkunan.
 ---
 
 
@@ -153,10 +164,14 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 - Aluksi oli haasteita ymmärtää kokonaiskuva projektista
 - ER- Kaaviota piti korjata useita kertoja, ennekuin se tuli valmiiksi
-- 
+- Tekninen määrittely oli yllättävän hankala ja työläs
+- Vaikka tuli seurattua tiuhaan mitä ryhmäläiset on tehnyt, niin oli jokseenki hankala sisäistää kaikki mitä muut ovat tehneet.
+-
 
 
 ## 8. Testaus
+
+- 
 
 ## 9. Johtopäätökset
 
@@ -180,4 +195,5 @@ Päävalikon toiminnot
 - Siirto
 - Tilitapahtumat
 - Omat tiedot
+- 10 sekunnin inaktiivisuus kirjautumisen aikana tyhjentää kirjautumiskentät.
 - 30 sekunnin inaktiivisuus istunnon aikana palauttaa takaisin kirjautumis-ikkunan
