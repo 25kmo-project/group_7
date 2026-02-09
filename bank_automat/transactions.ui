@@ -10,33 +10,38 @@
     <height>432</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Tilitapahtumat</string>
   </property>
-  <widget class="QPushButton" name="btnPrevious">
+  <widget class="QPushButton" name="btnNewer">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>390</y>
-     <width>80</width>
-     <height>24</height>
+     <width>91</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Edellinen</string>
+    <string>&lt;- Uudemmat</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnNext">
+  <widget class="QPushButton" name="btnOlder">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>490</x>
      <y>390</y>
-     <width>80</width>
-     <height>24</height>
+     <width>91</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Seuraava</string>
+    <string>Vanhemmat -&gt;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnClose">

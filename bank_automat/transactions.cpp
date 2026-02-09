@@ -16,8 +16,8 @@ Transactions::Transactions(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->btnClose, &QPushButton::clicked, this, &Transactions::btnCloseClicked);
-    connect(ui->btnNext, &QPushButton::clicked, this, &Transactions::btnNextClicked);
-    connect(ui->btnPrevious, &QPushButton::clicked, this, &Transactions::btnPreviousClicked);
+    connect(ui->btnOlder, &QPushButton::clicked, this, &Transactions::btnOlderClicked);
+    connect(ui->btnNewer, &QPushButton::clicked, this, &Transactions::btnNewerClicked);
 }
 
 Transactions::~Transactions()
@@ -35,7 +35,7 @@ void Transactions::setAccountId(int id)
     accountId = id;
 }
 
-void Transactions::btnPreviousClicked()
+void Transactions::btnNewerClicked()
 {
     if(currentOffset >= pageSize) {
         currentOffset -= pageSize;
@@ -43,7 +43,7 @@ void Transactions::btnPreviousClicked()
     }
 }
 
-void Transactions::btnNextClicked()
+void Transactions::btnOlderClicked()
 {
     currentOffset += pageSize;
     updateLogs();
@@ -103,8 +103,8 @@ void Transactions::updateLogs()
             ui->tableTransactions->verticalHeader()->hide();
             ui->tableTransactions->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-            ui->btnNext->setEnabled(json_array.size() == pageSize);
-            ui->btnPrevious->setEnabled(currentOffset > 0);
+            ui->btnOlder->setEnabled(json_array.size() == pageSize);
+            ui->btnNewer->setEnabled(currentOffset > 0);
         }else{
             qDebug() << "API virhe:" << reply->errorString();
         }
