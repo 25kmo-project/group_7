@@ -173,7 +173,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ## 8. Testaus
 
-- Sovelluksen valmistus vaiheessa testausta suoritettiin aina sitä mukaan, kun toiminnallisuuksia saatiin valmiiksi ja mahdollisia bugeja kirjattiin kanban-tauluun jos niitä ei heti saatu korjattua.
+- Sovelluksen valmistusvaiheessa testausta tehtiin jatkuvasti sitä mukaa, kun uusia toiminnallisuuksia saatiin valmiiksi. Mahdolliset bugit kirjattiin kanban-tauluun, jos niitä ei heti saatu korjattua.
 
 ## 9. Johtopäätökset
 
