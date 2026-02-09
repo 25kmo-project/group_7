@@ -84,7 +84,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo mkdir -p /opt/bank-app/db
+            sudo mkdir -p /opt/bank-app/db /opt/bank-app/nginx /opt/bank-app/certbot/conf /opt/bank-app/certbot/www
             sudo chown -R $USER:$USER /opt/bank-app
 
       - name: Copy SQL Schema and Scripts
