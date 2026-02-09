@@ -46,7 +46,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 
 ---
-![kaavio](./docs/yleiskuva1.png)
+![kaavio](./docs/Yleiskuva1.png)
 
 ## 4. Sovelluksen arkkitehtuuri
 
