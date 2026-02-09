@@ -150,6 +150,7 @@ void MainWindow::loginAction(QNetworkReply *reply)
     if (ui) {
         ui->textUsername->clear();
         ui->textPassword->clear();
+        ui->LabelErrorMessage->clear();
     }
 
     // Pysäytetään login-inaktiivisuusajastin, koska kentät ovat nyt tyhjiä
