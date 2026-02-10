@@ -8,13 +8,16 @@
 Dokumentaatio Doxygen-dokumentaatio löytyy täältä: 👉[Bank Automat ‑dokumentaatio](https://aleksijohan.github.io/bank-automat-docs/)
 
 ---
-(Käännetään jossain vaiheessa enkuksi?)
+
 ## 1. Johdanto
 
 
 Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla. Sovellus kommunikoi REST‑rajapinnan kautta backendin kanssa ja mahdollistaa käyttäjälle kirjautumisen, tilitietojen tarkastelun sekä rahansiirrot.
 
-(Lisää tähän joku kuva)
+![johdanto](./docs/johdanto.png)
+
+
+
 
 ---
 
@@ -105,11 +108,13 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Backend palauttaa tokenin ja käyttäjän tiedot  
 - Virhetilanteet näytetään käyttöliittymässä 
 
-(Tänne kuvia kun Qt sovellus on viimeistelty)
+![login](./docs/login.png)
 
 ### 5.2 Tilitietojen näyttäminen
 - Accountinfo hakee tilin tiedot automaattisesti  
 - Näytetään: Tyyppi, tilinumero, saldo, luottoraja  
+
+![paavalikko](./docs/paavalikko.png)
 
 ### 5.3 Nosto
 - Käyttäjä valitsee summan tai syöttää sen itse  
@@ -118,23 +123,33 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Onnistunut nosto päivittää saldon  
 - Backend estää luoton ylittymisen
 
+![nosto](./docs/nosto.png)
+
 ### 5.4 Talletus
 - Käyttäjä syöttää talletettavan summan  
 - Backend päivittää saldon  
 - Accountinfo näyttää uuden saldon  
+
+![talletus](./docs/talletus.png)
 
 ### 5.5 Rahan siirto
 - Käyttäjä pystyy siirtämään rahaa tilinsä välillä.
 - Backend hoitaa siirron
 - Accountinfo päivittää saldon
 
+![siirto](./docs/siirto.png)
+
 ### 5.6 Henkilötiedot
 - Data‑ikkuna näyttää käyttäjän nimen, osoitteen ja muut tiedot  
 - Tiedot haetaan backendistä GET‑pyynnöllä  
 
+![tiedot](./docs/tiedot.png)
+
 ### 5.7 Tilitapahtumat
 - Käyttäjä pystyy selamaan tilitapahtumia
 - Tiedot haetaan backendistä log-taulusta.
+
+![tapahtumat](./docs/tapahtumat.png)
 
 ### 5.8 Kirjautumisajastin
 - Ajastin aktivoituu kun kirjautumiskentissä on merkkejä.
@@ -152,7 +167,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Nosto, talletus, siirto ja tilitapahtumat ovat erillisiä toimintoja
 - Valitsekortti-ikkuna avautuu yhdistelmäkortilla  
 
-(Tähän kuvia käyttöliittymästä)
+
 
 ## 7. Lisäominaisuudet
 - Sovelluksen backend ja tietokanta toimii Linux-palvelimella
@@ -162,13 +177,13 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 
 ## 7. Haasteita
-(Jokainen kirjoittaa omia?)
+
 
 - Aluksi oli haasteita ymmärtää kokonaiskuva projektista
 - ER- Kaaviota piti korjata useita kertoja, ennekuin se tuli valmiiksi
 - Tekninen määrittely oli yllättävän hankala ja työläs
 - Vaikka tuli seurattua tiuhaan mitä ryhmäläiset on tehnyt, niin oli jokseenki hankala sisäistää kaikki mitä muut ovat tehneet.
--
+
 
 
 ## 8. Testaus
@@ -176,6 +191,8 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Sovelluksen valmistusvaiheessa testausta tehtiin jatkuvasti sitä mukaa, kun uusia toiminnallisuuksia saatiin valmiiksi. Mahdolliset bugit kirjattiin kanban-tauluun, jos niitä ei heti saatu korjattua.
 
 ## 9. Johtopäätökset
+
+- Sovellus pelaa oikealla tavalla ja olemme tyytyväisiä työhömme.
 
 
 
