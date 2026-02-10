@@ -6,111 +6,132 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>501</height>
+    <width>720</width>
+    <height>520</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>450</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Tilisiirto</string>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>120</y>
-     <width>331</width>
-     <height>41</height>
-    </rect>
+
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>25</number>
    </property>
-   <property name="text">
-    <string>Vastaanottajan tilinumero:</string>
+   <property name="leftMargin">
+    <number>40</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="btnTransferBack">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>90</width>
-     <height>29</height>
-    </rect>
+   <property name="topMargin">
+    <number>30</number>
    </property>
-   <property name="text">
-    <string>Paluu</string>
+   <property name="rightMargin">
+    <number>40</number>
    </property>
-  </widget>
-  <widget class="QLineEdit" name="textTransferAccountNumber">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>121</y>
-     <width>113</width>
-     <height>41</height>
-    </rect>
+   <property name="bottomMargin">
+    <number>40</number>
    </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>170</y>
-     <width>261</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Siirrettävä summa:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="textTrasferAmount">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>178</y>
-     <width>113</width>
-     <height>41</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnTransferMoney">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>231</y>
-     <width>90</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Siirrä</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelTransferAccountBalance">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>70</y>
-     <width>131</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>70</y>
-     <width>191</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Tilin saldo:</string>
-   </property>
-  </widget>
+
+   <!-- Top bar -->
+   <item>
+    <layout class="QHBoxLayout" name="topBar">
+     <item>
+      <widget class="QPushButton" name="btnTransferBack">
+       <property name="text">
+        <string>Paluu</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Tilin saldo -->
+   <item alignment="Qt::AlignCenter">
+    <widget class="QLabel" name="labelTransferAccountBalance">
+     <property name="text">
+      <string>1840.00 €</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>42</pointsize>
+       <weight>75</weight>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #00FF88;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- Lomake -->
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <property name="horizontalSpacing">
+      <number>30</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>20</number>
+     </property>
+
+     <!-- Vastaanottajan tilinumero -->
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Vastaanottajan tilinumero:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="textTransferAccountNumber"/>
+     </item>
+
+     <!-- Siirrettävä summa -->
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Siirrettävä summa:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="textTrasferAmount">
+       <property name="placeholderText">
+        <string>0.00</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Siirrä-nappi -->
+   <item>
+    <widget class="QPushButton" name="btnTransferMoney">
+     <property name="text">
+      <string>Siirrä</string>
+     </property>
+    </widget>
+   </item>
+
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

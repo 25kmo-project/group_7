@@ -15,144 +15,159 @@ int main (int argc, char *argv[])
         font-family: "Segoe UI", Arial, sans-serif;
     }
 
-    /* Top bar - napit */
-    QPushButton#btnBack, QPushButton#btnLogout {
+    /* ───── Top bar - napit ───── */
+    QPushButton#btnBack, QPushButton#btnLogout, QPushButton#btnLogOut,
+    QPushButton#btnWithdrawBack, QPushButton#btnDepositBack,
+    QPushButton#btnTransferBack, QPushButton#btnClose {
         background-color: #DC3545;
-        font-size: 21pt;
-        font-weight: bold;
-        border-radius: 12px;
-        padding: 15px 50px;
-        min-width: 220px;
-        min-height: 65px;
-    }
-
-    /* Neljä päätoimintanappia – nyt selvästi pienemmät */
-    QPushButton#btnDeposit, QPushButton#btnWithdraw,
-    QPushButton#btnTransfer, QPushButton#btnTransactions {
-        background-color: #1E90FF;
-        font-size: 20pt;           /* pienempi fontti */
-        font-weight: bold;
-        border-radius: 16px;
-        padding: 18px 30px;
-        min-height: 82px;          /* oli 110px → nyt 82px */
-    }
-
-    /* Omat tiedot -nappi – nyt isompi ja selkeä */
-    QPushButton#Omatiedot {
-        background-color: #007BFF;
         font-size: 19pt;
         font-weight: bold;
-        border-radius: 14px;
-        padding: 18px 50px;
-        min-height: 68px;
-        min-width: 210px;
+        border-radius: 12px;
+        padding: 12px 40px;
+        min-width: 140px;
+        min-height: 16px;
     }
 
-    /* Info-kortti – reunus ohuempi ja siisti */
-    QFrame#infoFrame {
-        background-color: #001F3F;
-        border: 2px solid #1E90FF;   /* ohut sininen reunus */
-        border-radius: 20px;
-    }
-
-    /* Poistetaan kaikki siniset viivat rivien välistä */
-    QLabel {
-        font-size: 21pt;
-        border: none;                /* poistaa kaikki reunat */
-        border-bottom: none;         /* ei viivoja rivien alle */
-        padding: 6px 0;
-    }
-
-    // QFileSystemWatcher *watcher = new QFileSystemWatcher(); // watcher->addPath(qssPath); // QObject::connect(watcher, &QFileSystemWatcher::fileChanged, [&](const QString &path){ // qDebug() << "WATCHER TRIGGERED"; // QTimer::singleShot(100, [&](){ // a.setStyleSheet(loadStyleSheet(qssPath)); // watcher->addPath(qssPath); // }); // });
-
-    /* Top bar - napit (sama tyyli molemmissa ikkunoissa) */
-    QPushButton#btnBack,
-    QPushButton#btnLogout,
-    QPushButton#btnLogOut {
-        background-color: #DC3545;
-        color: white;
-        font-size: 21pt;
+    /* ───── Siniset toimintonapit ───── */
+    QPushButton#btnDeposit, QPushButton#btnWithdraw, QPushButton#btnTransfer,
+    QPushButton#btnTransactions, QPushButton#btnNosta, QPushButton#btnNewDeposit,
+    QPushButton#btnAddFive, QPushButton#btnAddTen, QPushButton#btnAddTwenty,
+    QPushButton#btnAddFifty, QPushButton#btnAddHundred, QPushButton#btnAddTwoHundred,
+    QPushButton#btnAddFiveHundred, QPushButton#btn20, QPushButton#btn40,
+    QPushButton#btn50, QPushButton#btn100, QPushButton#btnWithdrawBack_6,
+    QPushButton#btnNewer, QPushButton#btnOlder {
+        background-color: #1E90FF;
+        font-size: 19pt;
         font-weight: bold;
         border-radius: 12px;
-        padding: 15px 50px;
-        min-width: 220px;
-        min-height: 65px;
+        padding: 12px 30px;
+        min-width: 120px;
+        min-height: 16px;
     }
-
-    QPushButton#btnLogOut {
-        min-width: 240px;   /* Kirjaudu ulos on vähän leveämpi */
-    }
-
-    /* Neljä päätoimintanappia (Talletus, Nosto...) */
-    QPushButton#btnDeposit, QPushButton#btnWithdraw,
-    QPushButton#btnTransfer, QPushButton#btnTransactions {
+    /* Omat tiedot -nappi – sama tyyli  */
+    QPushButton#Omatiedot {
         background-color: #1E90FF;
+        font-size: 19pt;
+        font-weight: bold;
+        border-radius: 12px;
+        padding: 12px 40px;
+        min-width: 180px;
+        min-height: 55px;
+    }
+
+    QPushButton#Omatiedot:hover {
+        background-color: #3AA0FF;
+    }
+
+    QPushButton#pushButton {
+        background-color: #C8102E;
+        color: white;
         font-size: 20pt;
         font-weight: bold;
-        border-radius: 16px;
-        padding: 18px 30px;
-        min-height: 82px;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 50px;
+        min-width: 170px;
+        min-height: 58px;
     }
 
-    /* Omat tiedot -nappi */
-    QPushButton#Omatiedot {
-        background-color: #007BFF;
-        font-size: 19pt;
+    QPushButton#pushButton:hover {
+        background-color: #E03C4E;
+    }
+
+    /* ───── Vihreät vahvistusnapit ───── */
+    QPushButton#btnLogin, QPushButton#btnNosta, QPushButton#btnTransferMoney {
+        background-color: #28A745;
+        font-size: 22pt;
         font-weight: bold;
         border-radius: 14px;
-        padding: 18px 50px;
-        min-height: 68px;
-        min-width: 210px;
+        padding: 14px 60px;
+        min-height: 16px;
+        min-width: 220px;
     }
 
-    /* Info-kortti (Tilitiedot) */
-    QFrame#infoFrame {
-        background-color: #001F3F;
+    QPushButton#btnReset {
+        background-color: #DC3545;
+        font-size: 19pt;
+        font-weight: bold;
+        border-radius: 12px;
+        padding: 12px 40px;
+        min-height: 16px;
+    }
+
+    /* ───── Syöttökentät ───── */
+    QLineEdit#textUsername, QLineEdit#textPassword,
+    QLineEdit#lineEditAmount,
+    QLineEdit#textTransferAccountNumber, QLineEdit#textTrasferAmount {
+        background-color: #FFFFFF;
+        color: #000000;
+        font-size: 20pt;
+        padding: 8px 12px;
         border: 2px solid #1E90FF;
-        border-radius: 20px;
+        border-radius: 8px;
+        min-height: 16px;
     }
 
-    /* Omat tiedot -kortti */
-    QFrame#profileCard {
+    /* ───── Kirjautumisikkuna ───── */
+    QFrame#loginCard {
         background-color: #001F3F;
-        border: 3px solid #1E90FF;
-        border-radius: 22px;
+        border: 1px solid #1E90FF;
+        border-radius: 24px;
+        max-width: 520px;
     }
 
-    /* Otsikot */
-    QLabel#labelTitle {
-        font-size: 34pt;
+    QLabel#label_4 {                    /* Tervetuloa! */
+        color: #FFFFFF;
+        font-size: 36pt;
         font-weight: bold;
     }
 
-    /* Kaikki labelit (poistaa viivat ja tekee siistin) */
+    QLabel#LabelErrorMessage {
+        font-size: 18pt;
+        font-weight: bold;
+        color: #FF4444;
+    }
+
+    /* ───── Muut labelit ja otsikot ───── */
     QLabel {
-        font-size: 21pt;
-        border: none;
-        border-bottom: none;
-        padding: 8px 0;
+        font-size: 19pt;
     }
 
-    /* Saldo */
-    QLabel#labelBalance {
-        font-size: 40pt;
-        color: #00FF88;
-        font-weight: bold;
-    }
-
-    /* Harmaat otsikkorivit */
-    /* Saldo vihreänä ja isona */
-    QLabel#labelBalance {
-        font-size: 40pt;
-        color: #00FF88;
-        font-weight: bold;
-    }
-
-    /* Otsikkorivit harmaammaksi */
+    QLabel#label, QLabel#label_2,
     QLabel#labelIDTitle, QLabel#labelTypeTitle,
     QLabel#labelAccountNumberTitle, QLabel#labelBalanceTitle,
     QLabel#labelCreditLimitTitle {
         color: #BBBBBB;
+    }
+
+    QLabel#labelBalance {
+        font-size: 40pt;
+        color: #00FF88;
+        font-weight: bold;
+    }
+
+    /* Info-kortit */
+    QFrame#infoFrame, QFrame#profileCard, QFrame#tableFrame {
+        background-color: #001F3F;
+        border: 3px solid #1E90FF;
+        border-radius: 20px;
+    }
+
+    /* Tilitapahtumat-taulukko */
+    QTableView#tableTransactions {
+        background-color: #001F3F;
+        color: #FFFFFF;
+        font-size: 17pt;
+        gridline-color: #334455;
+        alternate-background-color: #112233;
+        selection-background-color: #1E90FF;
+    }
+
+    QHeaderView::section {
+        background-color: #1E90FF;
+        color: white;
+        font-weight: bold;
+        padding: 8px;
     }
 )");
 
