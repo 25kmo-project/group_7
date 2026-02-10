@@ -95,7 +95,11 @@ void Transactions::updateLogs()
                 QList<QStandardItem*> row;
                 row << new QStandardItem(formattedDate);
                 row << actionItem;
-                row << new QStandardItem(obj["amount"].toString() + " €");
+                if (translatedAction == "Tilisiirto" || translatedAction == "Nosto") {
+                row << new QStandardItem("-" + obj["amount"].toString() + " €");
+                } else {
+                    row << new QStandardItem(obj["amount"].toString() + " €");
+                }
                 model->appendRow(row);
             }
 
