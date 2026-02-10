@@ -14,7 +14,7 @@ Dokumentaatio Doxygen-dokumentaatio löytyy täältä: 👉[Bank Automat ‑doku
 
 Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla. Sovellus kommunikoi REST‑rajapinnan kautta backendin kanssa ja mahdollistaa käyttäjälle kirjautumisen, tilitietojen tarkastelun sekä rahansiirrot.
 
-![johdanto](./docs/johdanto.png)
+![johdanto](./docs/johdanto1.png)
 
 
 
