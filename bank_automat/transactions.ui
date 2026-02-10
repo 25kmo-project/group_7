@@ -6,67 +6,126 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
-    <height>432</height>
+    <width>900</width>
+    <height>620</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>9</pointsize>
-   </font>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>500</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Tilitapahtumat</string>
   </property>
-  <widget class="QPushButton" name="btnNewer">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>390</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
+
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>20</number>
    </property>
-   <property name="text">
-    <string>&lt;- Uudemmat</string>
+   <property name="leftMargin">
+    <number>40</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="btnOlder">
-   <property name="geometry">
-    <rect>
-     <x>490</x>
-     <y>390</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
+   <property name="topMargin">
+    <number>30</number>
    </property>
-   <property name="text">
-    <string>Vanhemmat -&gt;</string>
+   <property name="rightMargin">
+    <number>40</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="btnClose">
-   <property name="geometry">
-    <rect>
-     <x>500</x>
-     <y>20</y>
-     <width>80</width>
-     <height>24</height>
-    </rect>
+   <property name="bottomMargin">
+    <number>40</number>
    </property>
-   <property name="text">
-    <string>Sulje</string>
-   </property>
-  </widget>
-  <widget class="QTableView" name="tableTransactions">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>561</width>
-     <height>331</height>
-    </rect>
-   </property>
-  </widget>
+
+   <!-- Top bar -->
+   <item>
+    <layout class="QHBoxLayout" name="topBar">
+     <item>
+      <widget class="QPushButton" name="btnClose">
+       <property name="text">
+        <string>Sulje</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+
+   <!-- Taulukko kortissa -->
+   <item>
+    <widget class="QFrame" name="tableFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="tableLayout">
+      <property name="leftMargin">
+       <number>20</number>
+      </property>
+      <property name="topMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>20</number>
+      </property>
+      <property name="bottomMargin">
+       <number>20</number>
+      </property>
+      <item>
+       <widget class="QTableView" name="tableTransactions">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="gridStyle">
+         <enum>Qt::SolidLine</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- Vanhat ja Uudet tapahtumat -->
+   <item>
+    <layout class="QHBoxLayout" name="paginationLayout">
+     <property name="spacing">
+      <number>30</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="btnNewer">
+       <property name="text">
+        <string>← Uudemmat</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerCenter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnOlder">
+       <property name="text">
+        <string>Vanhemmat →</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

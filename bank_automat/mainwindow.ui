@@ -4,176 +4,87 @@
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1024</width>
-    <height>768</height>
+    <x>0</x><y>0</y><width>850</width><height>580</height>
    </rect>
   </property>
   <property name="minimumSize">
-   <size>
-    <width>1024</width>
-    <height>768</height>
-   </size>
-  </property>
-  <property name="font">
-   <font>
-    <pointsize>14</pointsize>
-   </font>
+   <size><width>800</width><height>550</height></size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Otto - Pankkiautomaatti</string>
   </property>
+
   <widget class="QWidget" name="centralwidget">
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
-   <widget class="QPushButton" name="btnLogin">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>240</y>
-      <width>141</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string>Kirjaudu</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>351</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string>Tervetuloa!</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="LabelErrorMessage">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>310</y>
-      <width>761</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>131</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>15</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Tunnus</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Salasana</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>80</y>
-      <width>251</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="spacing">
-      <number>15</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLineEdit" name="textUsername">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLineEdit" name="textPassword">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::EchoMode::Password</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>0</y>
-      <width>111</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Poistu</string>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">30</property>
+    <property name="leftMargin">50</property>
+    <property name="topMargin">40</property>
+    <property name="rightMargin">50</property>
+    <property name="bottomMargin">50</property>
+
+    <!-- Poistu-nappi ylös oikealle -->
+    <item>
+     <layout class="QHBoxLayout">
+      <item>
+       <spacer/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text"><string>Poistu</string></property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- Kirjautumiskortti -->
+    <item>
+     <widget class="QFrame" name="loginCard">
+      <layout class="QVBoxLayout">
+       <property name="spacing">30</property>
+       <property name="leftMargin">70</property>
+       <property name="topMargin">50</property>
+       <property name="rightMargin">70</property>
+       <property name="bottomMargin">50</property>
+
+       <item alignment="Qt::AlignCenter">
+        <widget class="QLabel" name="label_4">
+         <property name="text"><string>Tervetuloa!</string></property>
+         <property name="font"><font><pointsize>36</pointsize><weight>75</weight></font></property>
+        </widget>
+       </item>
+
+       <item>
+        <layout class="QFormLayout">
+         <property name="horizontalSpacing">40</property>
+         <property name="verticalSpacing">25</property>
+
+         <item row="0" column="0"><widget class="QLabel" name="label"><property name="text"><string>Tunnus</string></property></widget></item>
+         <item row="0" column="1"><widget class="QLineEdit" name="textUsername"/></item>
+
+         <item row="1" column="0"><widget class="QLabel" name="label_2"><property name="text"><string>Salasana</string></property></widget></item>
+         <item row="1" column="1"><widget class="QLineEdit" name="textPassword"><property name="echoMode"><enum>QLineEdit::Password</enum></property></widget></item>
+        </layout>
+       </item>
+
+       <item alignment="Qt::AlignCenter">
+        <widget class="QPushButton" name="btnLogin">
+         <property name="text"><string>Kirjaudu</string></property>
+        </widget>
+       </item>
+
+       <item alignment="Qt::AlignCenter">
+        <widget class="QLabel" name="LabelErrorMessage"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <item>
+     <spacer/>
+    </item>
+   </layout>
   </widget>
+
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
- <connections/>
 </ui>
