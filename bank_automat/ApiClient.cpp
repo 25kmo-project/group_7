@@ -1,3 +1,8 @@
+/**
+ * @file apiclient.cpp
+ * @brief Singleton API-client kaikkien backend kutsujen hoitamiseen
+ */
+
 #include "apiclient.h"
 #include "environment.h"
 
@@ -12,7 +17,12 @@ ApiClient& ApiClient::instance()
     static ApiClient inst;
     return inst;
 }
-
+/**
+ * @brief Tekee POST-pyynnön
+ * @param endpoint
+ * @param json Lähetettävä JSON-data.
+ * @return QNetWorkReply*
+ */
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent)
 {

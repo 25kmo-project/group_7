@@ -1,3 +1,9 @@
+/**
+ * @file Transfer.cpp
+ * @brief Rahansiirron dialogin toteutus.
+ * @details Käyttäjä voi syöttää kohdetilinumeron ja summan, siirto lähetetään backendille ja saldo päivitetään onnitumisen jälkeen.
+ */
+
 #include "transfer.h"
 #include "ui_transfer.h"
 
@@ -13,7 +19,7 @@ transfer::transfer(QWidget *parent)
     , ui(new Ui::transfer)
 {
     ui->setupUi(this);
-
+    //connectit napile
     connect(ui->btnTransferBack, &QPushButton::clicked, this, &transfer::btnBackClicked);
     connect(ui->btnTransferMoney, &QPushButton::clicked, this, &transfer::btnTransferMoneyClicked);
     connect(ui->textTrasferAmount, &QLineEdit::returnPressed, this, &transfer::btnTransferMoneyClicked);
@@ -23,7 +29,10 @@ transfer::~transfer()
 {
     delete ui;
 }
-
+/**
+ * @brief Asettaa tilin ID:n josta siirto lähetetään.
+ * @param id Oma account_id
+ */
 void transfer::setAccountId(int id)
 {
     accountId = id;
@@ -37,6 +46,11 @@ void transfer::setToken(const QString &t)
 // -----------------------------
 //  HAE SALDO
 // -----------------------------
+
+/**
+ * @brief Hakee nykyisen tilin saldon backendistä ja näyttää sen.
+ * @details Kutsutaan aina kun ikkuna avataan ja onnistuneen siirron jälkeen.
+ */
 void transfer::getBalance()
 {
     QString endpoint = "bank_account/" + QString::number(accountId);
@@ -60,6 +74,11 @@ void transfer::getBalance()
 // -----------------------------
 //  SIIRTO
 // -----------------------------
+
+/**
+ * @brief Käsittelee "Siirrä" napin klikkauksen
+ * @details Validoi syötteet ja lähettää POST:n ja päivittää saldon onnistuessa.
+ */
 void transfer::btnTransferMoneyClicked()
 {
     QString targetAccount = ui->textTransferAccountNumber->text().trimmed();
@@ -111,12 +130,19 @@ void transfer::btnTransferMoneyClicked()
 // -----------------------------
 //  UI
 // -----------------------------
+
+/**
+ * @brief Päivittää saldon näyttöön kun ikkuna avataan
+ * @details getBalance() on jo kutsuttu Accountinfossta ennen ikkunan avaamista, mutta varmitetaan vielä showEventissä.
+ */
 void transfer::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
     ui->labelTransferAccountBalance->setText(balance + " €");
 }
-
+/**
+ * @brief Takaisin nappi sulkee siirto ikkunan.
+ */
 void transfer::btnBackClicked()
 {
     close();

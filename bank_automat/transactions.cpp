@@ -1,3 +1,8 @@
+/**
+ * @file transaction.cpp
+ * @brief Tilitapahtumien näyttöikkuna
+ * @details Hakee tapahtumat backendistä. Näyttää ne taulukossa.
+ */
 #include "transactions.h"
 #include "ui_transactions.h"
 
@@ -29,12 +34,17 @@ void Transactions::setToken(const QString &t)
 {
     token = t;
 }
-
+/**
+ * @brief Asettaa tilin ID:n, jonka tapahtumia näytetään.
+ *
+ */
 void Transactions::setAccountId(int id)
 {
     accountId = id;
 }
-
+/**
+ * @brief Siirtyy edelliseen sivulle (uudemmat tapahtumat)
+ */
 void Transactions::btnNewerClicked()
 {
     if(currentOffset >= pageSize) {
@@ -42,13 +52,18 @@ void Transactions::btnNewerClicked()
         updateLogs();
     }
 }
-
+/**
+ * @brief Siirtyy vanhemmalla sivulle (vanhemmat tapahtumat)
+ */
 void Transactions::btnOlderClicked()
 {
     currentOffset += pageSize;
     updateLogs();
 }
-
+/**
+ * @brief Hakee ja näyttää tilitapahtumat backendistä.
+ * @details KUTSU: GET.
+ */
 void Transactions::updateLogs()
 {
     QString endpoint = "bank_log/paginated/" + QString::number(accountId) + "?limit=" + QString::number(pageSize) + "&offset=" + QString::number(currentOffset);

@@ -1,3 +1,9 @@
+/**
+ * @file Withdraw.cpp
+ * @brief Noston dialogin toteutus.
+ * @details Käsittelee nappien klikkaukset, summan laskennan ja lähettää nostopyynnön API:lle.
+ */
+
 #include "withdraw.h"
 #include "ui_withdraw.h"
 
@@ -24,7 +30,11 @@ void Withdraw::on_btnWithdrawBack_clicked()
     emit withdrawDone();
     close();
 }
-
+/**
+ * @brief Lähettää nostopyynnön backendille.
+ * @param amount Nostettava summa euroina.
+ * @note POST /bank_log/withdraw
+ */
 // -----------------------------
 //  YHTEINEN FUNKTIO NOSTOILLE
 // -----------------------------
@@ -62,30 +72,47 @@ void Withdraw::sendWithdrawRequest(int amount)
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief Lähettää nostopyynnön backendille
+ * @param amount Nostettava summa euroina.
+ * @note Käyttää suoraan jäsenmuuttujaa accountID
+ */
 // -----------------------------
 //  NOSTONAPIT
 // -----------------------------
+/**
+ * @brief Withdraw::on_btn20_clicked
+ */
 void Withdraw::on_btn20_clicked()
 {
     sendWithdrawRequest(20);
 }
-
+/**
+ * @brief Withdraw::on_btn40_clicked
+ */
 void Withdraw::on_btn40_clicked()
 {
     sendWithdrawRequest(40);
 }
+/**
+ * @brief Withdraw::on_btn50_clicked
+ */
 
 void Withdraw::on_btn50_clicked()
 {
     sendWithdrawRequest(50);
 }
-
+/**
+ * @brief Withdraw::on_btn100_clicked
+ */
 void Withdraw::on_btn100_clicked()
 {
     sendWithdrawRequest(100);
 }
-
+/**
+ *@brief "Muu summa" -nosto
+ *@details Validoi minimin. 10euron tarkkuuden ja seteliyhdistelmän
+ */
 // -----------------------------
 //  Muu summa
 // -----------------------------
@@ -120,7 +147,6 @@ void Withdraw::on_btnNosta_clicked()
 
     sendWithdrawRequest(amount);
 }
-
 // -----------------------------
 //  UI
 // -----------------------------

@@ -1,3 +1,8 @@
+/**
+ *@file data.cpp
+ *@brief Käyttäjän henkilötietojen ikkuna.
+ *@details Saa backendiltä JSON-datan.
+ */
 #include "data.h"
 #include "ui_data.h"
 #include <QJsonDocument>
@@ -25,7 +30,11 @@ Data::~Data()
 {
     delete ui;
 }
-
+/**
+* @brief Asettaa ja parsii käyttäjän tiedot backendistä.
+* @param newTestData
+* @details Jos JSON on virheellinen tai avaimia puuttuu näytetään teksti "Ei dataa".
+*/
 
 void Data::setTestData(const QByteArray &newTestData)
 {
@@ -53,14 +62,20 @@ void Data::setTestData(const QByteArray &newTestData)
     this->update(); // Päivitetään UI välittömästi
 }
 
-
+/**
+ * @brief Takaisin nappi painettu sulkee tämän ikkunan.
+ * @details Palataan accountinfo ikkunaan.
+ */
 void Data::btnBackClicked()
 {
     this->close();
     qDebug() << "Data: Takaisin nappi painettu - ikkuna suljettu";
 }
 
-
+/**
+ * @brief Kirjaudu ulos nappi.
+ * @details Sulkee data-ikkunan ja lähettää logoutRequested()-signaalin Accountinfo kuuntelee tätä ja avaa koknaan uuden Mainwindow kirjautumisikkunan.
+ */
 void Data::btnLogOutClicked()
 {
     qDebug() << "Data: Kirjaudu-ulos nappi painettu.";

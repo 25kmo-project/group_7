@@ -1,3 +1,8 @@
+/**
+ *@file Deposit.h
+ *@brief Talletusdialogin toteutus.
+ *@details Käsittelee nappien summan laskennan ja lähettää talletuksen API:lle.
+ */
 #include "deposit.h"
 #include "ui_deposit.h"
 
@@ -29,16 +34,28 @@ Deposit::~Deposit()
 {
     delete ui;
 }
-
+/**
+ * @brief Deposit::setToken
+ * @param t JWT-token backend-kutsuille
+ */
 void Deposit::setToken(const QString &t)
 {
     token = t; // vain UI-ikkunoita varten
 }
+/**
+ * @brief Asettaa tilin ID:n, johon talletus kohdistuu
+ * @param id Tilin-ID tietokannassa
+ */
 
 void Deposit::setAccountId(int id)
 {
     accountId = id;
 }
+/**
+ * @brief Lähettää talletuspyynnön backendille.
+ * @param amount Talletettava summa euroina.
+ * @note Käyttää ApiClient instance() singletonia, kutsu POST /bank_log/deposit
+ */
 
 void Deposit::btnDepositBackClicked()
 {
@@ -75,6 +92,10 @@ void Deposit::sendDepositRequest(int amount)
         reply->deleteLater();
     });
 }
+/**
+ * @brief Käsittelee Talleta napin klikkauksen
+ * @details Tarkistaa maksimirajan (1000euroa) ja että on suuurempi kuin 0 (>0)
+ */
 
 // -----------------------------
 //  NAPIT LISÄÄ SUMMAA
