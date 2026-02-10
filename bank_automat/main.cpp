@@ -1,3 +1,9 @@
+/**
+ * @file main.cpp
+ * @brief Sovelluksen aloituspiste.
+ * @details Luo QApplicationin, asettaa globaalin stylesheetin ja näyttää Mainwindowin.
+ */
+
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>

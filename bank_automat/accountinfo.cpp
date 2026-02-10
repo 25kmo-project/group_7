@@ -1,3 +1,9 @@
+/**
+ * @file accountinfo.cpp
+ * @brief Tilin pääikkuna.
+ * @details Näytetään tilin tiedot. Napit talletukseen, nostoon, siirtoon, tilitapahtumiin ja omiin tietoihin. Päivittää saldon automaattisesti toiminnon jälkeen.
+ */
+
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
 
@@ -32,30 +38,41 @@ Accountinfo::~Accountinfo()
     delete ui;
 }
 
-
+/**
+ * @brief Asettaa tilin tyypin.
+ */
 void Accountinfo::setAccountType(const QString &type)
 {
     accountType = type;
 }
 
-
+/**
+ * @brief Asettaa käyttäjän ID:N
+ */
 void Accountinfo::setUsername(const QString &newUsername)
 {
     username = newUsername;
 }
 
-
+/**
+ * @brief Asettaa JWT-toknein
+ */
 void Accountinfo::setToken(const QByteArray &newToken)
 {
     token = newToken;
 }
 
-
+/**
+ * @brief Asettaa tilin ID:n (käytetään mm. refreshBalance() ja Transactions).
+ */
 void Accountinfo::setAccountId(int id)
 {
     accountId = id;
 }
-
+/**
+ * @brief Asettaa tilin tiedot UI:hin backendin vastauksesta.
+ * @param obj QJsonObject /bank_account/{user}/{type} -kutsusta.
+ */
 void Accountinfo::setAccountData(const QJsonObject &obj)
 {
     if (obj.contains("account_id")) {
@@ -69,7 +86,10 @@ void Accountinfo::setAccountData(const QJsonObject &obj)
     ui->labelCreditLimit->setText(obj.value("credit_limit").toString("Ei dataa"));
 }
 
-
+/**
+ * @brief Kutsutaan aina kun ikkuna avataan.
+ * @details Hakee tuoreimmat tilin tiedot backendistä ja päivittää UI:n.
+ */
 void Accountinfo::showEvent(QShowEvent *event)
 {
     QDialog::showEvent(event);
@@ -94,7 +114,9 @@ void Accountinfo::showEvent(QShowEvent *event)
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief "Omat tiedot" -nappi → avaa henkilötietonäkymän.
+ */
 void Accountinfo::btnMyDataClicked()
 {
     QString endpoint = "bank_user/" + username;
@@ -118,7 +140,9 @@ void Accountinfo::btnMyDataClicked()
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief "Nosto" -nappi → avaa Withdraw-dialogin.
+ */
 void Accountinfo::btnWithdrawClicked()
 {
     Withdraw *objWd = new Withdraw(this);
@@ -129,7 +153,9 @@ void Accountinfo::btnWithdrawClicked()
     connect(objWd, &Withdraw::withdrawDone, this, &Accountinfo::refreshBalance);
     objWd->show();
 }
-
+/**
+ * @brief "Talletus" -nappi → avaa Deposit-dialogin.
+ */
 void Accountinfo::btnNewDepositClicked()
 {
     Deposit *objDeposit = new Deposit(this);
@@ -139,7 +165,9 @@ void Accountinfo::btnNewDepositClicked()
     connect(objDeposit, &Deposit::depositSuccessful, this, &Accountinfo::refreshBalance);
     objDeposit->show();
 }
-
+/**
+ * @brief "Siirto" -nappi → avaa Transfer-dialogin.
+ */
 void Accountinfo::btnTransferClicked()
 {
     transfer *objTransfer = new transfer(this);
@@ -150,7 +178,10 @@ void Accountinfo::btnTransferClicked()
     connect(objTransfer, &transfer::transferSuccesful, this, &Accountinfo::refreshBalance);
     objTransfer->show();
 }
-
+/**
+ * @brief Päivittää tilin saldon näytölle.
+ * @details Kutsutaan automaattisesti noston, talletuksen tai siirron jälkeen.
+ */
 void Accountinfo::refreshBalance()
 {
     QString endpoint = "bank_account/" + QString::number(accountId);
@@ -168,13 +199,19 @@ void Accountinfo::refreshBalance()
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief Takaisin-nappi (yleensä Qt Designerin automaattinen slot).
+ * @details Lähettää signaalin MainWindow:lle ja sulkee ikkunan.
+ */
 void Accountinfo::on_btnBack_clicked()
 {
     emit backRequested();
     close();
 }
-
+/**
+ * @brief Kirjaudu ulos -nappi.
+ * @details Palauttaa käyttäjän kirjautumisnäkymään.
+ */
 void Accountinfo::on_btnLogout_clicked()
 {
     emit backRequested();

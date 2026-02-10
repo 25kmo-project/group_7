@@ -1,3 +1,9 @@
+/**
+ * @file MainWinwdow.cpp
+ * @brief Pääikkunan logiikka, kirjautuminen ja inactivity-timer.
+ * @details Hallitsee koko sovelluksen tilaa, eventFilteriä ja inaktiivisuusajastimia.
+ */
+
 #include "choosecard.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -10,7 +16,9 @@
 #include <QNetworkReply>
 #include <QLineEdit>
 #include <qevent.h>
-
+/**
+ * @brief Alustaa ajastimet ja signaalit
+ */
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,6 +43,12 @@ MainWindow::MainWindow(QWidget *parent)
     qApp->installEventFilter(this);
     inactivityTimer->start();
 }
+
+/**
+ * @brief Event filter hiiren ja näppäimistön liikkeille
+ * @details Nollaa inactivityTimerin aina kun käyttäjä tekee jotain.
+ *  Jos kirjautumiskentissä on tekstiä, käynnistyy myös 10s login-ajastin
+ */
 
 MainWindow::~MainWindow()
 {
@@ -62,6 +76,11 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QMainWindow::eventFilter(obj, event);
 }
 
+/**
+ * @brief Kutsutaan kun käyttäjä ei ole tehnyt mitään 30-sekuntiin.
+ * @details Sulkee kaikki ikkunat ja palauttaa kirjautumisnäkymän.
+ */
+
 void MainWindow::onInactivityTimeout()
 {
     qDebug() << "30s Inaktiivisuus: palautetaan alkutilaan";
@@ -81,6 +100,11 @@ void MainWindow::onInactivityTimeout()
     inactivityTimer->start();
 }
 
+/**
+ * @brief 10 sekunnin timeout kirjautumissivulla (vain jos kentissä on tekstiä)
+ * @details Tyhjentää käyttäjätunnus ja salasanakentät
+ */
+
 void MainWindow::onLoginInactivityTimeout()
 {
     qDebug() << "10s Inaktiivisuus -> Tyhjennetään kirjautumiskentät.";
@@ -90,7 +114,10 @@ void MainWindow::onLoginInactivityTimeout()
     }
     loginInactivityTimer->stop();
 }
-
+/**
+ * @brief Kirjautumispainikkeen slotti
+ * @details Lähettää korttinumeron ja PIN koodin backendille.
+ */
 void MainWindow::btnLoginSlot()
 {
     QString endpoint = "bank_kirjautuminen";
@@ -105,7 +132,11 @@ void MainWindow::btnLoginSlot()
         loginAction(reply);
     });
 }
-
+/**
+ * @brief Käsittelee kirjautumisvastauksen backendiltä.
+ * @param reply QNetWorkReply-objekti vastauksesta.
+ * @details Tarkistaa tokenin olemassaolon, tallentaa sen APiClientiin ja avaa oikean ikkunan korttityypin mukaan.
+ */
 void MainWindow::loginAction(QNetworkReply *reply)
 {
     QByteArray responseData = reply->readAll();
@@ -180,6 +211,12 @@ void MainWindow::loginAction(QNetworkReply *reply)
     reply->deleteLater();
 }
 
+/**
+ * @brief Avaa accountinfo-ikkunan debit tai credit kortille
+ * @param userId Käyttäjän ID.
+ * @param type "debit tai "credit".
+ */
+
 void MainWindow::openAccountWindow(int userId, const QString &type)
 {
     // Haetaan tilitiedot backendistä
@@ -205,7 +242,10 @@ void MainWindow::openAccountWindow(int userId, const QString &type)
         accReply->deleteLater();
     });
 }
-
+/**
+ * @brief Dual kortin valinnan jälkeinen käsittely
+ * @param type Valittu korttityyppi debit tai credit.
+ */
 void MainWindow::onCardSelected(QString type)
 {
     qDebug() << "Kortti valittu:" << type;
@@ -216,6 +256,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     // Suljetaan koko sovellus, jos pöäikkuna suljetaan
     QApplication::quit();
 }
+/**
+ * @brief Suljetaan koko sovellus kun pääikkuna suljetaan.
+ */
 
 void MainWindow::on_pushButton_clicked()
 {

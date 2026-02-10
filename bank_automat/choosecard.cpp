@@ -1,3 +1,9 @@
+/**
+ *@file choosecard.cpp
+ *@brief Kortin valinta ikkuna dual-kortille.
+ *@details Näyttää käyttäjän kortit. Klikkauksella haetaan suoraan tilit-tiedot backendistä ja avataan Accountinfo-ikkuna.
+ */
+
 #include "choosecard.h"
 #include "ui_choosecard.h"
 
@@ -23,7 +29,10 @@ ChooseCard::~ChooseCard()
 {
     delete ui;
 }
-
+/**
+ * @brief Käsittelee debit napin klikkauksen.
+ * @details Hakee debit tilin tiedot ja avaa accountinfo ikkunan.
+ */
 void ChooseCard::btnDEBITClicked()
 {
     if (username.isEmpty()) {
@@ -48,7 +57,10 @@ void ChooseCard::btnDEBITClicked()
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief Käsittelee credit napin klikkauksen.
+ * @details Hakee credit tilin tiedot ja avaa accountinfo ikkunan.
+ */
 void ChooseCard::btnCREDITClicked()
 {
     if (username.isEmpty()) {
@@ -73,7 +85,10 @@ void ChooseCard::btnCREDITClicked()
         reply->deleteLater();
     });
 }
-
+/**
+ * @brief Avaa accountinfo ikkunan saaduilla tilin tiedoilla
+ * @param obj Backendin vastaus.
+ */
 void ChooseCard::openAccount(const QJsonObject &obj)
 {
     Accountinfo *acc = new Accountinfo(this);
@@ -97,7 +112,9 @@ void ChooseCard::setUsername(const QString &newUsername)
 {
     username = newUsername;
 }
-
+/**
+ * @brief Takaisin-nappi, palauttaa mainwindow:n näkyviin.
+ */
 void ChooseCard::btnBackClicked()
 {
     emit backRequested();
