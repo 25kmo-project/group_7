@@ -92,6 +92,16 @@ int main (int argc, char *argv[])
         min-width: 220px;
     }
 
+    QPushButton#btnDEBIT, QPushButton#btnCREDIT {
+        background-color: #1E90FF;
+        font-size: 26pt;
+        font-weight: bold;
+        border-radius: 16px;
+        padding: 30px 60px;
+        min-height: 110px;
+        min-width: 260px;
+    }
+
     QPushButton#btnReset {
         background-color: #DC3545;
         font-size: 19pt;
