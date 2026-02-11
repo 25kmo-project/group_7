@@ -113,7 +113,7 @@ void Transactions::updateLogs()
                 if (translatedAction == "Tilisiirto" || translatedAction == "Nosto") {
                 row << new QStandardItem("-" + obj["amount"].toString() + " €");
                 } else {
-                    row << new QStandardItem(obj["amount"].toString() + " €");
+                    row << new QStandardItem("+" + obj["amount"].toString() + " €");
                 }
                 model->appendRow(row);
             }
