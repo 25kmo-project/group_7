@@ -110,6 +110,11 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ![login](./docs/login.png)
 
+### 5.1.2
+  - Käyttäjä valitsee Debit tai Credit kortin, jos hänelle on dual kortti
+
+![dualkortti](./docs/dualkortti(uusi).png)
+
 ### 5.2 Tilitietojen näyttäminen
 - Accountinfo hakee tilin tiedot automaattisesti  
 - Näytetään: Tyyppi, tilinumero, saldo, luottoraja  
