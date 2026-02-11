@@ -91,13 +91,21 @@ void ChooseCard::btnCREDITClicked()
  */
 void ChooseCard::openAccount(const QJsonObject &obj)
 {
-    Accountinfo *acc = new Accountinfo(this);
+    QWidget *mw = parentWidget();
+
+    Accountinfo *acc = new Accountinfo(mw);
 
     acc->setAccountData(obj);
     acc->setToken(ApiClient::instance().getToken());
     acc->setUsername(username);
     acc->setAccountId(obj["account_id"].toInt());
     acc->setAccountType(obj["account_type"].toString());
+
+    //Sulkee login ikkunan kortin valinnan jälkeen.
+    if (mw) {
+        connect(acc, &Accountinfo::backRequested, mw, &QWidget::show);
+        mw->hide();
+    }
 
     acc->show();
     close();
