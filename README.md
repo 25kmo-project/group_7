@@ -1,6 +1,7 @@
 # Group 7 Project
- 
- # 📘 Projektiraportti  
+
+## 📘 Projektiraportti
+
 **Projektin nimi: Pankkiautomaatti**  
 **Tekijät: Valtteri Sippala, Vili Virnes, Aleksi Jussila ja Santeri Rautio**  
 **2026 kevät**  
@@ -11,13 +12,9 @@ Dokumentaatio Doxygen-dokumentaatio löytyy täältä: 👉[Bank Automat ‑doku
 
 ## 1. Johdanto
 
-
 Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla. Sovellus kommunikoi REST‑rajapinnan kautta backendin kanssa ja mahdollistaa käyttäjälle kirjautumisen, tilitietojen tarkastelun sekä rahansiirrot.
 
 ![johdanto](./docs/johdanto1.png)
-
-
-
 
 ---
 
@@ -30,23 +27,20 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Toteuttaa nostojen, talletusten, tilisiirron ja tilitapahtumien näytöt.
 - Harjoitella ryhmässä työskentelyä
 
-
-
 ---
 
 ## 3. Käytetyt teknologiat
 
 | Teknologia | Käyttötarkoitus |
-|-----------|-----------------|
-| Qt        | Käyttöliittymä |
-| C++       | Sovelluslogiikka |
-| REST API  | Backend‑yhteydet |
-| MySQL     | Tietokanta |
-| JSON      | Datan siirto backendin ja frontendin välillä |
-| Nginx     | Reverse proxy  |
-| Docker    | Paketoi sovelluksen ja sen riippuvuudet samaan pakettin |
-| Git actions CI/CD | Hoitaa sovelluksen päivitysten automaattisen käyttöönoton
-
+| ---------- | --------------- |
+| Qt         | Käyttöliittymä |
+| C++        | Sovelluslogiikka |
+| REST API   | Backend‑yhteydet |
+| MySQL      | Tietokanta |
+| JSON       | Datan siirto backendin ja frontendin välillä |
+| Nginx      | Reverse proxy |
+| Docker     | Paketoi sovelluksen ja sen riippuvuudet samaan pakettin |
+| Git actions CI/CD | Hoitaa sovelluksen päivitysten automaattisen käyttöönoton |
 
 ---
 ![kaavio](./docs/Yleiskuva1.png)
@@ -64,18 +58,18 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ![ER-kaavio](./docs/ER-kaavio.png)
 
-
 ### 4.1 Api - kutsut
-- Qt:ssa API‑kutsut tehdään QNetworkAccessManager‑olion avulla. 
-- Ensin luodaan QNetworkRequest ja asetetaan URL sekä otsikot. 
+
+- Qt:ssa API‑kutsut tehdään QNetworkAccessManager‑olion avulla.
+- Ensin luodaan QNetworkRequest ja asetetaan URL sekä otsikot.
 - Lähetetään pyyntö (get, post, put, delete)
 - Odotetaan vastausta signaalilla finished
 
 ![kutsu](./docs/kutsu.png)
 
-
 ### 4.1 JSON - vastaukset
- - JSON (JavaScript Object Notation) on kevyt ja selkeä tietomuoto, jota käytetään tiedon siirtämiseen sovellusten välillä.
+
+- JSON (JavaScript Object Notation) on kevyt ja selkeä tietomuoto, jota käytetään tiedon siirtämiseen sovellusten välillä.
 
 - JSON koostuu avain–arvo‑pareista ja muistuttaa rakenteeltaan JavaScript‑olioita.
 
@@ -84,8 +78,6 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - JSON on helppolukuinen sekä ihmisille että koneille, ja se on yksi yleisimmistä tiedonsiirtostandardeista.
 
 ![vastaus](./docs/vastaus.png)
-
-
 
 ### 4.2 Ikkunoiden kommunikointi
 
@@ -98,30 +90,35 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Tyypillinen kommunikointitapa on signaali, kuten: void backRequested();
 
 ![back](./docs/back.png)
+
 ---
 
 ## 5. Toiminnallisuudet
 
 ### 5.1 Kirjautuminen
+
 - Käyttäjä syöttää kortin numeron ja PIN‑koodin  
 - Sovellus lähettää POST‑pyynnön backendille  
 - Backend palauttaa tokenin ja käyttäjän tiedot  
-- Virhetilanteet näytetään käyttöliittymässä 
+- Virhetilanteet näytetään käyttöliittymässä
 
 ![login](./docs/login.png)
 
 ### 5.1.2
-  - Käyttäjä valitsee Debit tai Credit kortin, jos hänelle on dual kortti
+
+- Käyttäjä valitsee Debit tai Credit kortin, jos hänelle on dual kortti
 
 ![dualkortti](./docs/dualkortti(uusi).png)
 
 ### 5.2 Tilitietojen näyttäminen
+
 - Accountinfo hakee tilin tiedot automaattisesti  
 - Näytetään: Tyyppi, tilinumero, saldo, luottoraja  
 
 ![paavalikko](./docs/paavalikko.png)
 
 ### 5.3 Nosto
+
 - Käyttäjä valitsee summan tai syöttää sen itse  
 - Sovellus tarkistaa summan kelpoisuuden  
 - Backend estää debit‑tilin miinukselle menon  
@@ -131,6 +128,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 ![nosto](./docs/nosto.png)
 
 ### 5.4 Talletus
+
 - Käyttäjä syöttää talletettavan summan  
 - Backend päivittää saldon  
 - Accountinfo näyttää uuden saldon  
@@ -138,6 +136,7 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 ![talletus](./docs/talletus.png)
 
 ### 5.5 Rahan siirto
+
 - Käyttäjä pystyy siirtämään rahaa tilinsä välillä.
 - Backend hoitaa siirron
 - Accountinfo päivittää saldon
@@ -145,25 +144,29 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 ![siirto](./docs/siirto.png)
 
 ### 5.6 Henkilötiedot
+
 - Data‑ikkuna näyttää käyttäjän nimen, osoitteen ja muut tiedot  
 - Tiedot haetaan backendistä GET‑pyynnöllä  
 
 ![tiedot](./docs/tiedot.png)
 
 ### 5.7 Tilitapahtumat
+
 - Käyttäjä pystyy selamaan tilitapahtumia
 - Tiedot haetaan backendistä log-taulusta.
 
 ![tapahtumat](./docs/tapahtumat.png)
 
 ### 5.8 Kirjautumisajastin
+
 - Ajastin aktivoituu kun kirjautumiskentissä on merkkejä.
 - Jos käyttäjä ei täytä ajastimen ehtoja, niin ajastin tyhjentää kirjautumiskentät.
 
 ### 5.9 Inaktiivisuusajastin
-- 30 sekunnin inaktiivisuus istunnon aikana palauttaa takaisin kirjautumis-ikkunan.
----
 
+- 30 sekunnin inaktiivisuus istunnon aikana palauttaa takaisin kirjautumis-ikkunan.
+
+---
 
 ## 6. Käyttöliittymä
 
@@ -172,48 +175,77 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 - Nosto, talletus, siirto ja tilitapahtumat ovat erillisiä toimintoja
 - Valitsekortti-ikkuna avautuu yhdistelmäkortilla  
 
-
+---
 
 ## 7. Lisäominaisuudet
-- Sovelluksen backend ja tietokanta toimii Linux-palvelimella
-- Git actions CI/CD putki huolehtii sovelluksen 
-- (Kuvaile lisäominaisuudet + kuva?)
 
+### 7.1 Linux palvelin (CSC-pouta)
 
+- Palvelinympäristönä CSC Pouta -virtuaalikone
+- Käyttöjärjestelmänä Ubuntu 20.04 LTS
+- Tietoturva toteutettu kaksitasoisella palomuurilla: CSC Security Groups ja palvelimen sisäisellä palomuurilla (UFW)
+- Automatisoitu tietokannan varmuuskopiointi kerran vuorokaudessa Crontab-ajastuksella
 
-## 7. Haasteita
+### 7.2 Kontitus (Docker)
 
+- Sovellus on täysin kontitettu, mikä mahdollistaa saman ympäristön ajamisen paikallisesti ja palvelimella
+- Nginx toimii reverse proxyna ja hoitaa SSL-terminaation
+- Certbot huolehtii Let's Encrypt -sertifikaatin automaattisesta hakemisesta
+- Data säilytetään Docker Volumejen avulla, mikä takaa datan pysyvyyden konttien välillä
+- Jos tietokannan rakenteeseen tulee muutoksia ensimmäisen alustuksen jälkeen, ne on tehtävä manuaalisesti, jotta olemassa oleva data säilyy
+
+| Kontti | Käyttötarkoitus |
+| ------ | ------- |
+| Nginx | Reverse proxy ja SSL-terminaatio |
+| Certbot | Let's Encrypt -sertifikaatin hallinta ja automaattinen uusiminen |
+| API | Node.js/Express sovellus |
+| Database | MySQL Tietokanta |
+
+### 7.3 CI/CD (GitHub Actions)
+
+- Jatkuva integrointi ja käyttöönotto GitHub Actionsin avulla
+- Workflow käynnistyy vain, kun muutoksia pushataan main-haaraan määritettyihin tiedostoihin tai kansioihin (backend, db, nginx)
+- Automaattinen Docker-imagen rakennus ja tallennus Docker Hubiin
+- Palvelin vetää uusimman imagen ja käynnistää kontit uudelleen ilman datan menetystä
+
+---
+
+## 8. Haasteita
 
 - Aluksi oli haasteita ymmärtää kokonaiskuva projektista
 - ER- Kaaviota piti korjata useita kertoja, ennekuin se tuli valmiiksi
 - Tekninen määrittely oli yllättävän hankala ja työläs
 - Vaikka tuli seurattua tiuhaan mitä ryhmäläiset on tehnyt, niin oli jokseenki hankala sisäistää kaikki mitä muut ovat tehneet.
 
+---
 
-
-## 8. Testaus
+## 9. Testaus
 
 - Sovelluksen valmistusvaiheessa testausta tehtiin jatkuvasti sitä mukaa, kun uusia toiminnallisuuksia saatiin valmiiksi. Mahdolliset bugit kirjattiin kanban-tauluun, jos niitä ei heti saatu korjattua.
 
-## 9. Johtopäätökset
+---
+
+## 10. Johtopäätökset
 
 - Sovellus pelaa oikealla tavalla ja olemme tyytyväisiä työhömme.
 
+---
 
-
-## 10. Tilakaavio
-
+## 11. Tilakaavio
 
   ![Tilakaavio](./docs/Tilakaavio_v1.5.png)
 
   Kirjautuminen
+
 - Kirjautuessa 10 sekunnin inaktiivisuus alustaa kirjautumis-ikkunan
 
 Kortin valinta (vain dual‑kortilla)
+
 - Kortin valinnan jälkeen siirtyy päävalikkoon
 - Pelkällä credit tai debit kortilla siirtyy suoraan päävalikkoon
 
 Päävalikon toiminnot
+
 - Nosto
 - Talletus
 - Siirto
