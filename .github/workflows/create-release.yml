@@ -56,15 +56,15 @@ jobs:
         refreshenv
 
     - name: Create installer
-      run: iscc bank_automat/bank_automat.iss
+      run: iscc bank_automat.iss
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.get_version.outputs.VERSION }}
-        name: MyWeather v${{ steps.get_version.outputs.VERSION }}
+        name: Bank Automat v${{ steps.get_version.outputs.VERSION }}
         body: |
-          ## MyWeather v${{ steps.get_version.outputs.VERSION }}
+          ## Bank Automat v${{ steps.get_version.outputs.VERSION }}
 
           ### Lataa asennusohjelma
           Lataa bank_automat.exe alta ja suorita se asentaaksesi sovelluksen.
