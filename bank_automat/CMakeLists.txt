@@ -27,6 +27,7 @@ qt_add_executable(bank_automat
     ApiClient.h
     ApiClient.cpp
     transactions.h transactions.cpp transactions.ui
+    resources.rc
 )
 
 
@@ -38,6 +39,10 @@ target_link_libraries(bank_automat
 )
 
 include(GNUInstallDirs)
+
+target_compile_definitions(bank_automat PRIVATE
+  $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT>
+)
 
 install(TARGETS bank_automat
     BUNDLE  DESTINATION .

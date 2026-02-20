@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon("app_icon.ico"));
 
     // Inaktiivisuusajastin
     inactivityTimer = new QTimer(this);

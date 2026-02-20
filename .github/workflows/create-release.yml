@@ -1,0 +1,77 @@
+name: Create GitHub Release
+
+on:
+  push:
+    branches: [ release ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get version from CMakeLists.txt
+      id: get_version
+      run: |
+        $version = Select-String -Path "bank_automat/CMakeLists.txt" -Pattern 'project\(bank_automat VERSION ([0-9.]+)\)' | ForEach-Object { $_.Matches.Groups[1].Value }
+        if (-not $version) {
+          $version = "1.0.0"
+        }
+        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+        echo "Version: $version"
+      shell: pwsh
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.9.1'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2022_64'
+        modules: 'qtnetworkauth'
+
+    - name: Configure CMake
+      run: |
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        cmake -S bank_automat -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ env.QT_ROOT_DIR }}"
+      shell: cmd
+
+    - name: Build
+      run: |
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        cmake --build build
+      shell: cmd
+
+    - name: Deploy Qt dependencies
+      run: windeployqt build/bank_automat.exe --release
+
+    - name: Install Inno Setup
+      run: |
+        choco install innosetup -y
+        refreshenv
+
+    - name: Create installer
+      run: iscc bank_automat/bank_automat.iss
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.get_version.outputs.VERSION }}
+        name: MyWeather v${{ steps.get_version.outputs.VERSION }}
+        body: |
+          ## MyWeather v${{ steps.get_version.outputs.VERSION }}
+
+          ### Lataa asennusohjelma
+          Lataa bank_automat.exe alta ja suorita se asentaaksesi sovelluksen.
+
+          ### Muutokset
+          - Automaattisesti luotu release release-branchista
+        files: |
+          output/bank_automat.exe
+        draft: false
+        prerelease: false
