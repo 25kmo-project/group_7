@@ -203,10 +203,21 @@ Tämä projekti toteuttaa pankkiautomaatin käyttöliittymän Qt:lla ja C++:lla.
 
 ### 7.3 CI/CD (GitHub Actions)
 
-- Jatkuva integrointi ja käyttöönotto GitHub Actionsin avulla
+Projektissa on kaksi erillistä automaatioputkea
+
+#### A. Backend & Docker
+
+- Jatkuva integrointi ja käyttöönotto
 - Workflow käynnistyy vain, kun muutoksia pushataan main-haaraan määritettyihin tiedostoihin tai kansioihin (backend, db, nginx)
 - Automaattinen Docker-imagen rakennus ja tallennus Docker Hubiin
 - Palvelin vetää uusimman imagen ja käynnistää kontit uudelleen ilman datan menetystä
+
+#### B. Windows-työpöytäsovellus
+
+- Workflow käynnistyy, kun release-haaraa päivitetään
+- Kääntää Qt-sovelluksen Windows-ympäristössä MSVC-kääntäjällä
+- Suorittaa windeployqt-työkalun, joka kerää tarrvittavat DLL-tiedostot mukaan pakettiin
+- Luo automaattisen asennusohjelman (Inno Setup) ja luo GitHub Release-julkaisun, josta asennustiedosto on ladattavissa
 
 ---
 
