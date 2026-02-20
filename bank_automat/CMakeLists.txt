@@ -27,7 +27,7 @@ qt_add_executable(bank_automat
     ApiClient.h
     ApiClient.cpp
     transactions.h transactions.cpp transactions.ui
-    ${CMAKE_CURRENT_SOURCE_DIR/resources.rc
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources.rc
 )
 
 
