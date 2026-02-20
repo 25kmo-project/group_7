@@ -72,6 +72,6 @@ jobs:
           ### Muutokset
           - Automaattisesti luotu release release-branchista
         files: |
-          output/bank_automat.exe
+          output/bank_automatSetup.exe
         draft: false
         prerelease: false
