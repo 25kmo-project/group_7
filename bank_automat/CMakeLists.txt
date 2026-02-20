@@ -39,6 +39,10 @@ target_link_libraries(bank_automat
 
 include(GNUInstallDirs)
 
+target_compile_definitions(bank_automat PRIVATE
+  $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT>
+)
+
 install(TARGETS bank_automat
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
